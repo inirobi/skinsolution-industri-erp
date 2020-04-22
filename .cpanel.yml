@@ -1,0 +1,5 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/example/public_html/skinsolutionindustri.co.id/remote/skin-solution-industri-erp
+    - /bin/cp -a * $DEPLOYPATH
