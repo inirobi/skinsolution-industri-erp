@@ -25,3 +25,6 @@ Route::resource('/materials', 'MaterialsController');
 // penggajian
 Route::get('/pegawai', 'PenggajianController@pegawai');
 Route::get('/gaji', 'PenggajianController@gaji');
+
+// Route Transaksi Pemesanan
+Route::get('/pemesanan/customer', 'TransaksiPemesananController@customer');
