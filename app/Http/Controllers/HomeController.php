@@ -8,12 +8,11 @@ class HomeController extends Controller
 {
     public function index()
     {
-        return view('penggajian.gaji');
+        return view('dashboard');
     }
 
     public function error()
     {
         return view('error.page-not-found');
-        // return view('welcome');
     }
 }

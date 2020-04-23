@@ -16,7 +16,8 @@
     <link href="assets/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
     <!-- NProgress -->
     <link href="assets/vendors/nprogress/nprogress.css" rel="stylesheet">
-
+    <!-- iCheck -->
+    <link href="assets/vendors/iCheck/skins/flat/green.css" rel="stylesheet">
     <!-- data table -->
     <link href="assets/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
     <link href="assets/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
@@ -61,7 +62,7 @@
                   <li><a href="#"><i class="fa fa-home"></i> Home</a></li>
                   <li><a><i class="fa fa-edit"></i> Inventory <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="form.html">Bahan Baku</a></li>
+                      <li><a href="{{ route('materials.index') }}">Bahan Baku</a></li>
                       <li><a href="form_advanced.html">Packaging</a></li>
                       <li><a href="form_validation.html">Supplier</a></li>
                       <li><a>Purchase Order<span class="fa fa-chevron-down"></span></a>
@@ -338,7 +339,8 @@
     <script src="assets/vendors/fastclick/lib/fastclick.js"></script>
     <!-- NProgress -->
     <script src="assets/vendors/nprogress/nprogress.js"></script>
-
+    <!-- iCheck -->
+    <script src="assets/vendors/iCheck/icheck.min.js"></script>
     <!-- Custom Theme Scripts -->
     <script src="assets/build/js/custom.min.js"></script>
 

@@ -18,3 +18,6 @@ Route::get('/', function () {
 
 Route::get('/home', 'HomeController@index');
 Route::get('/error', 'HomeController@error');
+
+// bahan baku
+Route::resource('/materials', 'MaterialsController');
