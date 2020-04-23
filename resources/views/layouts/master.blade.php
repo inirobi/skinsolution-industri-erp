@@ -166,8 +166,8 @@
                   </li>
                   <li><a><i class="fa fa-sitemap"></i> Penggajian <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                        <li><a href="#level1_1">Pegawai</a></li>
-                        <li><a href="#level1_1">Gaji</a></li>
+                        <li><a href="{{ url('pegawai') }}">Pegawai</a></li>
+                        <li><a href="{{ url('gaji') }}">Gaji</a></li>
                         <li><a href="#level1_1">Cashbond</a></li>
                         <li><a href="#level1_2">Presensi</a>
                         </li>

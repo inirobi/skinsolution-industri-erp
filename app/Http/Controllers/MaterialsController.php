@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use DB;
+use App\Materials;
+use Ramsey\Uuid\Uuid;
 
 class MaterialsController extends Controller
 {
@@ -13,7 +16,8 @@ class MaterialsController extends Controller
      */
     public function index()
     {
-        return view('inventory.bahan_baku.index');
+        $tamp = Materials::all();
+        return view('inventory.bahan_baku.index',['materials'=> $tamp, 'no'=>1]);
     }
 
     /**
