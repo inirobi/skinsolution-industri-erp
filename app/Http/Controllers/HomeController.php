@@ -8,7 +8,7 @@ class HomeController extends Controller
 {
     public function index()
     {
-        return view('dashboard');
+        return view('penggajian.gaji');
     }
 
     public function error()
