@@ -11,14 +11,14 @@
     <title>Gentelella Alela! | </title>
 
     <!-- Bootstrap -->
-    <link href="assets/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ asset('assets/vendors/bootstrap/dist/css/bootstrap.min.css')}}" rel="stylesheet">
     <!-- Font Awesome -->
-    <link href="assets/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="{{ asset('assets/vendors/font-awesome/css/font-awesome.min.css')}}" rel="stylesheet">
     <!-- NProgress -->
-    <link href="assets/vendors/nprogress/nprogress.css" rel="stylesheet">
+    <link href="{{ asset('assets/vendors/nprogress/nprogress.css')}}" rel="stylesheet">
     
     <!-- Custom styling plus plugins -->
-    <link href="assets/build/css/custom.min.css" rel="stylesheet">
+    <link href="{{ asset('assets/build/css/custom.min.css')}}" rel="stylesheet">
   </head>
 
   <body class="nav-md">
@@ -103,9 +103,9 @@
               <div class="menu_section">
                 <h3>TRANSAKSI</h3>
                 <ul class="nav side-menu">
-                  <li><a><i class="fa fa-bug"></i> Transaksi Pemesanan <span class="fa fa-chevron-down"></span></a>
+                  <li><a><i class="fa fa-bug"></i> Pemesanan <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="e_commerce.html">Customer</a></li>
+                      <li><a href="{{ url('/pemesanan/customer') }}">Customer</a></li>
                       <li><a>Purchase Order<span class="fa fa-chevron-down"></span></a>
                           <ul class="nav child_menu">
                             <li class="sub_menu"><a href="level2.html">Trial</a></li>
@@ -324,15 +324,15 @@
     </div>
 
     <!-- jQuery -->
-    <script src="assets/vendors/jquery/dist/jquery.min.js"></script>
+    <script src="{{ asset('assets/vendors/jquery/dist/jquery.min.js')}}"></script>
     <!-- Bootstrap -->
-   <script src="assets/vendors/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+   <script src="{{ asset('assets/vendors/bootstrap/dist/js/bootstrap.bundle.min.js')}}"></script>
     <!-- FastClick -->
-    <script src="assets/vendors/fastclick/lib/fastclick.js"></script>
+    <script src="{{ asset('assets/vendors/fastclick/lib/fastclick.js')}}"></script>
     <!-- NProgress -->
-    <script src="assets/vendors/nprogress/nprogress.js"></script>
+    <script src="{{ asset('assets/vendors/nprogress/nprogress.js')}}"></script>
 
     <!-- Custom Theme Scripts -->
-    <script src="assets/build/js/custom.min.js"></script>
+    <script src="{{ asset('assets/build/js/custom.min.js')}}"></script>
   </body>
 </html>

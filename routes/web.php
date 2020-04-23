@@ -17,4 +17,6 @@ Route::get('/', function () {
 
 
 Route::get('/home', 'HomeController@index');
-Route::get('/error', 'HomeController@error');
+
+// Route Transaksi Pemesanan
+Route::get('/pemesanan/customer', 'TransaksiPemesananController@customer');
