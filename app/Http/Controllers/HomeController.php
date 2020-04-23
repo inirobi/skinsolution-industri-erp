@@ -10,9 +10,4 @@ class HomeController extends Controller
     {
         return view('dashboard');
     }
-
-    public function error()
-    {
-        return view('error.page-not-found');
-    }
 }

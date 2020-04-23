@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>404 Page Not Found</title>
   <link rel="shortcut icon" href="https://img.icons8.com/material-sharp/24/000000/nothing-found.png">
-  <link rel="stylesheet" type="text/css" href="assets/src/css/page-not-found.css">
+  <link rel="stylesheet" type="text/css" href="{{ asset('assets/src/css/page-not-found.css')}}">
 </head>
 <body>
   <div id="container">
