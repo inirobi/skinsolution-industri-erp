@@ -1,4 +1,4 @@
-# skinsolution-industri-erp
-Repository untuk skinsolutionindustri bagian erp
-tambah ini jadi oke
-jadi uwwwu
+# ERP SKINSOLUTION INDUSTRY
+
+Projek ini untuk pengembangan sistem erp di Skinsolution Industry.<br />
+Membantu dalam pengembangan inventory dan operasional perusahaan. :)
