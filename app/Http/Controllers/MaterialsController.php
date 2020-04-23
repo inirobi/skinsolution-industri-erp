@@ -13,7 +13,7 @@ class MaterialsController extends Controller
      */
     public function index()
     {
-        return view('inventory.bahan_baku');
+        return view('inventory.bahan_baku.index');
     }
 
     /**
