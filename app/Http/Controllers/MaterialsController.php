@@ -3,9 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use DB;
 use App\Materials;
-use Ramsey\Uuid\Uuid;
 
 class MaterialsController extends Controller
 {
@@ -83,6 +81,17 @@ class MaterialsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            $materials = Materials::findOrFail($id)->delete();
+  
+            return redirect()
+                ->route('materials.index')
+                ->with('success', 'Bahan baku berhasil dihapus.');
+  
+          } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){
+            return redirect()
+                ->route('materials.index')
+                ->with('error', 'Data tidak ditemukan.');
+          }
     }
 }
