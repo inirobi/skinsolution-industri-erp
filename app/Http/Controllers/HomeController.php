@@ -14,5 +14,6 @@ class HomeController extends Controller
     public function error()
     {
         return view('error.page-not-found');
+        // return view('welcome');
     }
 }
