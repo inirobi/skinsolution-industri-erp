@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>404 Page Not Found</title>
   <link rel="shortcut icon" href="https://img.icons8.com/material-sharp/24/000000/nothing-found.png">
-  <link rel="stylesheet" type="text/css" href="page-not-found.css">
+  <link rel="stylesheet" type="text/css" href="assets/src/css/page-not-found.css">
 </head>
 <body>
   <div id="container">
     <div class="content">
-      <h2>404</h2>
+      <h2>404</h2>  
       <h4>Maaf, Halaman tidak ditemukan !</h4>
     </div>
   </div>
