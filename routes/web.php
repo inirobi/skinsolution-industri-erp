@@ -27,9 +27,22 @@ Route::resource('/materials', 'MaterialsController');
 Route::resource('/suppliers', 'SuppliersController');
 //packaging
 Route::resource('/packagings', 'PackagingsController');
+//principals
+Route::resource('/principals', 'PrincipalsController');
+//samples
+Route::resource('/samples', 'SamplesController');
 
 //===============end inventory===================
 
+
+//==========pemesanan====================//
+
+//packaging
+Route::resource('/customers', 'CustomersController');
+
+
+
+//==========pemesanan====================//
 // penggajian
 Route::get('/pegawai', 'PenggajianController@pegawai');
 Route::get('/gaji', 'PenggajianController@gaji');

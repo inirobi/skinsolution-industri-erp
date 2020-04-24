@@ -10,8 +10,4 @@ class TransaksiPemesananController extends Controller
   {
     return view('welcome');
   }
-  public function customer()
-  {
-    return view('pemesanan.customer');
-  }
 }

@@ -16,7 +16,7 @@ class SuppliersController extends Controller
     {
         $tamp = Suppliers::orderBy('updated_at', 'desc')->get();
         return view('inventory.suppliers.index',['suppliers'=> $tamp, 'no'=>1]);
-    }
+    } 
 
     /**
      * Show the form for creating a new resource.
@@ -128,7 +128,7 @@ class SuppliersController extends Controller
 
           return redirect()
               ->route('suppliers.index')
-              ->with('success', 'Data bahan baku berhasil diupdate.');
+              ->with('success', 'Data suppliers berhasil diupdate.');
 
         } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){
           return redirect()

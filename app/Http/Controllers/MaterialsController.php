@@ -154,7 +154,7 @@ class MaterialsController extends Controller
   
             return redirect()
                 ->route('materials.index')
-                ->with('success', 'Bahan baku berhasil dihapus.');
+                ->with('success', 'Data bahan baku berhasil dihapus.');
   
           } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){
             return redirect()

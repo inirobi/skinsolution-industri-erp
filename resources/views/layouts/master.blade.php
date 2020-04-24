@@ -60,14 +60,20 @@
             <!-- sidebar menu -->
             <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
               <div class="menu_section">
-                <h3>General</h3>
                 <ul class="nav side-menu">
                   <li><a href="{{ url('home') }}"><i class="fa fa-home"></i> Home</a></li>
-                  <li><a><i class="fa fa-edit"></i> Inventory <span class="fa fa-chevron-down"></span></a>
+                </ul>
+              </div>
+              <div class="menu_section">
+                <h3>MASTER</h3>
+                <ul class="nav side-menu">
+                  <li><a><i class="fa fa-cubes"></i> Inventory <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li><a href="{{ route('materials.index') }}">Bahan Baku</a></li>
                       <li><a href="form_advanced.html">Packaging</a></li>
                       <li><a href="{{ route('suppliers.index') }}">Supplier</a></li>
+                      <li><a href="{{ route('principals.index') }}">Principal</a></li>
+                      <li><a href="{{ route('samples.index') }}">Sample Bahan Baku</a></li>
                       <li><a>Purchase Order<span class="fa fa-chevron-down"></span></a>
                           <ul class="nav child_menu">
                             <li class="sub_menu"><a href="level2.html">Bahan Baku</a></li>
@@ -78,12 +84,14 @@
                           <ul class="nav child_menu">
                             <li class="sub_menu"><a href="level2.html">Bahan Baku</a></li>
                             <li><a href="#level2_2">Packaging</a></li>
+                            <li><a href="#level2_2">Sample</a></li>
                           </ul>
                       </li>
                       <li><a>Stok<span class="fa fa-chevron-down"></span></a>
                           <ul class="nav child_menu">
                             <li class="sub_menu"><a href="level2.html">Bahan Baku</a></li>
                             <li><a href="#level2_2">Packaging</a></li>
+                            <li><a href="#level2_2">Sample</a></li>
                           </ul>
                       </li>
                       <li><a>Estimasi Pemesanan<span class="fa fa-chevron-down"></span></a>
@@ -94,7 +102,7 @@
                       </li>                   
                     </ul>
                   </li>
-                  <li><a><i class="fa fa-desktop"></i> Produksi <span class="fa fa-chevron-down"></span></a>
+                  <li><a><i class="fa fa-diamond"></i> Produksi <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li><a href="general_elements.html">Formula</a></li>
                       <li><a href="media_gallery.html">Produk</a></li>
@@ -109,14 +117,15 @@
                       <li><a href="icons.html">Stok Produk</a></li>
                     </ul>
                   </li>
+                  <li><a href="#"><i class="fa fa-users"></i> User Management</a></li>
                 </ul>
               </div>
               <div class="menu_section">
                 <h3>TRANSAKSI</h3>
                 <ul class="nav side-menu">
-                  <li><a><i class="fa fa-bug"></i> Pemesanan <span class="fa fa-chevron-down"></span></a>
+                  <li><a><i class="fa fa-shopping-cart"></i> Pemesanan <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="{{ url('/pemesanan/customer') }}">Customer</a></li>
+                      <li><a href="{{ route('customers.index') }}">Customer</a></li>
                       <li><a>Purchase Order<span class="fa fa-chevron-down"></span></a>
                           <ul class="nav child_menu">
                             <li class="sub_menu"><a href="level2.html">Trial</a></li>
@@ -127,7 +136,7 @@
                       <li><a href="e_commerce.html">Pengiriman</a></li>
                     </ul>
                   </li>
-                  <li><a><i class="fa fa-windows"></i> Accounting <span class="fa fa-chevron-down"></span></a>
+                  <li><a><i class="fa fa-usd"></i> Accounting <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li><a href="page_403.html">Pengeluaran</a></li>
                       <li><a>Pemasukan<span class="fa fa-chevron-down"></span></a>
@@ -140,7 +149,7 @@
                       <li><a href="pricing_tables.html">Notifikasi Pembayaran PO</a></li>
                     </ul>
                   </li>
-                  <li><a><i class="fa fa-sitemap"></i> Customer <span class="fa fa-chevron-down"></span></a>
+                  <li><a><i class="fa fa-user"></i> Customer <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                         <li><a href="#level1_1">Produk</a>
                         <li><a>Purchase Order<span class="fa fa-chevron-down"></span></a>
@@ -167,7 +176,7 @@
                         <li><a href="#level1_2">Invoice</a></li>
                     </ul>
                   </li>
-                  <li><a><i class="fa fa-sitemap"></i> Penggajian <span class="fa fa-chevron-down"></span></a>
+                  <li><a><i class="fa fa-credit-card"></i> Penggajian <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                         <li><a href="{{ url('pegawai') }}">Pegawai</a></li>
                         <li><a href="{{ url('gaji') }}">Gaji</a></li>
@@ -187,7 +196,7 @@
               <div class="menu_section">
                 <h3>LAPORAN</h3>
                 <ul class="nav side-menu">
-                  <li><a><i class="fa fa-bug"></i> Laporan <span class="fa fa-chevron-down"></span></a>
+                  <li><a><i class="fa fa-file-text"></i> Laporan <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li><a href="e_commerce.html">Laporan Pemasukan</a></li>
                       <li><a href="e_commerce.html">Laporan Pengeluaran</a></li>
