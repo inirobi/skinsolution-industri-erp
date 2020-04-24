@@ -47,33 +47,11 @@
               <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
                 <thead>
                   <tr>
-                    <th>No</th>
-                    <th>Code</th>
-                    <th>Name</th>
-                    <th>Mobile</th>
-                    <th>Email</th>
-                    <th>Address</th>
-                    <th>Contact Person</th>
+                    <th>Id</th>
+                    <th>Category</th>
                     <th>Action</th>
                   </tr>
                 </thead>
-                <tbody>
-                  @foreach($suppliers as $data)
-                  <tr>
-                    <td>{{ $no++ }}</td>
-                    <td>{{ $data -> supplier_code }}</td>
-                    <td>{{ $data -> supplier_name }}</td>
-                    <td>{{ $data -> supplier_mobile }}</td>
-                    <td>{{ $data -> supplier_email }}</td>
-                    <td>{{ $data -> supplier_address }}</td>
-                    <td>{{ $data -> contact_person }}</td>
-                    <td class="text-center">
-                      <a href="{{ route('suppliers.edit', $data) }}" class="btn btn-warning" title="Edit"><i class="fa fa-edit"></i></a>
-                      <a href="{{ route('suppliers.destroy', $data) }}" class="btn btn-danger" onclick="event.preventDefault();destroy('{{ route('suppliers.destroy', $data) }}')" title="Hapus"><i class="fa fa-trash"></i></a>
-                    </td>
-                  </tr>
-                  @endforeach
-                </tbody>
               </table>
             </div>
           </div>
@@ -91,7 +69,6 @@
 </form>
 
 <script>
-
 function destroy(action){
     swal({
         title: 'Apakah anda yakin?',
@@ -107,6 +84,21 @@ function destroy(action){
       }
     });
   }
+
+$(document).ready(function(){
+  $.get('{{ url('packagings') }}',function(result, state){
+    console.log(result);
+  })
+  // $('#datatable-buttons').DataTable({
+  //   processing: true,
+  //   serverSide: true,
+  //   ajax: '{{ url('packagings') }}',
+  //   columns: [
+  //     { data: 'id', name: 'id' },
+  //     { data: 'category', name: 'category' },
+  //   ]
+  // });
+});
 
 </script>
 
