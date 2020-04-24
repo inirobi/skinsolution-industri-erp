@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return view('validasi');
+    return view('dashboard');
 });
 
 
