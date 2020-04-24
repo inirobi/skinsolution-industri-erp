@@ -17,7 +17,7 @@
     <!-- NProgress -->
     <link href="{{ asset('assets/vendors/nprogress/nprogress.css" rel="stylesheet')}}">
     <!-- iCheck -->
-    <!-- <link href="{{ asset('assets/vendors/iCheck/skins/flat/green.css" rel="stylesheet')}}"> -->
+    <link href="{{ asset('assets/vendors/iCheck/skins/flat/green.css" rel="stylesheet')}}">
     <!-- data table -->
     <link href="{{ asset('assets/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css')}}" rel="stylesheet">
     <link href="{{ asset('assets/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css')}}" rel="stylesheet">
@@ -67,7 +67,7 @@
                     <ul class="nav child_menu">
                       <li><a href="{{ route('materials.index') }}">Bahan Baku</a></li>
                       <li><a href="form_advanced.html">Packaging</a></li>
-                      <li><a href="form_validation.html">Supplier</a></li>
+                      <li><a href="{{ route('suppliers.index') }}">Supplier</a></li>
                       <li><a>Purchase Order<span class="fa fa-chevron-down"></span></a>
                           <ul class="nav child_menu">
                             <li class="sub_menu"><a href="level2.html">Bahan Baku</a></li>
@@ -344,7 +344,7 @@
     <!-- NProgress -->
     <script src="{{ asset('assets/vendors/nprogress/nprogress.js')}}"></script>
     <!-- iCheck -->
-    <!-- <script src="{{ asset('assets/vendors/iCheck/icheck.min.js')}}"></script> -->
+    <script src="{{ asset('assets/vendors/iCheck/icheck.min.js')}}"></script>
 
       <!-- Datatables -->
     <script src="{{ asset('assets/vendors/datatables.net/js/jquery.dataTables.min.js')}}"></script>

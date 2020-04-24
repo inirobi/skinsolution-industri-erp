@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Materials;
+use App\Suppliers;
 
-class MaterialsController extends Controller
+class SuppliersController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,8 +14,8 @@ class MaterialsController extends Controller
      */
     public function index()
     {
-        $tamp = Materials::orderBy('updated_at', 'desc')->get();
-        return view('inventory.bahan_baku.index',['materials'=> $tamp, 'no'=>1]);
+        $tamp = Suppliers::orderBy('updated_at', 'desc')->get();
+        return view('inventory.suppliers.index',['suppliers'=> $tamp, 'no'=>1]);
     }
 
     /**
@@ -25,7 +25,7 @@ class MaterialsController extends Controller
      */
     public function create()
     {
-        return view('inventory.bahan_baku.create');
+        return view('inventory.suppliers.create');
     }
 
     /**
@@ -37,34 +37,32 @@ class MaterialsController extends Controller
     public function store(Request $request)
     {
         $this->validate($request,[
-            'material_code' => 'required',
-            'cas_num' => 'required',
-            'material_name' => 'required',
-            'inci_name' => 'required',
-            'stock_minimum' => 'required',
-            'category' => 'required',
-            'price' => 'required',
+            'supplier_code' => 'required',
+            'supplier_name' => 'required',
+            'supplier_mobile' => 'required',
+            'supplier_email' => 'required',
+            'supplier_address' => 'required',
+            'contact_person' => 'required',
         ]);
 
         try {
             $req = $request->all();
-            Materials::create([
+            Suppliers::create([
                 'id' => null,
-                'material_code' => $req['material_code'],
-                'cas_num' => $req['cas_num'],
-                'material_name' => $req['material_name'],
-                'inci_name' => $req['inci_name'],
-                'stock_minimum' => $req['stock_minimum'],
-                'category' => $req['category'],
-                'price' => $req['price'],
+                'supplier_code' => $req['supplier_code'],
+                'supplier_name' => $req['supplier_name'],
+                'supplier_mobile' => $req['supplier_mobile'],
+                'supplier_email' => $req['supplier_email'],
+                'supplier_address' => $req['supplier_address'],
+                'contact_person' => $req['contact_person'],
               ]);
           return redirect()
-              ->route('materials.index')
-              ->with('success', 'Data bahan baku berhasil disimpan.');
+              ->route('suppliers.index')
+              ->with('success', 'Data suppliers berhasil disimpan.');
 
         }catch(Exception $e){
           return redirect()
-              ->route('materials.create')
+              ->route('suppliers.create')
               ->with('error', $e->toString());
         }
     }
@@ -89,12 +87,12 @@ class MaterialsController extends Controller
     public function edit($id)
     {
         try {
-            $materials = Materials::findOrFail($id);
-            return view('inventory.bahan_baku.create', ['materials' => $materials]);
+            $suppliers = suppliers::findOrFail($id);
+            return view('inventory.suppliers.create', ['suppliers' => $suppliers]);
   
           } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){
             return redirect()
-                ->route('materials.index')
+                ->route('suppliers.index')
                 ->with('error', 'Data tidak ditemukan.');
           }
     }
@@ -109,34 +107,32 @@ class MaterialsController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request,[
-            'material_code' => 'required',
-            'cas_num' => 'required',
-            'material_name' => 'required',
-            'inci_name' => 'required',
-            'stock_minimum' => 'required',
-            'category' => 'required',
-            'price' => 'required',
+            'supplier_code' => 'required',
+            'supplier_name' => 'required',
+            'supplier_mobile' => 'required',
+            'supplier_email' => 'required',
+            'supplier_address' => 'required',
+            'contact_person' => 'required',
         ]);
 
         try {
           $req = $request->all();
-          $materials = Materials::findOrFail($id);
-          $materials->material_code = $req['material_code'];
-          $materials->cas_num = $req['cas_num'];
-          $materials->material_name = $req['material_name'];
-          $materials->inci_name = $req['inci_name'];
-          $materials->stock_minimum = $req['stock_minimum'];
-          $materials->category = $req['category'];
-          $materials->price = $req['price'];
-          $materials->save();
+          $suppliers = Suppliers::findOrFail($id);
+          $suppliers->supplier_code = $req['supplier_code'];
+          $suppliers->supplier_name = $req['supplier_name'];
+          $suppliers->supplier_mobile = $req['supplier_mobile'];
+          $suppliers->supplier_email = $req['supplier_email'];
+          $suppliers->supplier_address = $req['supplier_address'];
+          $suppliers->contact_person = $req['contact_person'];
+          $suppliers->save();
 
           return redirect()
-              ->route('materials.index')
+              ->route('suppliers.index')
               ->with('success', 'Data bahan baku berhasil diupdate.');
 
         } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){
           return redirect()
-              ->route('materials.index')
+              ->route('suppliers.index')
               ->with('error', 'Data tidak ditemukan.');
         }
     }
@@ -149,16 +145,16 @@ class MaterialsController extends Controller
      */
     public function destroy($id)
     {
-        try {
-            $materials = Materials::findOrFail($id)->delete();
+         try {
+            $suppliers = suppliers::findOrFail($id)->delete();
   
             return redirect()
-                ->route('materials.index')
-                ->with('success', 'Bahan baku berhasil dihapus.');
+                ->route('suppliers.index')
+                ->with('success', 'Data suppliers berhasil dihapus.');
   
           } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){
             return redirect()
-                ->route('materials.index')
+                ->route('suppliers.index')
                 ->with('error', 'Data tidak ditemukan.');
           }
     }

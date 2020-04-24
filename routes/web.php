@@ -21,6 +21,8 @@ Route::get('/error', 'HomeController@error');
 
 // bahan baku
 Route::resource('/materials', 'MaterialsController');
+//suplier
+Route::resource('/suppliers', 'SuppliersController');
 
 // penggajian
 Route::get('/pegawai', 'PenggajianController@pegawai');

@@ -25,7 +25,7 @@
     <div class="col-md-12 col-sm-12 ">
       <div class="x_panel">
         <div class="x_title">
-          <a href="#" class="btn btn-success" data-toggle="modal" data-target="#modalAdd"><i class="fa fa-plus"></i> Tambah </a>
+          <a href="{{ route('materials.create') }}" class="btn btn-success"><i class="fa fa-plus"></i> Tambah </a>
           <ul class="nav navbar-right panel_toolbox">
             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
             </li>
@@ -38,14 +38,14 @@
             <div class="row">
                 <div class="col-sm-12">
                   <div class="card-box table-responsive">
-          <table id="datatable-buttons" class="table table-striped table-bordered" style="width:100%">
+          <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
             <thead>
               <tr>
                 <th>No</th>
-                <th>Kode</th>
-                <th>Nama</th>
-                <th>Stok Minimal</th>
-                <th>Harga</th>
+                <th>Material Code</th>
+                <th>Material Name</th>
+                <th>Stock Minimum</th>
+                <th>Price</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -55,13 +55,13 @@
                 <td>{{ $no++ }}</td>
                 <td>{{ $data -> material_code }}</td>
                 <td>{{ $data -> material_name }}</td>
-                <td>${{ $data -> stock_minimum }}</td>
+                <td>{{ $data -> stock_minimum }}</td>
                 <td>${{ $data -> price }}</td>
                 <td class="text-center">
                   <a class="btn btn-info" title="Detail" onclick="detailConfirm('{{ $data -> material_code }}','{{ $data -> material_name }}','{{ $data -> cas_num }}','{{ $data -> inci_name }}','{{ $data -> stock_minimum }}','{{ $data -> category }}','{{ $data -> price }}')" href="#" data-toggle="modal" data-target="#modalDetail" class="btn btn-small text-primary">
                     <i class="fa fa-eye"></i>
                   </a>
-                  <a href="#" class="btn btn-warning" title="Edit"><i class="fa fa-edit"></i></a>
+                  <a href="{{ route('materials.edit', $data) }}" class="btn btn-warning" title="Edit"><i class="fa fa-edit"></i></a>
 
                   <a href="{{ route('materials.destroy', $data) }}" class="btn btn-danger" onclick="event.preventDefault();destroy('{{ route('materials.destroy', $data) }}')" title="Hapus"><i class="fa fa-trash"></i></a>
                   
@@ -100,7 +100,7 @@
       <div class="modal-body">
         <form>
           <div class="form-group">
-            <label for="kode" class="col-form-label">Kode:</label>
+            <label for="kode" class="col-form-label">Material Code:</label>
             <input readonly="" type="text" class="form-control" id="kode">
           </div>
           <div class="form-group">
@@ -108,133 +108,26 @@
             <input readonly="" type="text" class="form-control" id="cas_num">
           </div>
           <div class="form-group">
-            <label for="nama" class="col-form-label">Nama:</label>
+            <label for="nama" class="col-form-label">Material Name:</label>
             <input readonly="" type="text" class="form-control" id="nama">
           </div>
           <div class="form-group">
-            <label for="ukuran" class="col-form-label">Ukuran:</label>
+            <label for="ukuran" class="col-form-label">Inci Name:</label>
             <textarea readonly="" class="form-control" id="ukuran"></textarea>
           </div>
           <div class="form-group">
-            <label for="minimal" class="col-form-label">Stok Minimal:</label>
+            <label for="minimal" class="col-form-label">Stock Minimum:</label>
             <input readonly="" type="text" class="form-control" id="minimal">
           </div>
           <div class="form-group">
-            <label for="kategori" class="col-form-label">Kategori:</label>
+            <label for="kategori" class="col-form-label">Category:</label>
             <input readonly="" type="text" class="form-control" id="kategori">
           </div>
           <div class="form-group">
-            <label for="harga" class="col-form-label">Harga:</label>
+            <label for="harga" class="col-form-label">Price:</label>
             <input readonly="" type="text" class="form-control" id="harga">
           </div>
         </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- modal add -->
-<div class="modal fade bd-example-modal-lg" id="modalAdd" tabindex="-1" role="dialog" aria-labelledby="modalDetailLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="modalDetailLabel">Tambah Bahan Baku</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form action="{{ route('materials.store') }}" method="POST" enctype="multipart/form-data" novalidate>
-          @csrf
-          <div class="field item form-group">
-            <label class="col-form-label col-md-3 col-sm-3  label-align">Name<span
-                class="required">*</span></label>
-            <div class="col-md-6 col-sm-6">
-              <input class="form-control" data-validate-length-range="6" data-validate-words="2" name="namaku"
-                placeholder="ex. John f. Kennedy" required="required" />
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="kode" class="col-form-label">Kode:</label>
-            <input type="text" data-validate-length-range="6" class="form-control" name="kode" required="required">
-          </div>
-          <div class="form-group">
-            <label for="cas_num" class="col-form-label">Cas Num:</label>
-            <input type="text" class="form-control" name="cas_num">
-          </div>
-          <div class="form-group">
-            <label for="nama" class="col-form-label">Nama:</label>
-            <input type="text" class="form-control" name="nama">
-          </div>
-          <div class="form-group">
-            <label for="ukuran" class="col-form-label">Ukuran:</label>
-            <textarea class="form-control" name="ukuran"></textarea>
-          </div>
-          <div class="form-group">
-            <label for="minimal" class="col-form-label">Stok Minimal:</label>
-            <input type="text" class="form-control" name="minimal">
-          </div>
-          <div class="form-group">
-            <label for="kategori" class="col-form-label">Kategori:</label>
-            <input type="text" class="form-control" name="kategori">
-          </div>
-          <div class="form-group">
-            <label for="harga" class="col-form-label">Harga:</label>
-            <input type="text" class="form-control" name="harga">
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- modal update -->
-<div class="modal fade bd-example-modal-lg" id="modalDetail" tabindex="-1" role="dialog" aria-labelledby="modalDetailLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="modalDetailLabel">Detail Bahan Baku</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <!-- <form>
-          <div class="form-group">
-            <label for="kode" class="col-form-label">Kode:</label>
-            <input type="text" class="form-control" id="kode">
-          </div>
-          <div class="form-group">
-            <label for="cas_num" class="col-form-label">Cas Num:</label>
-            <input type="text" class="form-control" id="cas_num">
-          </div>
-          <div class="form-group">
-            <label for="nama" class="col-form-label">Nama:</label>
-            <input type="text" class="form-control" id="nama">
-          </div>
-          <div class="form-group">
-            <label for="ukuran" class="col-form-label">Ukuran:</label>
-            <textarea class="form-control" id="ukuran"></textarea>
-          </div>
-          <div class="form-group">
-            <label for="minimal" class="col-form-label">Stok Minimal:</label>
-            <input type="text" class="form-control" id="minimal">
-          </div>
-          <div class="form-group">
-            <label for="kategori" class="col-form-label">Kategori:</label>
-            <input type="text" class="form-control" id="kategori">
-          </div>
-          <div class="form-group">
-            <label for="harga" class="col-form-label">Harga:</label>
-            <input type="text" class="form-control" id="harga">
-          </div>
-        </form> -->
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -260,52 +153,6 @@ function detailConfirm(kode, nama, cas_num,ukuran,minimal, kategori, harga)
     $('#modalDetail').modal();
 }
 
-function coba(obj, id) {
-  console.log(obj.href);
-  console.log(id);
-  swal({
-        title: 'Are you sure?',
-        text: 'This record and it`s details will be permanantly deleted!',
-        icon: 'warning',
-        buttons: ["Cancel", "Yes!"],
-    }).then(function(value) {
-        console.log('value');
-        console.log(value);
-        var url = 'materials/' + id;
-        $.ajax({
-            url: url,
-            type: 'DELETE',
-            success: function(result) {
-                // Do something with the result
-                alert('kontol babi');
-            }
-        });
-        // if (value) {
-        //     window.location.href = url;
-        // }
-    });
-}
-
-$('.delete-confirm').on('Click', function (event) {
-    alert('hayu');
-    event.preventDefault();
-    const url = $(this).attr('href');
-    swal({
-        title: 'Are you sure?',
-        text: 'This record and it`s details will be permanantly deleted!',
-        icon: 'warning',
-        buttons: ["Cancel", "Yes!"],
-    }).then(function(value) {
-
-        if (value) {
-            window.location.href = url;
-        }
-    });
-});
-function Yes() {
-  swal('Sukses!', 'yeyy', 'success');
-}
-
 function destroy(action){
     swal({
         title: 'Apakah anda yakin?',
@@ -323,7 +170,5 @@ function destroy(action){
   }
 </script>
 
-
-@include('layouts.validasi_footer')
 
 @endsection
