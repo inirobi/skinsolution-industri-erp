@@ -174,11 +174,6 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        
-        /*
-         *Provider Yajra DataTable Oracle
-         */
-        yajra\Datatables\DatatablesServiceProvider::class,
     ],
 
     /*
@@ -229,8 +224,6 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-        //aliases yajra
-        'Datatables' => yajra\Datatables\Facades\Datatables::class,
 
     ],
 
