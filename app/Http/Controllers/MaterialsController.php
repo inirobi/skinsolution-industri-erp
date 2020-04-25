@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Materials;
+use Illuminate\Support\Facades\DB;
 
 class MaterialsController extends Controller
 {
@@ -161,5 +162,14 @@ class MaterialsController extends Controller
                 ->route('materials.index')
                 ->with('error', 'Data tidak ditemukan.');
           }
+    }
+
+    public function dataStock()
+    {
+        $stocks = DB::table('stocks')
+            ->join('materials', 'stocks.material_id', '=', 'materials.id')
+            ->select('stocks.*', 'materials.material_code', 'materials.material_name')
+            ->get();
+        return view('inventory.bahan_baku.stocks',['stocks'=> $stocks, 'no'=>1]);
     }
 }
