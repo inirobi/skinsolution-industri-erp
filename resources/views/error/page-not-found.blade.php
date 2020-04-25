@@ -12,7 +12,9 @@
     <div class="content">
       <h2>404</h2>  
       <h4>Maaf, Halaman tidak ditemukan !</h4>
+      <p>
       <a href="#" onclick="javascript:history.back()">Kembali</a>
+      </p>
     </div>
   </div>
   <script>
