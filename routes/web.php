@@ -32,6 +32,9 @@ Route::resource('/principals', 'PrincipalsController');
 //samples
 Route::resource('/samples', 'SamplesController');
 
+// stock bahan baku
+Route::get('/materials_stocks', 'MaterialsController@dataStock');
+
 //===============end inventory===================
 
 

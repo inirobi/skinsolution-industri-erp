@@ -89,7 +89,7 @@
                       </li>
                       <li><a>Stok<span class="fa fa-chevron-down"></span></a>
                           <ul class="nav child_menu">
-                            <li class="sub_menu"><a href="level2.html">Bahan Baku</a></li>
+                            <li class="sub_menu"><a href="{{url('/materials_stocks')}}">Bahan Baku</a></li>
                             <li><a href="#level2_2">Packaging</a></li>
                             <li><a href="#level2_2">Sample</a></li>
                           </ul>
