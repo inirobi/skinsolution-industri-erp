@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Materials;
 use Illuminate\Support\Facades\DB;
+use App\MaterialSupplier;
+use App\Suppliers;
 
 class MaterialsController extends Controller
 {
@@ -87,7 +89,15 @@ class MaterialsController extends Controller
      */
     public function show($id)
     {
-        //
+        $sup= DB::table('material_suppliers')
+        ->select('material_suppliers.*','suppliers.*','materials.*')
+        ->join('suppliers','suppliers.id','=','material_suppliers.supplier_id')
+        ->join('materials','materials.id','=','material_suppliers.material_id')
+        ->selectRaw('material_suppliers.id as id_x')
+        ->where('material_suppliers.material_id',$id)->get();
+
+        $supplier= Suppliers::all();
+        return view('inventory.bahan_baku.supplier',['sup' => $sup, 'id' => $id, 'supplier' => $supplier]);
     }
 
     /**
@@ -105,7 +115,7 @@ class MaterialsController extends Controller
           } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){
             return redirect()
                 ->route('materials.index')
-                ->with('error', 'Data tidak ditemukan.');
+                ->with('error', 'Data is not found.');
           }
     }
 
@@ -142,12 +152,12 @@ class MaterialsController extends Controller
 
           return redirect()
               ->route('materials.index')
-              ->with('success', 'Data bahan baku berhasil diupdate.');
+              ->with('success', 'Successfully Updated.');
 
         } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){
           return redirect()
               ->route('materials.index')
-              ->with('error', 'Data tidak ditemukan.');
+              ->with('error', 'Data is not found.');
         }
     }
 
@@ -164,12 +174,12 @@ class MaterialsController extends Controller
   
             return redirect()
                 ->route('materials.index')
-                ->with('success', 'Data bahan baku berhasil dihapus.');
+                ->with('success', 'Successfully Deleted.');
   
           } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){
             return redirect()
                 ->route('materials.index')
-                ->with('error', 'Data tidak ditemukan.');
+                ->with('error', 'Data is not found.');
           }
     }
 
@@ -177,9 +187,45 @@ class MaterialsController extends Controller
     {
         $stocks = DB::table('stocks')
             ->join('materials', 'stocks.material_id', '=', 'materials.id')
-            ->select('stocks.*', 'materials.material_code', 'materials.material_name')
+            ->select('stocks.*', 'materials.*')
             ->orderBy('materials.updated_at', 'desc')
             ->get();
         return view('inventory.bahan_baku.stocks',['stocks'=> $stocks, 'no'=>1]);
+    }
+
+    // suppliers
+
+    public function supplierStore(Request $request)
+    {
+        $x = DB::table('material_suppliers')->where([
+                ['supplier_id', '=', $request->supplier_id],
+                ['material_id', '=', $request->material_id],
+            ])->count();
+        if($x>0){
+            return redirect()->back()->with('error', 'Supplier Already Exist');
+        }
+        else{
+            $sup = MaterialSupplier::create([
+                'id' => null,
+                'material_id' => $request->material_id,
+                'supplier_id' => $request->supplier_id,
+            ]);
+            return redirect()->back()->with('success', 'Successfully Created.');
+        }
+        
+    }
+
+    public function SupplierDelete($id)
+    {
+
+        try {
+            MaterialSupplier::whereId($id)->delete();
+            return redirect()->back()->with('success', 'Successfully Deleted.');
+  
+          } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){
+            return redirect()
+                ->route('materials.index')
+                ->with('error', 'Data is not found.');
+          }   
     }
 }

@@ -4,7 +4,7 @@
 <!-- page content -->
 <div class="page-title">
   <div class="title_left">
-    <h3>Data Bahan Baku</h3>
+    <h3>Materials List</h3>
   </div>
 
   <div class="title_right">
@@ -25,7 +25,7 @@
     <div class="col-md-12 col-sm-12 ">
       <div class="x_panel">
         <div class="x_title">
-          <a href="{{ route('materials.create') }}" class="btn btn-success"><i class="fa fa-plus"></i> Tambah </a>
+          <a href="{{ route('materials.create') }}" class="btn btn-success"><i class="fa fa-plus"></i> Add New Material </a>
           <ul class="nav navbar-right panel_toolbox">
             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
             </li>
@@ -42,9 +42,12 @@
             <thead>
               <tr>
                 <th>No</th>
-                <th>Material Code</th>
-                <th>Material Name</th>
+                <th>Code</th>
+                <th>Cas Num</th>
+                <th>Name</th>
+                <th>Inci Name</th>
                 <th>Stock Minimum</th>
+                <th>Cantegory</th>
                 <th>Price</th>
                 <th>Action</th>
               </tr>
@@ -54,18 +57,19 @@
               <tr>
                 <td>{{ $no++ }}</td>
                 <td>{{ $data -> material_code }}</td>
+                <td>{{ $data -> cas_num }}</td>
                 <td>{{ $data -> material_name }}</td>
+                <td>{{ $data -> inci_name }}</td>
                 <td>{{ $data -> stock_minimum }}</td>
+                <td>{{ $data -> category }}</td>
                 <td>${{ $data -> price }}</td>
                 <td class="text-center">
-                  <a class="btn btn-info" title="Detail" onclick="detailConfirm('{{ $data -> material_code }}','{{ $data -> material_name }}','{{ $data -> cas_num }}','{{ $data -> inci_name }}','{{ $data -> stock_minimum }}','{{ $data -> category }}','{{ $data -> price }}')" href="#" data-toggle="modal" data-target="#modalDetail" class="btn btn-small text-primary">
+                  <a class="btn btn-info" href="{{ route('materials.show', $data) }}" title="Detail" class="btn btn-small text-primary">
                     <i class="fa fa-eye"></i>
                   </a>
                   <a href="{{ route('materials.edit', $data) }}" class="btn btn-warning" title="Edit"><i class="fa fa-edit"></i></a>
 
                   <a href="{{ route('materials.destroy', $data) }}" class="btn btn-danger" onclick="event.preventDefault();destroy('{{ route('materials.destroy', $data) }}')" title="Hapus"><i class="fa fa-trash"></i></a>
-                  
-                  <!-- <a href="#" class="btn btn-danger" onclick="javascript:coba(this, '{{ $data->id }}')" title="Hapus"><i class="fa fa-trash"></i></a> -->
                 </td>
               </tr>
               @endforeach

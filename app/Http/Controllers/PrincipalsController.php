@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Principals;
+use App\PrincipalSupplier;
+use App\Suppliers;
+use Illuminate\Support\Facades\DB;
 
 class PrincipalsController extends Controller
 {
@@ -80,7 +83,15 @@ class PrincipalsController extends Controller
      */
     public function show($id)
     {
-        //
+        $sup= DB::table('principal_suppliers')
+        ->select('principal_suppliers.*','suppliers.*','principals.*')
+        ->join('suppliers','suppliers.id','=','principal_suppliers.supplier_id')
+        ->join('principals','principals.id','=','principal_suppliers.principal_id')
+        ->selectRaw('principal_suppliers.id as id_x')
+        ->where('principal_suppliers.principal_id',$id)->get();
+
+        $supplier= Suppliers::all();
+        return view('inventory.principals.supplier',['sup' => $sup, 'id' => $id, 'supplier' => $supplier]);
     }
 
     /**
@@ -158,5 +169,41 @@ class PrincipalsController extends Controller
                 ->route('principals.index')
                 ->with('error', 'Data tidak ditemukan.');
           }
+    }
+
+    // suppliers
+
+    public function supplierStore(Request $request)
+    {
+        $x = DB::table('principal_suppliers')->where([
+                ['supplier_id', '=', $request->supplier_id],
+                ['principal_id', '=', $request->principal_id],
+            ])->count();
+        if($x>0){
+            return redirect()->back()->with('error', 'Supplier Already Exist');
+        }
+        else{
+            $sup = PrincipalSupplier::create([
+                'id' => null,
+                'principal_id' => $request->principal_id,
+                'supplier_id' => $request->supplier_id,
+            ]);
+            return redirect()->back()->with('success', 'Data principal berhasil dihapus.');
+        }
+        
+    }
+
+    public function SupplierDelete($id)
+    {
+
+        try {
+            PrincipalSupplier::whereId($id)->delete();
+            return redirect()->back()->with('success', 'Successfully Deleted.');
+  
+          } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){
+            return redirect()
+                ->route('materials.index')
+                ->with('error', 'Data is not found.');
+          }   
     }
 }

@@ -134,6 +134,7 @@
                           </ul>
                       </li>
                       <li><a href="e_commerce.html">Pengiriman</a></li>
+                      <li><a href="e_commerce.html">History Pengiriman</a></li>
                     </ul>
                   </li>
                   <li><a><i class="fa fa-usd"></i> Accounting <span class="fa fa-chevron-down"></span></a>

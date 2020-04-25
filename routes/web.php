@@ -24,7 +24,8 @@ Route::get('/error', 'HomeController@error');
 // bahan baku
 Route::resource('/materials', 'MaterialsController');
 Route::get('/materials_stocks', 'MaterialsController@dataStock');
-
+Route::get('/material/supplier', 'MaterialsController@supplierStore');
+Route::delete('/material/supplier/{id}', 'MaterialsController@SupplierDelete');
 //suplier
 Route::resource('/suppliers', 'SuppliersController');
 
@@ -34,6 +35,8 @@ Route::get('/packagings_stocks', 'PackagingsController@dataStock');
 
 //principals
 Route::resource('/principals', 'PrincipalsController');
+Route::get('/principal/supplier', 'PrincipalsController@supplierStore');
+Route::delete('/principal/supplier/{id}', 'PrincipalsController@SupplierDelete');
 
 //samples
 Route::resource('/samples', 'SamplesController');

@@ -45,6 +45,7 @@
                 <th>Material Code</th>
                 <th>Material Name</th>
                 <th>Quantity</th>
+                <th>Date</th>
               </tr>
             </thead>
             <tbody>
@@ -53,7 +54,11 @@
                 <td>{{ $no++ }}</td>
                 <td>{{ $data -> material_code }}</td>
                 <td>{{ $data -> material_name }}</td>
-                <td>{{ $data -> quantity }}</td>
+                <td>
+                  @if($data->quantity <= $data->stock_minimum)<span class="badge badge-danger">{{$data->quantity}}</span>@endif
+                  @if($data->quantity > $data->stock_minimum)<span class="badge bg-green">{{$data->quantity}}</span>@endif
+                </td>
+                <td> {{$data->created_at}}</td>
               </tr>
               @endforeach
             </tbody>
