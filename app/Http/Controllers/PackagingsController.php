@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Packagings;
 use Illuminate\Http\Request;
-use DataTables;
 
 class PackagingsController extends Controller
 {
@@ -15,9 +14,7 @@ class PackagingsController extends Controller
      */
     public function index(Request $request)
     {
-        if($request){
-            return Datatables::of(Packagings::latest()->get())->make(true);
-        }
+        return view('inventory.packagings.index');
     }
 
 
