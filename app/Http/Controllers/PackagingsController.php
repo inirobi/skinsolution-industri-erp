@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Packagings;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PackagingsController extends Controller
 {
@@ -91,5 +92,15 @@ class PackagingsController extends Controller
     public function destroy(Packagings $packagings)
     {
         //
+    }
+
+    public function dataStock()
+    {
+        $stocks = DB::table('packaging_stocks')
+            ->join('packagings', 'packaging_stocks.packaging_id', '=', 'packagings.id')
+            ->select('packaging_stocks.*', 'packagings.packaging_code', 'packagings.packaging_name', 'packagings.packaging_type')
+            ->orderBy('packagings.updated_at', 'desc')
+            ->get();
+        return view('inventory.packagings.stocks',['stocks'=> $stocks, 'no'=>1]);
     }
 }

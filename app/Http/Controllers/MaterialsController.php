@@ -178,6 +178,7 @@ class MaterialsController extends Controller
         $stocks = DB::table('stocks')
             ->join('materials', 'stocks.material_id', '=', 'materials.id')
             ->select('stocks.*', 'materials.material_code', 'materials.material_name')
+            ->orderBy('materials.updated_at', 'desc')
             ->get();
         return view('inventory.bahan_baku.stocks',['stocks'=> $stocks, 'no'=>1]);
     }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Samples;
 use App\Suppliers;
+use Illuminate\Support\Facades\DB;
 
 class SamplesController extends Controller
 {
@@ -173,5 +174,16 @@ class SamplesController extends Controller
                 ->route('samples.index')
                 ->with('error', 'Data tidak ditemukan.');
           }
+    }
+
+    public function dataStock()
+    {
+        $stocks = DB::table('sample_stocks')
+            ->join('sample_materials', 'sample_stocks.sample_material_id', '=', 'sample_materials.id')
+            ->join('suppliers', 'sample_materials.supplier_id', '=', 'suppliers.id')
+            ->select('sample_stocks.*', 'sample_materials.material_code', 'sample_materials.material_name', 'suppliers.supplier_name')
+            ->orderBy('sample_stocks.updated_at', 'desc')
+            ->get();
+        return view('inventory.samples.stocks',['stocks'=> $stocks, 'no'=>1]);
     }
 }

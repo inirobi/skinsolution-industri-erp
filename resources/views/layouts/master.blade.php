@@ -90,8 +90,8 @@
                       <li><a>Stok<span class="fa fa-chevron-down"></span></a>
                           <ul class="nav child_menu">
                             <li class="sub_menu"><a href="{{url('/materials_stocks')}}">Bahan Baku</a></li>
-                            <li><a href="#level2_2">Packaging</a></li>
-                            <li><a href="#level2_2">Sample</a></li>
+                            <li><a href="{{url('/packagings_stocks')}}">Packaging</a></li>
+                            <li><a href="{{url('/samples_stocks')}}">Sample</a></li>
                           </ul>
                       </li>
                       <li><a>Estimasi Pemesanan<span class="fa fa-chevron-down"></span></a>

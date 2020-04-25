@@ -23,17 +23,21 @@ Route::get('/error', 'HomeController@error');
 
 // bahan baku
 Route::resource('/materials', 'MaterialsController');
+Route::get('/materials_stocks', 'MaterialsController@dataStock');
+
 //suplier
 Route::resource('/suppliers', 'SuppliersController');
+
 //packaging
 Route::resource('/packagings', 'PackagingsController');
+Route::get('/packagings_stocks', 'PackagingsController@dataStock');
+
 //principals
 Route::resource('/principals', 'PrincipalsController');
+
 //samples
 Route::resource('/samples', 'SamplesController');
-
-// stock bahan baku
-Route::get('/materials_stocks', 'MaterialsController@dataStock');
+Route::get('/samples_stocks', 'SamplesController@dataStock');
 
 //===============end inventory===================
 
