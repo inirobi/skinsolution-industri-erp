@@ -29,10 +29,14 @@ Route::delete('/material/supplier/{id}', 'MaterialsController@SupplierDelete');
 //suplier
 Route::resource('/suppliers', 'SuppliersController');
 
+//SOF Rout Packagings
 //packaging
 Route::resource('/packagings', 'PackagingsController');
 Route::get('/packagings_stocks', 'PackagingsController@dataStock');
 
+Route::get('/packagings/customer/ajax', 'PackagingsController@customerState');
+Route::get('/packagings/supplier/ajax', 'PackagingsController@supplierState');
+//EOF Route Packagings
 //principals
 Route::resource('/principals', 'PrincipalsController');
 Route::get('/principal/supplier', 'PrincipalsController@supplierStore');

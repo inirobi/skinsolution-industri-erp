@@ -70,7 +70,7 @@
                   <li><a><i class="fa fa-cubes"></i> Inventory <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li><a href="{{ route('materials.index') }}">Bahan Baku</a></li>
-                      <li><a href="form_advanced.html">Packaging</a></li>
+                      <li><a href="{{ route('packagings.index') }}">Packaging</a></li>
                       <li><a href="{{ route('suppliers.index') }}">Supplier</a></li>
                       <li><a href="{{ route('principals.index') }}">Principal</a></li>
                       <li><a href="{{ route('samples.index') }}">Sample Bahan Baku</a></li>
@@ -383,6 +383,7 @@
     <!-- sweetalert -->
     <script src="{{ asset('assets/vendors/sweetalert/sweetalert.min.js')}}"></script>
 
-    
+    @stack('scripts')
+
   </body>
 </html>
