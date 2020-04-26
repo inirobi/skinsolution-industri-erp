@@ -19,7 +19,11 @@ class Packagings extends Model
         'status',
         'price',
     ];
-
+    /**
+     * Reference for many to many relations
+     * 
+     * $this->belongsToMany( CLASS, TABLE, KEY-RELATING-THIS-MODEL, KEY-FOR-OTHER-MODEL )
+     */
     public function customers()
     {
         return $this->belongsToMany('App\Customers', 'packaging_customer', 'packaging_id', 'customer_id');

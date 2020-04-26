@@ -101,7 +101,7 @@ class PackagingsController extends Controller
      * @param  \App\Packagings  $packagings
      * @return \Illuminate\Http\Response
      */
-    public function show(Packagings $packagings)
+    public function show($id)
     {
         //
     }
@@ -219,6 +219,48 @@ class PackagingsController extends Controller
         return Suppliers::select('suppliers.id','suppliers.supplier_name')->get();
     }
 
+    /**
+     * State Ajax of All Data Packaging
+     * 
+     * @return JSON
+     */
+    public function getAllPackagingsData()
+    {
+        DB::statement(DB::raw('set @row:=0'));
+        return Packagings::select(DB::raw('@row:=@row+1 as rowNumber, packagings.id as idData'),'packagings.*','customers.*','suppliers.*')
+                        ->leftJoin('customers','packagings.customer_id','=','customers.id')
+                        ->leftJoin('suppliers','packagings.supplier_id','=','suppliers.id')
+                        ->get();
+    }
+
+    /**
+     * State Ajax of Customers Data Packaging
+     * 
+     * @return JSON
+     */
+    public function getCustomersPackagingsData()
+    {
+        DB::statement(DB::raw('set @row:=0'));
+        return Packagings::select(DB::raw('@row:=@row+1 as rowNumber'),'packagings.*','customers.*')
+                        ->leftJoin('customers','packagings.customer_id','=','customers.id')
+                        ->where('packagings.packaging_type','CS')
+                        ->get();
+    }
+
+    /**
+     * State Ajax of Customers Data Packaging
+     * 
+     * @return JSON
+     */
+    public function getSuppliersPackagingsData()
+    {
+        DB::statement(DB::raw('set @row:=0'));
+        return Packagings::select(DB::raw('@row:=@row+1 as rowNumber'),'packagings.*','suppliers.*')
+                        ->leftJoin('suppliers','packagings.supplier_id','=','suppliers.id')
+                        ->where('packagings.packaging_type','SS')
+                        ->get();
+    }
+
     public function dataStock()
     {
         $stocks = DB::table('packaging_stocks')
@@ -229,4 +271,3 @@ class PackagingsController extends Controller
         return view('inventory.packagings.stocks',['stocks'=> $stocks, 'no'=>1]);
     }
 }
- 

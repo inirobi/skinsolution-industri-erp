@@ -26,6 +26,7 @@ Route::resource('/materials', 'MaterialsController');
 Route::get('/materials_stocks', 'MaterialsController@dataStock');
 Route::get('/material/supplier', 'MaterialsController@supplierStore');
 Route::delete('/material/supplier/{id}', 'MaterialsController@SupplierDelete');
+
 //suplier
 Route::resource('/suppliers', 'SuppliersController');
 
@@ -33,10 +34,13 @@ Route::resource('/suppliers', 'SuppliersController');
 //packaging
 Route::resource('/packagings', 'PackagingsController');
 Route::get('/packagings_stocks', 'PackagingsController@dataStock');
-
 Route::get('/packagings/customer/ajax', 'PackagingsController@customerState');
 Route::get('/packagings/supplier/ajax', 'PackagingsController@supplierState');
+Route::get('/packagings/all/ajax', 'PackagingsController@getAllPackagingsData');
+Route::get('/packagings/customers/ajax', 'PackagingsController@getCustomersPackagingsData');
+Route::get('/packagings/suppliers/ajax', 'PackagingsController@getSuppliersPackagingsData');
 //EOF Route Packagings
+
 //principals
 Route::resource('/principals', 'PrincipalsController');
 Route::get('/principal/supplier', 'PrincipalsController@supplierStore');
