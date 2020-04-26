@@ -10,3 +10,16 @@ class PoMaterialDetail extends Model
     public $incrementing = false;
     protected $fillable = ['id','po_material_id','material_id','quantity','price'];    
 }
+    protected $guarded  = ['id'];
+
+    public function po_material()
+    {
+        return $this->belongsTo(PoMaterial::class,'po_material_id');
+    }    
+
+    public function material()
+    {
+        return $this->belongsTo(Material::class,'material_id');
+    }    
+
+}

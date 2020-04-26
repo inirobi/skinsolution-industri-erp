@@ -71,6 +71,8 @@
                     <ul class="nav child_menu">
                       <li><a href="{{ route('materials.index') }}">Materials</a></li>
                       <li><a href="form_advanced.html">Packaging</a></li>
+                      <li><a href="{{ route('materials.index') }}">Bahan Baku</a></li>
+                      <li><a href="{{ route('packagings.index') }}">Packaging</a></li>
                       <li><a href="{{ route('suppliers.index') }}">Supplier</a></li>
                       <li><a href="{{ route('principals.index') }}">Principal</a></li>
                       <li><a href="{{ route('samples.index') }}">Sample Materials</a></li>
@@ -359,6 +361,8 @@
     <!-- iCheck -->
     <script src="{{ asset('assets/vendors/iCheck/icheck.min.js')}}"></script>
 
+    @stack('beforeScripts')
+
       <!-- Datatables -->
     <script src="{{ asset('assets/vendors/datatables.net/js/jquery.dataTables.min.js')}}"></script>
     <script src="{{ asset('assets/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js')}}"></script>
@@ -383,6 +387,7 @@
     <!-- sweetalert -->
     <script src="{{ asset('assets/vendors/sweetalert/sweetalert.min.js')}}"></script>
 
-    
+    @stack('scripts')
+
   </body>
 </html>

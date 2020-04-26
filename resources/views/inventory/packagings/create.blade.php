@@ -3,128 +3,190 @@
 @section('content')
 <!-- page content -->
 <div class="page-title">
-  <div class="title_left">
-    <h3>Suppliers</h3>
-  </div>
-
-  <div class="title_right">
-    <div class="col-md-5 col-sm-5 form-group pull-right top_search">
-      <div class="input-group">
-        <input type="text" class="form-control" placeholder="Search for...">
-        <span class="input-group-btn">
-          <button class="btn btn-default" type="button">Go!</button>
-        </span>
-      </div>
+    <div class="title_left">
+        <h3>Packaging</h3>
     </div>
-  </div>
 </div>
 <div class="clearfix"></div>
 
 <div class="row">
-  <div class="col-md-12 col-sm-12">
-    <div class="x_panel">
-      <div class="x_content">
-        @if(isset($suppliers))
-          <form action="{{ route('suppliers.update', $suppliers) }}" novalidate method="POST" enctype="multipart/form-data">
-          @method('PUT')
-        @else
-            <form action="{{ route('suppliers.store') }}" method="POST" enctype="multipart/form-data">
-        @endif
+    <div class="col-md-12 col-sm-12">
+        <div class="x_panel">
+            <div class="x_content">
+                @if(isset($data))
+                    <form action="{{ route('packagings.update', $data) }}" novalidate method="POST" enctype="multipart/form-data">
+                    @method('PUT')
+                @else
+                    <form action="{{ route('packagings.store') }}" method="POST" enctype="multipart/form-data">
+                @endif
 
-        @csrf
-          <p>Wajib disi <code>*</code>
-          </p>
-          <span class="section">
-            @if(isset($suppliers))
-                {{ __('Update Supplier') }}
-            @else
-                {{ __('Form Supplier') }}
-            @endif
-          </span>
-          <div class="field item form-group">
-            <label class="col-form-label col-md-3 col-sm-3  label-align">Supplier Kode<code>*</code></label>
-            <div class="col-md-6 col-sm-6">
-              <input class="form-control @error('supplier_code') is-invalid @enderror" value="{{ old('supplier_code', $suppliers->supplier_code ?? '') }}" name="supplier_code" required="required" />
+                        @csrf
+                        <p>Wajib disi <code>*</code>
+                        </p>
+                        <span class="section">
+                            @if(isset($data))
+                            {{ __('Update Packagings') }}
+                            @else
+                            {{ __('Form Packagings') }}
+                            @endif
+                        </span>
+                        <div class="field item form-group">
+                            <label class="col-form-label col-md-3 col-sm-3  label-align">Packaging
+                                Code<code>*</code></label>
+                            <div class="col-md-6 col-sm-6">
+                                <input class="form-control @error('packaging_code') is-invalid @enderror"
+                                    value="{{ old('packaging_code', $data->packaging_code ?? '') }}"
+                                    name="packaging_code" required="required" autofocus placeholder="Packaging Code"/>
+                            </div>
+                            @error('packaging_code')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
+                        </div>
+                        <div class="field item form-group">
+                            <label class="col-form-label col-md-3 col-sm-3  label-align">Category<code>*</code></label>
+                            <div class="col-md-6 col-sm-6">
+                                <input class="form-control @error('category') is-invalid @enderror"
+                                    value="{{ old('category', $data->category ?? '') }}" name="category"
+                                    required="required" placeholder="Category"/>
+                            </div>
+                            @error('category')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
+                        </div>
+                        <div class="field item form-group">
+                            <label class="col-form-label col-md-3 col-sm-3  label-align">Packaging
+                                Name<code>*</code></label>
+                            <div class="col-md-6 col-sm-6">
+                                <input class="form-control  @error('packaging_name') is-invalid @enderror"
+                                    value="{{ old('packaging_name', $data->packaging_name ?? '') }}" type="text"
+                                    name="packaging_name" required='required' placeholder="Packaging Name"/>
+                            </div>
+                            @error('packaging_name')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
+                        </div>
+                        <div class="item form-group">
+                            <label class="col-form-label col-md-3 col-sm-3 label-align">Packaging Type <code>*</code></label>
+                            <div class="col-md-6 col-sm-6 ">
+                                <div id="packaging_type" class="btn-group" data-toggle="buttons">
+                                    <label class="btn btn-primary" data-toggle-class="btn-primary"
+                                        data-toggle-passive-class="btn-default" id="btn-customer">
+                                        <input type="radio" value="CS" id="packaging_type" name="packaging_type"
+                                            checked="checked" class="join-btn">
+                                        &nbsp; Customer
+                                    </label>
+                                    <label class="btn btn-secondary" data-toggle-class="btn-primary"
+                                        data-toggle-passive-class="btn-default" id="btn-supplier">
+                                        <input type="radio" value="SS" id="packaging_type" name="packaging_type"
+                                            class="join-btn">
+                                        &nbsp; Supplier
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item form-group">
+                            <label class="col-form-label col-md-3 col-sm-3 label-align">Vendor <code>*</code></label>
+                            <div class="col-md-6 col-sm-6 ">
+                                <div id="cs">
+                                    <select class="form-control" name="vendor" id="vendor">
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="field item form-group">
+                            <label class="col-form-label col-md-3 col-sm-3  label-align">Stock Minimum
+                                <code>*</code></label>
+                            <div class="col-md-6 col-sm-6">
+                                <input class="form-control  @error('stock_minimum') is-invalid @enderror"
+                                    value="{{ old('stock_minimum', $data->stock_minimum ?? '') }}" type="number"
+                                    name="stock_minimum" required='required' min="1" placeholder="Stock Minimum"/>
+                            </div>
+                            @error('stock_minimum')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
+                        </div>
+
+                        <div class="field item form-group">
+                            <label class="col-form-label col-md-3 col-sm-3  label-align">Price <code>*</code></label>
+                            <div class="col-md-6 col-sm-6">
+                                <input class="form-control  @error('price') is-invalid @enderror"
+                                    value="{{ old('price', $data->price ?? '') }}" type="number" name="price"
+                                    required='required' min="0" placeholder="Price"/>
+                            </div>
+                            @error('price')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" onclick="javascript:history.back()">Cancel</button>
+                            <button type="submit" class="btn btn-primary"><i class="fa fa-floppy-o"></i> Save</button>
+                        </div>
+                    </form>
             </div>
-            @error('supplier_code')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-            @enderror
-          </div>
-          <div class="field item form-group">
-            <label class="col-form-label col-md-3 col-sm-3  label-align">Supplier Name<code>*</code></label>
-            <div class="col-md-6 col-sm-6">
-              <input class="form-control  @error('supplier_name') is-invalid @enderror" value="{{ old('supplier_name', $suppliers->supplier_name ?? '') }}" type="text" name="supplier_name" required='required' />
-            </div>
-            @error('supplier_name')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-            @enderror
-          </div>
-          <div class="field item form-group">
-            <label class="col-form-label col-md-3 col-sm-3  label-align">Supplier Mobile<code>*</code></label>
-            <div class="col-md-6 col-sm-6">
-              <input class="form-control tel @error('supplier_mobile') is-invalid @enderror" value="{{ old('supplier_mobile', $suppliers->supplier_mobile ?? '') }}" name="supplier_mobile"required="required" type="tel" data-validate-length-range="8,20"/>
-            </div>
-            @error('supplier_mobile')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-            @enderror
-          </div>
-          <div class="field item form-group">
-            <label class="col-form-label col-md-3 col-sm-3  label-align">Supplier Address<code>*</code></label>
-            <div class="col-md-6 col-sm-6">
-              <textarea required="required" name='supplier_address' rows="3" class="form-control  @error('supplier_address') is-invalid @enderror" name="supplier_address" required autocomplete="supplier_address">{{ old('supplier_address', $suppliers->supplier_address ?? '') }}</textarea>
-            </div>
-            @error('supplier_address')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-            @enderror
-          </div>
-          <div class="field item form-group">
-            <label class="col-form-label col-md-3 col-sm-3  label-align">Supplier Email<code>*</code></label>
-            <div class="col-md-6 col-sm-6">
-              <input class="form-control email @error('supplier_email') is-invalid @enderror" value="{{ old('supplier_email', $suppliers->supplier_email ?? '') }}" type="email" name="supplier_email" required='required'>
-            </div>
-            @error('supplier_email')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-            @enderror
-          </div>
-          <div class="field item form-group">
-            <label class="col-form-label col-md-3 col-sm-3  label-align">Contact Person<code>*</code></label>
-            <div class="col-md-6 col-sm-6">
-              <input class="form-control  @error('contact_person') is-invalid @enderror" value="{{ old('contact_person', $suppliers->contact_person ?? '') }}" type="text" name="contact_person" required='required'>
-            </div>
-            @error('contact_person')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-            @enderror
-          </div>
-          <div class="ln_solid">
-            <div class="form-group">
-              <div class="col-md-6 offset-md-3">
-          <button type='submit' class="btn btn-primary">Submit</button>
-          @if(isset($suppliers))
-              <a href="{{ route('suppliers.index') }}" class="btn btn-danger">Cancel</a>
-            @else
-              <button type="reset" class="btn btn-success">Reset</button>
-            @endif
-              </div>
-            </div>
-          </div>
-        </form>
-      </div>
+        </div>
     </div>
-  </div>
 </div>
 <!-- /page content -->
 
 @include('layouts.validasi_footer')
+
+@push('scripts')
+<script>
+    $.get('{{url("packagings/customer/ajax")}}', function (data) {
+        $('#vendor').empty();
+        $.each(data, function (index, subcatObj) {
+            $('#vendor').append('<option value="' + subcatObj.id + '">' + subcatObj.customer_name +
+                '</option>')
+        });
+    });
+
+
+    $('input[type=radio][name=packaging_type]').change(function () {
+        var source = this.value;
+
+        if (source == "SS") {
+            $('#btn-customer').attr('class', 'btn btn-secondary');
+            $('#btn-supplier').attr('class', 'btn btn-primary');
+            $.get('{{url("packagings/supplier/ajax")}}', function (data) {
+                $('#vendor').empty();
+                $.each(data, function (index, subcatObj) {
+                    $('#vendor').append('<option value="' + subcatObj.id + '">' + subcatObj
+                        .supplier_name + '</option>')
+                });
+            });
+
+
+        }
+        if (source == "CS") {
+            $('#btn-customer').attr('class', 'btn btn-primary');
+            $('#btn-supplier').attr('class', 'btn btn-secondary');
+            $.get('{{url("packagings/customer/ajax")}}', function (data) {
+                $('#vendor').empty();
+                $.each(data, function (index, subcatObj) {
+                    $('#vendor').append('<option value="' + subcatObj.id + '">' + subcatObj
+                        .customer_name + '</option>')
+                });
+            });
+        }
+
+
+
+
+    });
+
+</script>
+@endpush
 @endsection
