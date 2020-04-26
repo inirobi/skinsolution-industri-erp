@@ -133,9 +133,9 @@
           {{csrf_field()}}
           <input type="hidden" class="form-control" value="{{$id}}" name="po_material_id">
           <div class="form-group">
-            <label for="kode" class="col-form-label">Supplier:</label>
+            <label for="kode" class="col-form-label">Material</label>
               <select class="form-control" name="supplier_id">
-                  @foreach($purchases as $a)
+                  @foreach($materials as $a)
                       <option value="{{$a->id}}" >{{$a->material_name}}</option>
                   @endforeach
               </select>

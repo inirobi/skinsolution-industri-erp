@@ -63,12 +63,8 @@ class PoMaterialController extends Controller
                 ->join('suppliers','suppliers.id', '=', 'material_suppliers.supplier_id')
                 ->where('po_material_details.po_material_id',$id)
                 ->get();
-        // echo "<pre>";
-        // var_dump($purchases[0]->supplier_name);
-        // echo "<hr>";
-        // var_dump($purchases);
-        // echo "</pre>";die;
-        return view('inventory.purchases.po_materials.detail',['purchases' => $purchases, 'id' => $id ]);
+        $materials = Materials::all();
+        return view('inventory.purchases.po_materials.detail',['purchases' => $purchases, 'id' => $id, 'materials' => $materials ]);
     }
 
     /**
