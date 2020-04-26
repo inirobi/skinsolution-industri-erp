@@ -69,34 +69,36 @@
                 <ul class="nav side-menu">
                   <li><a><i class="fa fa-cubes"></i> Inventory <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
+                      <li><a href="{{ route('materials.index') }}">Materials</a></li>
+                      <li><a href="form_advanced.html">Packaging</a></li>
                       <li><a href="{{ route('materials.index') }}">Bahan Baku</a></li>
                       <li><a href="{{ route('packagings.index') }}">Packaging</a></li>
                       <li><a href="{{ route('suppliers.index') }}">Supplier</a></li>
                       <li><a href="{{ route('principals.index') }}">Principal</a></li>
-                      <li><a href="{{ route('samples.index') }}">Sample Bahan Baku</a></li>
+                      <li><a href="{{ route('samples.index') }}">Sample Materials</a></li>
                       <li><a>Purchase Order<span class="fa fa-chevron-down"></span></a>
                           <ul class="nav child_menu">
-                            <li class="sub_menu"><a href="level2.html">Bahan Baku</a></li>
+                            <li class="sub_menu"><a href="{{ route('po_material.index') }}">Materials</a></li>
                             <li><a href="#level2_2">Packaging</a></li>
                           </ul>
                       </li>
                       <li><a>Penerimaan<span class="fa fa-chevron-down"></span></a>
                           <ul class="nav child_menu">
-                            <li class="sub_menu"><a href="level2.html">Bahan Baku</a></li>
+                            <li class="sub_menu"><a href="{{url('purchases_penerimaan')}}">Materials</a></li>
                             <li><a href="#level2_2">Packaging</a></li>
                             <li><a href="#level2_2">Sample</a></li>
                           </ul>
                       </li>
                       <li><a>Stok<span class="fa fa-chevron-down"></span></a>
                           <ul class="nav child_menu">
-                            <li class="sub_menu"><a href="{{url('/materials_stocks')}}">Bahan Baku</a></li>
+                            <li class="sub_menu"><a href="{{url('/materials_stocks')}}">Materials</a></li>
                             <li><a href="{{url('/packagings_stocks')}}">Packaging</a></li>
                             <li><a href="{{url('/samples_stocks')}}">Sample</a></li>
                           </ul>
                       </li>
                       <li><a>Estimasi Pemesanan<span class="fa fa-chevron-down"></span></a>
                           <ul class="nav child_menu">
-                            <li class="sub_menu"><a href="level2.html">Bahan Baku</a></li>
+                            <li class="sub_menu"><a href="level2.html">Materials</a></li>
                             <li><a href="#level2_2">Packaging</a></li>
                           </ul>
                       </li>                   

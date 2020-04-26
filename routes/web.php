@@ -50,6 +50,15 @@ Route::delete('/principal/supplier/{id}', 'PrincipalsController@SupplierDelete')
 Route::resource('/samples', 'SamplesController');
 Route::get('/samples_stocks', 'SamplesController@dataStock');
 
+//purchases
+Route::resource('/purchases', 'PurchasesManagementController');
+Route::get('/purchases_penerimaan','PurchasesManagementController@indexPurchases');
+Route::get('/purchases_penerimaan/view/{id}','PurchasesManagementController@showPurchases');
+Route::delete('/purchases_penerimaan/view/{id}','PurchasesManagementController@destroyPurchases');
+
+//po material
+Route::resource('/po_material', 'PoMaterialController');
+
 //===============end inventory===================
 
 
