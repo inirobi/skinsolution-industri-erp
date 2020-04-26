@@ -81,7 +81,6 @@
                 <th>Analis Num</th>
                 <th>Quantity</th>
                 <th>Expired Date</th>
-                <th>Action</th>
               </tr>
             </thead>
             <tbody>
@@ -93,9 +92,6 @@
                 <td>{{$data->analis_num}}</td>
                 <td>{{$data->quantity}}</td>
                 <td>{{$data->expired_date}}</td>
-                <td class="text-center">
-                  <a href="{{ url('purchases_penerimaan/view', $data->id) }}" class="btn btn-danger" onclick="event.preventDefault();destroy('{{ url('purchases_penerimaan/view', $data->id) }}')" title="Hapus"><i class="fa fa-trash"></i></a>
-                </td>
               </tr>
               @endforeach
             </tbody>
@@ -107,28 +103,6 @@
     </div>
   </div>
 </div>
-
-<!-- hapus -->
-<form id="destroy-form" method="POST">
-    @method('DELETE')
-    @csrf
-</form>
-<script type="text/javascript">
-  function destroy(action){
-    swal({
-        title: 'Apakah anda yakin?',
-        text: 'Setelah dihapus, Anda tidak akan dapat mengembalikan data ini!',
-        icon: 'warning',
-        buttons: ["Cancel", "Yes!"],
-    }).then(function(value) {
-        if (value) {
-          document.getElementById('destroy-form').setAttribute('action', action);
-          document.getElementById('destroy-form').submit();
-        }else {
-        swal("Data kamu aman!");
-      }
-    });
-  }
 </script>
         <!-- /page content -->
 @endsection
