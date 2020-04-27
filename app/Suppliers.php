@@ -13,4 +13,9 @@ class Suppliers extends Model
     {
         return $this->belongsToMany('App\Packagings');
     }
+
+        public function pomaterial()
+    {
+        return $this->hasMany(PoMaterial::class, 'supplier_id', 'id');
+    }
 }

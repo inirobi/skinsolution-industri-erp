@@ -27,6 +27,8 @@
    
     <!-- Custom styling plus plugins -->
     <link href="{{ asset('assets/build/css/custom.min.css')}}" rel="stylesheet">
+
+    @stack('styles')
   </head>
 
   <body class="nav-md">
@@ -67,8 +69,6 @@
                   <li><a><i class="fa fa-cubes"></i> Inventory <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li><a href="{{ route('materials.index') }}">Materials</a></li>
-                      <li><a href="form_advanced.html">Packaging</a></li>
-                      <li><a href="{{ route('materials.index') }}">Bahan Baku</a></li>
                       <li><a href="{{ route('packagings.index') }}">Packaging</a></li>
                       <li><a href="{{ route('suppliers.index') }}">Supplier</a></li>
                       <li><a href="{{ route('principals.index') }}">Principal</a></li>
@@ -129,16 +129,23 @@
                           <ul class="nav child_menu">
                             <li class="sub_menu"><a href="level2.html">Trial</a></li>
                             <li><a href="#level2_2">Produksi</a></li>
-                            <li><a href="#level2_2">Sisa</a></li>
                           </ul>
                       </li>
-                      <li><a href="e_commerce.html">Pengiriman</a></li>
-                      <li><a href="e_commerce.html">History Pengiriman</a></li>
+                      <li><a href="{{route('delivery_order.index')}}">Delivery Order</a></li>
+                      <li><a href="e_commerce.html">History</a></li>
+                      <li><a href="{{route('left_overs.index')}}">Leftovers</a></li>
                     </ul>
                   </li>
                   <li><a><i class="fa fa-usd"></i> Accounting <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="page_403.html">Pengeluaran</a></li>
+                      <li><a>Pengeluaran<span class="fa fa-chevron-down"></span></a>
+                          <ul class="nav child_menu">
+                            <li class="sub_menu"><a href="{{url('pengeluaran_material')}}">PO Material</a></li>
+                            <li><a href="{{url('pengeluaran_packaging')}}">PO Packaging</a></li>
+                            <li><a href="#level2_2">PO Lain-Lain</a></li>
+                            <li><a href="#level2_2">Gaji</a></li>
+                          </ul>
+                      </li>
                       <li><a>Pemasukan<span class="fa fa-chevron-down"></span></a>
                           <ul class="nav child_menu">
                             <li class="sub_menu"><a href="level2.html">Penjualan</a></li>

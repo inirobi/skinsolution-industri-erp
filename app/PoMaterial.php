@@ -9,12 +9,11 @@ class PoMaterial extends Model
     protected $table = 'po_materials';
 
     protected $fillable = ['id','po_num','po_date','tempo','supplier_id','currency','kurs', 'ppn', 'description', 'terms', 'status'];   
-}
-    protected $guarded  = ['id'];
+    // protected $guarded  = ['id'];
 
-    public function supplier()
+    public function suppliers()
     {
-        return $this->belongsTo(Supplier::class,'supplier_id');
-    }    
-
+        return $this->belongsTo(Suppliers::class, 'supplier_id', 'id');
+    }
 }
+ 

@@ -6,7 +6,10 @@ use Illuminate\Http\Request;
 use App\PoMaterial;
 use App\PoMaterialDetail;
 use App\Suppliers;
-use App\Materials;
+use App\Material;
+use App\NotifMaterials;
+use App\MaterialSupplier;
+use App\Petty;
 use Illuminate\Support\Facades\DB;
 
 class PoMaterialController extends Controller
@@ -87,7 +90,9 @@ class PoMaterialController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        echo $id."<br>";
+        var_dump($request);die;
+
     }
 
     /**
@@ -99,5 +104,45 @@ class PoMaterialController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function pengeluaran_material()
+    {
+        // $purchase = PoMaterial::orderBy('id', 'desc')->get();
+        $purchase = DB::table('po_materials')
+                    ->select('po_materials.*','suppliers.supplier_name') 
+                    ->join('suppliers','po_materials.supplier_id','=','suppliers.id')
+                    ->orderBy('po_materials.id','desc')
+                    ->get();
+        // $supplier = Suppliers::all();
+         // $notifmat=NotifMaterials::all();
+        // return view('accounting.pengeluaran.material.index', compact('purchase','supplier'));
+        return view('accounting.pengeluaran.material.index', compact('purchase'));
+    }
+    public function pengeluaran_material_detail($id)
+    {
+        $purchase = DB::table('po_material_details')
+                    ->join('materials','po_material_details.material_id','=','materials.id')
+                    ->join('po_materials','po_material_details.po_material_id','=','po_materials.id')
+                    ->join('suppliers', 'po_materials.supplier_id','=','suppliers.id')
+                    ->where('po_materials.id', $id)
+                    ->get();
+     
+        return view('accounting.pengeluaran.material.view', ['purchase'=>$purchase]);
+    }
+    public function pengeluaran_material_update(Request $request)
+    {
+        try {
+            DB::table('po_materials')
+              ->where('id', $request->kode)
+              ->update(['status' => $request->status]); 
+          
+          return redirect('pengeluaran_material')
+              ->with('success', 'Successfully Updated.');
+
+        } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){
+          return redirect('pengeluaran_material')
+              ->with('error', 'Data is not found.');
+        }
     }
 }

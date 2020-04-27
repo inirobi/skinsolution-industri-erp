@@ -4,7 +4,7 @@
 <!-- page content -->
 <div class="page-title">
   <div class="title_left">
-    <h3>Customers List</h3>
+    <h3>Delivery Order Lists</h3>
   </div>
 
   <div class="title_right">
@@ -25,7 +25,7 @@
   <div class="col-md-12 col-sm-12 ">
     <div class="x_panel">
       <div class="x_title">
-        <a href="{{ route('customers.create') }}" class="btn btn-success"><i class="fa fa-plus"></i> Add New Customer </a>
+        <a href="{{ route('delivery_order.create') }}" class="btn btn-success"><i class="fa fa-plus"></i> Add New Delivery Order</a>
         <ul class="nav navbar-right panel_toolbox">
           <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
           <li><a class="close-link"><i class="fa fa-close"></i></a></li>
@@ -41,26 +41,25 @@
                 <thead>
                   <tr>
                     <th>No</th>
-                    <th>Code</th>
-                    <th>Name</th>
-                    <th>Mobile</th>
-                    <th>Email</th>
-                    <th>Address</th>
+                    <th>Delivery Order Number</th>
+                    <th>Date</th>
+                    <th>Customer Name</th>
+                    <th>PO Number</th>
                     <th>Action</th>
                   </tr>
                 </thead>
                 <tbody>
-                  @foreach($customers as $data)
+                  @php $no=1 @endphp
+                  @foreach($inv as $data)
                   <tr>
-                    <td>{{ $no++ }}</td>
-                    <td>{{ $data -> customer_code }}</td>
-                    <td>{{ $data -> customer_name }}</td>
-                    <td>{{ $data -> customer_mobile }}</td>
-                    <td>{{ $data -> customer_email }}</td>
-                    <td>{{ $data -> customer_address }}</td>
+                    <td>{{$no++}}</td>
+                    <td> {{$data->delivery_order_num}} </td>
+                    <td> {{$data->date}}</td>
+                    <td> {{$data->customer->customer_name}}</td>
+                    <td> {{$data->po_product->po_num}} </td>
                     <td class="text-center">
-                      <a href="{{ route('customers.edit', $data) }}" class="btn btn-warning" title="Edit"><i class="fa fa-edit"></i></a>
-                      <a href="{{ route('customers.destroy', $data) }}" class="btn btn-danger" onclick="event.preventDefault();destroy('{{ route('customers.destroy', $data) }}')" title="Hapus"><i class="fa fa-trash"></i></a>
+                      <a href="{{route('delivery_order.edit',$data->id)}}" class="btn btn-warning" title="Edit"><i class="fa fa-edit"></i></a>
+                      <a href="{{route('delivery_order.destroy',$data->id)}}" onclick="event.preventDefault();destroy('{{route('delivery_order.destroy',$data->id)}}')" class="btn btn-danger" title="Hapus"><i class="fa fa-trash"></i></a>
                     </td>
                   </tr>
                   @endforeach

@@ -274,4 +274,10 @@ class PackagingsController extends Controller
             ->get();
         return view('inventory.packagings.stocks',['stocks'=> $stocks, 'no'=>1]);
     }
+
+    public function pengeluaran_packaging()
+    {
+        $purchase = PoPackaging::orderBy('id', 'desc')->get();
+        return view('backend.pengeluaran.packaging', compact('purchase'));
+    }
 }
