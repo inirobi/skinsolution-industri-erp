@@ -241,7 +241,7 @@ class PackagingsController extends Controller
     public function getCustomersPackagingsData()
     {
         DB::statement(DB::raw('set @row:=0'));
-        return Packagings::select(DB::raw('@row:=@row+1 as rowNumber'),'packagings.*','customers.*')
+        return Packagings::select(DB::raw('@row:=@row+1 as rowNumber, packagings.id as idData'),'packagings.*','customers.*')
                         ->leftJoin('customers','packagings.customer_id','=','customers.id')
                         ->where('packagings.packaging_type','CS')
                         ->get();
@@ -255,10 +255,14 @@ class PackagingsController extends Controller
     public function getSuppliersPackagingsData()
     {
         DB::statement(DB::raw('set @row:=0'));
-        return Packagings::select(DB::raw('@row:=@row+1 as rowNumber'),'packagings.*','suppliers.*')
+        return Packagings::select(DB::raw('@row:=@row+1 as rowNumber, packagings.id as idData'),'packagings.*','suppliers.*')
                         ->leftJoin('suppliers','packagings.supplier_id','=','suppliers.id')
                         ->where('packagings.packaging_type','SS')
                         ->get();
+        // return '{"data":'.Packagings::select(DB::raw('@row:=@row+1 as rowNumber'),'packagings.*','suppliers.*')
+        //     ->leftJoin('suppliers','packagings.supplier_id','=','suppliers.id')
+        //     ->where('packagings.packaging_type','SS')
+        //     ->get().'}';
     }
 
     public function dataStock()

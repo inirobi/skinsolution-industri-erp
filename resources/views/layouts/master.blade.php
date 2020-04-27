@@ -25,9 +25,6 @@
     <link href="{{ asset('assets/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css')}}" rel="stylesheet">
     <link href="{{ asset('assets/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css')}}" rel="stylesheet">
    
-    <!-- sweetalert -->
-    <link rel="stylesheet" type="text/css" href="https://unpkg.com/sweetalert/dist/sweetalert.css">
-    
     <!-- Custom styling plus plugins -->
     <link href="{{ asset('assets/build/css/custom.min.css')}}" rel="stylesheet">
   </head>
@@ -386,7 +383,7 @@
 
     <!-- sweetalert -->
     <script src="{{ asset('assets/vendors/sweetalert/sweetalert.min.js')}}"></script>
-
+    
     @stack('scripts')
 
   </body>
