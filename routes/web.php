@@ -110,3 +110,11 @@ Route::get('/pengeluaran_material/view/{id}', 'PoMaterialController@pengeluaran_
 Route::get('/pengeluaran_packaging', 'PoPackagingController@pengeluaran_packaging');
 Route::put('/pengeluaran_packaging', 'PoPackagingController@packaging_update');
 Route::get('/pengeluaran_packaging/view/{id}', 'PoPackagingController@packaging_View');
+
+//pengeluarn lain-lain
+Route::resource('/pengeluaran_lain', 'PoLainController');
+Route::post('/pengeluaran_lainView','PoLainController@ViewStore');
+Route::delete('/pengeluaran_lainDestroy/{id}','PoLainController@ViewDestroy');
+
+//pengeluaran gaji
+Route::resource('/pengeluaran_gaji', 'PengeluaranGajiController');

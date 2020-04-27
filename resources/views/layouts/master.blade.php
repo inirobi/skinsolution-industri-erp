@@ -142,8 +142,8 @@
                           <ul class="nav child_menu">
                             <li class="sub_menu"><a href="{{url('pengeluaran_material')}}">PO Material</a></li>
                             <li><a href="{{url('pengeluaran_packaging')}}">PO Packaging</a></li>
-                            <li><a href="#level2_2">PO Lain-Lain</a></li>
-                            <li><a href="#level2_2">Gaji</a></li>
+                            <li><a href="{{route('pengeluaran_lain.index')}}">PO Lain-Lain</a></li>
+                            <li><a href="{{route('pengeluaran_gaji.index')}}">Gaji</a></li>
                           </ul>
                       </li>
                       <li><a>Pemasukan<span class="fa fa-chevron-down"></span></a>
