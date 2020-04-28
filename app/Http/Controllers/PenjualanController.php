@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Gaji;
+use App\Penjualan;
 
-class PengeluaranGajiController extends Controller
+class PenjualanController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,9 +14,9 @@ class PengeluaranGajiController extends Controller
      */
     public function index()
     {
-        $gaji =Gaji::orderBy('id', 'desc')->get();
+        $penjualan =Penjualan::orderBy('id', 'desc')->get();
         $no=1;
-        return view('accounting.pengeluaran.gaji.index', compact('gaji','no'));
+        return view('accounting.pemasukan.penjualan.index', compact('penjualan','no'));
     }
 
     /**
@@ -37,21 +37,15 @@ class PengeluaranGajiController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request,[
-            'bulan' => 'required',
-            'tahun' => 'required',
-            'gaji' => 'required',
-        ]);
-
         try {
-            Gaji::create($request->all());
+            Penjualan::create($request->all());
             return redirect()
-                ->route('pengeluaran_gaji.index')
+                ->route('penjualan.index')
                 ->with('success', 'Successfully Salary Added');
 
         }catch(Exception $e){
           return redirect()
-              ->route('pengeluaran_gaji.index')
+              ->route('penjualan.index')
               ->with('error', 'Failed Salary Added');
         }
     }
@@ -64,7 +58,7 @@ class PengeluaranGajiController extends Controller
      */
     public function show($id)
     {
-        echo "show";
+        //
     }
 
     /**
@@ -87,25 +81,22 @@ class PengeluaranGajiController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->validate($request,[
-            'bulan' => 'required',
-            'tahun' => 'required',
-            'gaji' => 'required',
-        ]);
         try {
-            Gaji::whereId($id)
-                ->update([
-                    'bulan' => $request->bulan,
-                    'tahun' => $request->tahun,
-                    'gaji' => $request->gaji,
-                ]);
+            Penjualan::whereId($id)
+            ->update([
+                'date' => $request->date,
+                'keterangan' => $request->keterangan,
+                'bulan' => $request->bulan,
+                'tahun' => $request->tahun,
+                'penjualan' => $request->penjualan
+            ]);
             return redirect()
-                ->route('pengeluaran_gaji.index')
+                ->route('penjualan.index')
                 ->with('success', 'Successfully Uodated.');
   
           } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){
             return redirect()
-                ->route('pengeluaran_gaji.index')
+                ->route('penjualan.index')
                 ->with('error', 'Data is not found.');
           }
     }
@@ -119,16 +110,15 @@ class PengeluaranGajiController extends Controller
     public function destroy($id)
     {
         try {
-            $materials = Gaji::findOrFail($id)->delete();
-  
+            Penjualan::whereId($id)->delete();
             return redirect()
-                ->route('pengeluaran_gaji.index')
+                ->route('penjualan.index')
                 ->with('success', 'Successfully Deleted.');
-  
-          } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){
+
+        } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){
             return redirect()
-                ->route('pengeluaran_gaji.index')
+                ->route('penjualan.index')
                 ->with('error', 'Data is not found.');
-          }
+        }
     }
 }

@@ -73,7 +73,6 @@ Route::resource('/delivery_order', 'DeliveryOrderController');
 //left_overs
 Route::resource('/left_overs', 'LeftOversController');
 
-//==========pemesanan====================//
 // penggajian
 Route::get('/pegawai', 'PenggajianController@pegawai');
 Route::get('/gaji', 'PenggajianController@gaji');
@@ -118,3 +117,13 @@ Route::delete('/pengeluaran_lainDestroy/{id}','PoLainController@ViewDestroy');
 
 //pengeluaran gaji
 Route::resource('/pengeluaran_gaji', 'PengeluaranGajiController');
+
+//pemasukan pejualan
+Route::resource('/penjualan', 'PenjualanController');
+
+
+//==========================Produksi============================
+Route::resource('/labelling', 'LabellingController');
+
+//pengeluaran
+Route::resource('/pengeluaran_material', 'MaterialOutController');

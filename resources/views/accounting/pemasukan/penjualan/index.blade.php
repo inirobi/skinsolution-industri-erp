@@ -1,10 +1,17 @@
 @extends('layouts.master')
 
+@push('styles')
+    <!-- bootstrap-daterangepicker -->
+    <link href="{{ asset('assets/vendors/bootstrap-daterangepicker/daterangepicker.css')}}" rel="stylesheet">
+    <!-- bootstrap-datetimepicker -->
+    <link href="
+    {{ asset('assets/vendors/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css')}}" rel="stylesheet">
+@endpush
 @section('content')
 <!-- page content -->
 <div class="page-title">
   <div class="title_left">
-    <h3>Salary Lists</h3>
+    <h3>Sale Lists</h3>
   </div>
 
   <div class="title_right">
@@ -25,7 +32,7 @@
     <div class="col-md-12 col-sm-12 ">
       <div class="x_panel">
         <div class="x_title">
-          <a data-toggle="modal" href="#modalAdd" class="btn btn-success" ><i class="fa fa-plus"></i> Add New Salary </a>
+          <a data-toggle="modal" href="#modalAdd" class="btn btn-success" ><i class="fa fa-plus"></i> Add New Sale </a>
           <ul class="nav navbar-right panel_toolbox">
             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
             </li>
@@ -42,23 +49,27 @@
             <thead>
               <tr>
                 <th>No</th>
+                <th>Tanggal</th>
+                <th>Keteranagan</th>
                 <th>Bulan</th>
                 <th>Tahun</th>
-                <th>Jumlah Gaji</th>
+                <th>Harga Penjualan</th>
                 <th>Action</th>
               </tr>
             </thead>
             <tbody>
-              @foreach($gaji as $data)
+              @foreach($penjualan as $data)
               <tr>
                 <td>{{ $no++ }}</td>
+                <td>{{$data->date}}</td>
+                <td>{{$data->keterangan}}</td>
                 <td>{{$data->bulan}}</td>
                 <td>{{$data->tahun}}</td>
-                <td>Rp. {{number_format($data->gaji,2)}}</td>
+                <td>Rp. {{number_format($data->penjualan,2)}}</td>
                 <td class="text-center">
-                  <a href="#" class="btn btn-warning" onclick="editConfirm({{$data->id}},{{$data->bulan}},{{$data->tahun}},{{$data->gaji}})" title="Edit"><i class="fa fa-edit"></i></a>
+                  <a href="#" class="btn btn-warning" onclick="editConfirm( '{{$data->id}}', '{{$data->date}}', '{{$data->keterangan}}', '{{$data->bulan}}', '{{$data->tahun}}', '{{$data->penjualan}}')" title="Edit"><i class="fa fa-edit"></i></a>
 
-                  <a href="{{ route('pengeluaran_gaji.destroy',$data) }}" class="btn btn-danger" onclick="event.preventDefault();destroy('{{ route('pengeluaran_gaji.destroy',$data) }}')" title="Hapus"><i class="fa fa-trash"></i></a>
+                  <a href="{{ route('penjualan.destroy',$data) }}" class="btn btn-danger" onclick="event.preventDefault();destroy('{{ route('penjualan.destroy',$data) }}');" title="Hapus"><i class="fa fa-trash"></i></a>
                 </td>
               </tr>
               @endforeach
@@ -85,15 +96,32 @@
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="modalUpdateLabel">Detail Bahan Baku</h5>
+        <h5 class="modal-title" id="modalUpdateLabel">Update Sale</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-      <form id='editGaji' role="form" method="post">
+      <form id='editPennjualan' role="form" method="post">
         @method('PUT')
           {{csrf_field()}}
+          <div class="form-group">
+            <label class="control-label col-md-2">Tanggal</label>
+            <fieldset>
+              <div class="control-group">
+                  <div class="controls">
+                      <div class="col-md-11 xdisplay_inputx form-group has-feedback">
+                          <input type="text" class="form-control has-feedback-left" id="single_cal3" placeholder="Date" aria-describedby="date" name="date">
+                          <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
+                      </div>
+                  </div>
+              </div>
+              </fieldset>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-md-2">Keterangan</label>
+            <textarea name='keterangan' id='keterangan' class='form-control' required></textarea>
+          </div>
           <div class="form-group">
             <label class="control-label col-md-2">Bulan</label>
             <select id='bulan' class="form-control" name="bulan">
@@ -113,7 +141,7 @@
           </div>
           <div class="form-group">
             <label class="control-label col-md-2">Tahun</label>
-            <select class="form-control" id='tahun' name="tahun">
+            <select class="form-control" id='tahun' name="tahun" required>
             @php 
             $time = Carbon\Carbon::now();
             $year=$time->format("Y");
@@ -126,8 +154,8 @@
           </div>
 
           <div class="form-group">
-            <label class="control-label col-md-2">Jumlah Gaji</label>
-            <input name='gaji' id='gaji' placeholder=" xxx.xxx" type='text' class='form-control' required>
+            <label class="control-label col-md-2">Harga Penjualan</label>
+            <input name='penjualan' id='penjualan' placeholder=" xxx.xxx" type='text' class='form-control' required>
           </div>
             <br>
           <button type='submit' class="btn btn-primary"><i class="fa fa-floppy-o"></i> Save</button>
@@ -151,11 +179,28 @@
         </button>
       </div>
       <div class="modal-body">
-        <form action="{{ route('pengeluaran_gaji.store') }}" role="form" method="post">
+        <form action="{{ route('penjualan.store') }}" role="form" method="post">
           {{csrf_field()}}
           <div class="form-group">
+            <label class="control-label col-md-2">Tanggal</label>
+            <fieldset>
+              <div class="control-group">
+                <div class="controls">
+                  <div class="col-md-11 xdisplay_inputx form-group has-feedback">
+                    <input type="text" class="form-control has-feedback-left" id="single_cal3" placeholder="Date" aria-describedby="date" name='date' required>
+                    <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-md-2">Keterangan</label>
+            <textarea name='keterangan' class='form-control' required></textarea>
+          </div>
+          <div class="form-group">
             <label class="control-label col-md-2">Bulan</label>
-            <select class="form-control" name="bulan">
+            <select id='bulan' class="form-control" name="bulan">
                 <option value="1" >Januari</option>
                 <option value="2" >Februari</option>
                 <option value="3" >Maret</option>
@@ -172,20 +217,21 @@
           </div>
           <div class="form-group">
             <label class="control-label col-md-2">Tahun</label>
-            <select class="form-control" name="tahun">
+            <select class="form-control" id='tahun' name="tahun" required>
             @php 
             $time = Carbon\Carbon::now();
             $year=$time->format("Y");
+            $x=$year-5;
             @endphp
-            @for($a=2015;$a<=$year;$a++)
+            @for($a=$x;$a<=$year;$a++)
                 <option value="{{$a}}" >{{$a}}</option>
             @endfor
             </select>
           </div>
 
           <div class="form-group">
-            <label class="control-label col-md-2">Jumlah Gaji</label>
-            <input name='gaji' value='' placeholder=" xxx.xxx" type='text' class='form-control' required>
+            <label class="control-label col-md-2">Harga Penjualan</label>
+            <input name='penjualan' id='gaji' placeholder=" xxx.xxx" type='text' class='form-control' required>
           </div>
             <br>
           <button type='submit' class="btn btn-primary"><i class="fa fa-floppy-o"></i> Save</button>
@@ -198,16 +244,17 @@
   </div>
 </div>
 
-
+@push('scripts')
 <script>
 
-function editConfirm(id,bulan, tahun, gaji)
+function editConfirm(id,date,keterangan,bulan, tahun,penjualan)
 {
-    console.log("{{ url('pengeluaran_gaji') }}/"+id);
-    $('#gaji').attr('value',gaji);
+    $('#keterangan').html(keterangan);
+    $('#single_cal3').attr('value',date);
+    $('#penjualan').attr('value',penjualan);
     $('#bulan').val(bulan);
     $('#tahun').val(tahun);
-    $('#editGaji').attr('action',"{{ url('pengeluaran_gaji') }}/"+id)
+    $('#editPennjualan').attr('action',"{{ url('penjualan') }}/"+id)
     $('#modalUpdate').modal();
 }
 
@@ -227,6 +274,11 @@ function destroy(action){
     });
   }
 </script>
-
+<!-- bootstrap-daterangepicker -->
+<script src="{{ asset('assets/vendors/moment/min/moment.min.js')}}"></script>
+<script src="{{ asset('assets/vendors/bootstrap-daterangepicker/daterangepicker.js')}}"></script>
+<!-- bootstrap-datetimepicker -->    
+<script src="{{ asset('assets/vendors/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js')}}"></script>
+@endpush
 
 @endsection

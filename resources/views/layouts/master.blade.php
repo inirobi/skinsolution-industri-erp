@@ -110,10 +110,21 @@
                           <ul class="nav child_menu">
                             <li class="sub_menu"><a href="level2.html">Produksi</a></li>
                             <li><a href="#level2_2">Packaging</a></li>
-                            <li><a href="#level2_2">Labelling</a></li>
+                            <li><a href="{{ route('labelling.index') }}">Labelling</a></li>
                           </ul>
                       </li>
                       <li><a href="icons.html">Stok Produk</a></li>
+                      <li><a href="icons.html">Retur</a></li>
+                      <li><a>Pengeluaran Bahan<span class="fa fa-chevron-down"></span></a>
+                          <ul class="nav child_menu">
+                            <li class="sub_menu"><a href="{{ route('pengeluaran_material.index') }}">Material</a></li>
+                            <li><a href="#level2_2">Ruahan</a></li>
+                            <li><a href="#">Packaging</a></li>
+                            <li><a href="#">Labelling</a></li>
+                            <li><a href="#">Hasil Packaging</a></li>
+                            <li><a href="#">Hasil Labelling</a></li>
+                          </ul>
+                      </li>
                     </ul>
                   </li>
                   <li><a href="#"><i class="fa fa-users"></i> User Management</a></li>
@@ -148,7 +159,7 @@
                       </li>
                       <li><a>Pemasukan<span class="fa fa-chevron-down"></span></a>
                           <ul class="nav child_menu">
-                            <li class="sub_menu"><a href="level2.html">Penjualan</a></li>
+                            <li class="sub_menu"><a href="{{route('penjualan.index')}}">Penjualan</a></li>
                             <li><a href="#level2_2">Invoice</a></li>
                             <li><a href="#level2_2">Pembayaran Invoice</a></li>
                           </ul>

@@ -116,7 +116,7 @@
                                     </label>
                                     <label class="btn btn-secondary" data-toggle-class="btn-primary"
                                         data-toggle-passive-class="btn-default" id="btn-supplier">
-                                        <input type="radio" @php if('0'==$lain->ppn) echo'checked';@endphp value="0" id="ppn" name="ppn"
+                                        <input type="radio" value="0" id="ppn" name="ppn"
                                             class="join-btn">
                                         &nbsp; No
                                     </label>
