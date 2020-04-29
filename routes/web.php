@@ -101,14 +101,14 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 //==================accounting==============
 //pengeluaran_material
-Route::get('/pengeluaran_material', 'PoMaterialController@pengeluaran_material');
-Route::put('/pengeluaran_material', 'PoMaterialController@pengeluaran_material_update');
-Route::get('/pengeluaran_material/view/{id}', 'PoMaterialController@pengeluaran_material_detail');
+Route::get('/accounting_POmaterial', 'PoMaterialController@pengeluaran_material');
+Route::put('/accounting_POmaterial', 'PoMaterialController@pengeluaran_material_update');
+Route::get('/accounting_POmaterial/view/{id}', 'PoMaterialController@pengeluaran_material_detail');
 
 //pengeluaran packaging
-Route::get('/pengeluaran_packaging', 'PoPackagingController@pengeluaran_packaging');
-Route::put('/pengeluaran_packaging', 'PoPackagingController@packaging_update');
-Route::get('/pengeluaran_packaging/view/{id}', 'PoPackagingController@packaging_View');
+Route::get('/accounting_POpackaging', 'PoPackagingController@pengeluaran_packaging');
+Route::put('/accounting_POpackaging', 'PoPackagingController@packaging_update');
+Route::get('/accounting_POpackaging/view/{id}', 'PoPackagingController@packaging_View');
 
 //pengeluarn lain-lain
 Route::resource('/pengeluaran_lain', 'PoLainController');
@@ -124,8 +124,11 @@ Route::resource('/penjualan', 'PenjualanController');
 
 //==========================Produksi============================
 Route::resource('/labelling', 'LabellingController');
+Route::resource('/produksi', 'ProductController');
+Route::get('/stok_produksi', 'ProductController@indexStock')->name('produksi.stoct');
 
 //pengeluaran
 Route::resource('/pengeluaran_material', 'MaterialOutController');
 Route::resource('/pengeluaran_ruahan', 'RuahanOutController');
 Route::resource('/pengeluaran_packaging', 'PackagingOutController');
+Route::resource('/pengeluaran_labelling', 'LabellingOutController');

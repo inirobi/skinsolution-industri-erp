@@ -113,14 +113,14 @@
                             <li><a href="{{ route('labelling.index') }}">Labelling</a></li>
                           </ul>
                       </li>
-                      <li><a href="icons.html">Stok Produk</a></li>
+                      <li><a href="{{ route('produksi.stoct') }}">Stok Produk</a></li>
                       <li><a href="icons.html">Retur</a></li>
                       <li><a>Pengeluaran Bahan<span class="fa fa-chevron-down"></span></a>
                           <ul class="nav child_menu">
                             <li class="sub_menu"><a href="{{ route('pengeluaran_material.index') }}">Material</a></li>
                             <li><a href="{{ route('pengeluaran_ruahan.index') }}">Ruahan</a></li>
                             <li><a href="{{ route('pengeluaran_packaging.index') }}">Packaging</a></li>
-                            <li><a href="#">Labelling</a></li>
+                            <li><a href="{{ route('pengeluaran_labelling.index') }}">Labelling</a></li>
                             <li><a href="#">Hasil Packaging</a></li>
                             <li><a href="#">Hasil Labelling</a></li>
                           </ul>
@@ -151,8 +151,8 @@
                     <ul class="nav child_menu">
                       <li><a>Pengeluaran<span class="fa fa-chevron-down"></span></a>
                           <ul class="nav child_menu">
-                            <li class="sub_menu"><a href="{{url('pengeluaran_material')}}">PO Material</a></li>
-                            <li><a href="{{url('pengeluaran_packaging')}}">PO Packaging</a></li>
+                            <li class="sub_menu"><a href="{{url('accounting_POmaterial')}}">PO Material</a></li>
+                            <li><a href="{{url('accounting_POpackaging')}}">PO Packaging</a></li>
                             <li><a href="{{route('pengeluaran_lain.index')}}">PO Lain-Lain</a></li>
                             <li><a href="{{route('pengeluaran_gaji.index')}}">Gaji</a></li>
                           </ul>

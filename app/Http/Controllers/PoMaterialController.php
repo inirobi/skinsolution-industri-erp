@@ -137,11 +137,11 @@ class PoMaterialController extends Controller
               ->where('id', $request->kode)
               ->update(['status' => $request->status]); 
           
-          return redirect('pengeluaran_material')
+          return redirect('accounting_POmaterial')
               ->with('success', 'Successfully Updated.');
 
         } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){
-          return redirect('pengeluaran_material')
+          return redirect('accounting_POmaterial')
               ->with('error', 'Data is not found.');
         }
     }

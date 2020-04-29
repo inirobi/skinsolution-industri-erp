@@ -97,7 +97,7 @@
                           </td>
                          @endif
                          <td>
-                            <a class="btn btn-info" href="{{ url('pengeluaran_material/view', $data->id) }}" title="Detail" class="btn btn-small text-primary">
+                            <a class="btn btn-info" href="{{ url('accounting_POmaterial/view', $data->id) }}" title="Detail" class="btn btn-small text-primary">
                               <i class="fa fa-eye"></i>
                             </a>
                             <a href="#" class="btn btn-warning" title="Edit" onclick="changeStatus('{{ $data -> id }}')">
@@ -127,7 +127,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <form action="{{ url('pengeluaran_material')}}" method="post">
+        <form action="{{ url('accounting_POmaterial')}}" method="post">
           @method('PUT')
           @csrf
           <input type="hidden" name="kode" id="kode">

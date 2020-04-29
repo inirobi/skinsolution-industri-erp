@@ -124,7 +124,7 @@ class PoPackagingController extends Controller
             $petty->save();
 
         }
-       return redirect('pengeluaran_packaging')->with('success', 'Successfully Updated.');
+       return redirect('accounting_POpackaging')->with('success', 'Successfully Updated.');
     }
 
     public function packaging_View($id)
