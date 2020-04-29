@@ -4,7 +4,7 @@
 <!-- page content -->
 <div class="page-title">
   <div class="title_left">
-    <h3>Add New Pengeluaran Material</h3>
+    <h3>Add New Pengeluaran Packaging</h3>
   </div>
 
   <div class="title_right">
@@ -24,27 +24,27 @@
   <div class="col-md-12 col-sm-12">
     <div class="x_panel">
       <div class="x_content">
-        @if(isset($matout))
-          <form action="{{ route('pengeluaran_material.update', $matout) }}" novalidate method="POST" enctype="multipart/form-data">
+        @if(isset($packout))
+          <form action="{{ route('pengeluaran_packaging.update', $packout->id) }}" novalidate method="POST" enctype="multipart/form-data">
           @method('PUT')
         @else
-            <form action="{{ route('pengeluaran_material.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('pengeluaran_packaging.store') }}" method="POST" enctype="multipart/form-data">
         @endif
 
         @csrf
           <p>Wajib disi <code>*</code>
           </p>
           <span class="section">
-            @if(isset($matout))
-                {{ __('Update Pengeluaran Material') }}
+            @if(isset($packout))
+                {{ __('Update Pengeluaran Packaging') }}
             @else
-                {{ __('Form Pengeluaran Material') }}
+                {{ __('Form Pengeluaran Packaging') }}
             @endif
           </span>
           <div class="field item form-group">
             <label class="col-form-label col-md-3 col-sm-3  label-align">Code<code>*</code></label>
             <div class="col-md-6 col-sm-6">
-              <input class="form-control @error('code') is-invalid @enderror" @if(isset($matout)) disabled @endif value="{{ old('code', $matout->code ?? '') }}" name="code" required="required" />
+              <input class="form-control @error('code') is-invalid @enderror" @if(isset($packout)) disabled @endif value="{{ old('code', $packout->code ?? '') }}" name="code" required="required" />
             </div>
             @error('code')
                 <span class="invalid-feedback" role="alert">
@@ -58,7 +58,7 @@
               <div class="control-group">
                   <div class="controls">
                       <div class="col-md-11 xdisplay_inputx form-group has-feedback">
-                          <input type="text" class="form-control has-feedback-left" id="single_cal3" placeholder="Date" aria-describedby="date" value="{{ old('date', $lain->date ?? '') }}" name="date">
+                          <input autocomplete='off' type="text" class="form-control has-feedback-left" id="single_cal3" placeholder="Date" aria-describedby="date" value="{{ old('date', $dateOut ?? '') }}" name="date">
                           <span class="fa fa-calendar-o form-control-feedback left @error('date') is-invalid @enderror" aria-hidden="true"></span>
                       </div>
                       
@@ -68,25 +68,25 @@
                       </span>
                       @enderror
                   </div>
-              </div> 
+              </div>
               </fieldset>
           </div>
           <div class="field item form-group">
-              <label class="col-form-label col-md-3 col-sm-3  label-align">Material <code>*</code></label>
+              <label class="col-form-label col-md-3 col-sm-3  label-align">Packaging <code>*</code></label>
               <div class="col-md-6 col-sm-6">
-                  <select class="form-control @error('material_id') is-invalid @enderror" name="material_id">
-                  @if(isset($matout))
-                      @foreach($material as $d)
-                          <option @if($d->id == $matout->material_id) selected @endif value="{{$d->id}}" >{{$d->material_name}} - {{$d->id}}</option>
+                  <select class="form-control @error('packaging_id') is-invalid @enderror" name="packaging_id">
+                  @if(isset($packout))
+                      @foreach($packaging as $d)
+                          <option @if($d->id == $packout->packaging_id) selected @endif value="{{$d->id}}" >{{$d->packaging_name}} - {{$d->id}}</option>
                       @endforeach
                   @else
-                      @foreach($material as $d)
-                          <option value="{{$d->id}}" >{{$d->material_name}} - {{$d->id}}</option>
+                      @foreach($packaging as $d)
+                          <option value="{{$d->id}}" >{{$d->packaging_name}} - {{$d->id}}</option>
                       @endforeach
                   @endif
                   </select>
               </div>
-              @error('material_id')
+              @error('packaging_id')
               <span class="invalid-feedback" role="alert">
                   <strong>{{ $message }}</strong>
               </span>
@@ -96,7 +96,7 @@
           <div class="field item form-group">
             <label class="col-form-label col-md-3 col-sm-3  label-align">Quantity<code>*</code></label>
             <div class="col-md-6 col-sm-6">
-              <input class="form-control number @error('quantity') is-invalid @enderror" value="{{ old('quantity', $matout->quantity ?? '') }}" type="number" name="quantity" required='required'>
+              <input class="form-control number @error('quantity') is-invalid @enderror" value="{{ old('quantity', $packout->quantity ?? '') }}" type="number" name="quantity" required='required'>
             </div>
             @error('quantity')
                 <span class="invalid-feedback" role="alert">
@@ -108,7 +108,7 @@
           <div class="field item form-group">
             <label class="col-form-label col-md-3 col-sm-3  label-align">Keterangan <code>*</code></label>
             <div class="col-md-6 col-sm-6">
-              <textarea required="required" name='keterangan' rows="3" class="form-control  @error('keterangan') is-invalid @enderror" name="keterangan" required autocomplete="keterangan">{{ old('keterangan', $matout->keterangan ?? '') }}</textarea>
+              <textarea required="required" name='keterangan' rows="3" class="form-control  @error('keterangan') is-invalid @enderror" name="keterangan" required autocomplete="keterangan">{{ old('keterangan', $packout->keterangan ?? '') }}</textarea>
             </div>
             @error('keterangan')
                 <span class="invalid-feedback" role="alert">
@@ -120,8 +120,8 @@
             <div class="form-group">
               <div class="col-md-6 offset-md-3">
           <button type='submit' class="btn btn-primary">Submit</button>
-          @if(isset($matout))
-              <a href="{{ route('pengeluaran_material.index') }}" class="btn btn-danger">Cancel</a>
+          @if(isset($packout))
+              <a href="{{ route('pengeluaran_packaging.index') }}" class="btn btn-danger">Cancel</a>
             @else
               <button type="reset" class="btn btn-success">Reset</button>
             @endif

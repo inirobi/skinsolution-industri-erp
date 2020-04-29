@@ -34,9 +34,8 @@ class MaterialOutController extends Controller
      */
     public function create()
     {
-        $no = 1;
         $material = Material::all();
-        return view('produksi.pengeluaran.material.create', compact('material','no'));
+        return view('produksi.pengeluaran.material.create', compact('material'));
     }
 
     /**
@@ -47,22 +46,28 @@ class MaterialOutController extends Controller
      */
     public function store(Request $request)
     {
+        $date = explode('/',$request->date);
+        $date = $date[2]."-".$date[0]."-".$date[1];
         try {
-            $PoMaterial=new MaterialOut();
-            $PoMaterial->code=$request->code;
-            $PoMaterial->date=$request->date;
-            $PoMaterial->material_id=$request->material_id;
-            $PoMaterial->quantity=$request->quantity;
-            $PoMaterial->keterangan=$request->keterangan;
-            $PoMaterial->save();
-
-            $stock=Stock::where('material_id',$request->material_id)->get();
+            $stock= DB::table('stocks')
+            ->select(DB::raw('sum(quantity) as qty'))
+            ->where('stocks.material_id',$request->material_id)
+            ->get();
+            $stock_sum = floor($stock[0]->qty);
+            if($stock_sum < $request->quantity){
+                return redirect()->back()->with('error','Material Quantity Kurang');
+            }
+            DB::table('pengeluaran_material')
+            ->insert([ 
+                'code' => $request->code,
+                'date' => $date,
+                'material_id' => $request->material_id,
+                'quantity' => $request->quantity,
+                'keterangan' => $request->keterangan,
+            ]);
             foreach($stock as $d){
-                if($d->quantity < $request->quantity){
-                    return redirect()->back()->withErrors('Quantity Kurang');
-                } 
-                $qty=$d->quantity-$request->quantity;
-                Stock::whereId($d->id)
+                $qty=$d->qty-$request->quantity;
+                DB::table('stocks')->where('material_id',$request->material_id)
                     ->update([
                         'quantity' => $qty,
                     ]);
@@ -97,7 +102,9 @@ class MaterialOutController extends Controller
     {
         $matout = MaterialOut::findOrFail($id);
         $material = Material::all();
-        return view('produksi.pengeluaran.material.create', compact('matout','material'));
+        $dateOut = explode('-',$matout->date);
+        $dateOut = $dateOut[1]."-".$dateOut[2]."-".$dateOut[0];
+        return view('produksi.pengeluaran.material.create', compact('matout','material','dateOut'));
     }
 
     /**
@@ -109,21 +116,47 @@ class MaterialOutController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->validate($request,[
-            'code' => 'required',
-            'material_id' => 'required',
-        ]);
-
+        
         try {
-            MaterialOut::whereId($id)
+            $matout = DB::table('pengeluaran_material')->where('id',$id)->first();
+            
+            $stock= DB::table('stocks')
+                ->select(DB::raw('sum(quantity) as qty_product'))
+                ->where('stocks.material_id',$matout->material_id)
+                ->get();
+
+            $stock_awal = $stock[0]->qty_product+$matout->quantity;
+            DB::table('stocks')->where('material_id',$matout->material_id)
                 ->update([
-                    'code' => $request->code,
-                    'date' => $request->date,
-                    'material_id' => $request->material_id,
-                    'quantity' => $request->quantity,
-                    'keterangan' => $request->keterangan,
-                
+                    'quantity' => $stock_awal,
                 ]);
+            $stock2= DB::table('stocks')
+                ->select(DB::raw('sum(quantity) as qty_product'))
+                ->where('stocks.material_id',$request->material_id)
+                ->get();
+                $stock_sum = floor($stock2[0]->qty_product);
+                if($stock_sum < $request->quantity){
+                    return redirect()->back()->with('error','Production Quantity Kurang');
+                }
+            foreach($stock2 as $d){
+                $qty=$stock_sum-$request->quantity;
+                DB::table('stocks')->where('material_id',$request->material_id)
+                    ->update([
+                        'quantity' => $qty,
+                    ]);
+            }
+
+            $date = explode('/',$request->date);
+            $date = $date[2]."-".$date[0]."-".$date[1];
+            DB::table('pengeluaran_material')->where('id',$id)
+            ->update([
+                'code' => $matout->code,
+                'date' => $date,
+                'material_id' => $request->material_id,
+                'quantity' => $request->quantity,
+                'keterangan' => $request->keterangan,
+            ]);
+
             return redirect()->route('pengeluaran_material.index')->with('success', 'Successfully Updateed.');
   
           } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){

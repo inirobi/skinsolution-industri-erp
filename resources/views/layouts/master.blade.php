@@ -118,8 +118,8 @@
                       <li><a>Pengeluaran Bahan<span class="fa fa-chevron-down"></span></a>
                           <ul class="nav child_menu">
                             <li class="sub_menu"><a href="{{ route('pengeluaran_material.index') }}">Material</a></li>
-                            <li><a href="#level2_2">Ruahan</a></li>
-                            <li><a href="#">Packaging</a></li>
+                            <li><a href="{{ route('pengeluaran_ruahan.index') }}">Ruahan</a></li>
+                            <li><a href="{{ route('pengeluaran_packaging.index') }}">Packaging</a></li>
                             <li><a href="#">Labelling</a></li>
                             <li><a href="#">Hasil Packaging</a></li>
                             <li><a href="#">Hasil Labelling</a></li>

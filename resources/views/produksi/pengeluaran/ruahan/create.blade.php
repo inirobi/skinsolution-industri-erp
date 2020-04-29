@@ -4,7 +4,7 @@
 <!-- page content -->
 <div class="page-title">
   <div class="title_left">
-    <h3>Add New Pengeluaran Material</h3>
+    <h3>Add New Pengeluaran Hasil Ruahan</h3>
   </div>
 
   <div class="title_right">
@@ -25,10 +25,10 @@
     <div class="x_panel">
       <div class="x_content">
         @if(isset($matout))
-          <form action="{{ route('pengeluaran_material.update', $matout) }}" novalidate method="POST" enctype="multipart/form-data">
+          <form action="{{ route('pengeluaran_ruahan.update', $matout->id) }}" novalidate method="POST" enctype="multipart/form-data">
           @method('PUT')
         @else
-            <form action="{{ route('pengeluaran_material.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('pengeluaran_ruahan.store') }}" method="POST" enctype="multipart/form-data">
         @endif
 
         @csrf
@@ -36,9 +36,9 @@
           </p>
           <span class="section">
             @if(isset($matout))
-                {{ __('Update Pengeluaran Material') }}
+                {{ __('Update Pengeluaran Hasil Ruahan') }}
             @else
-                {{ __('Form Pengeluaran Material') }}
+                {{ __('Form Pengeluaran Hasil Ruahan') }}
             @endif
           </span>
           <div class="field item form-group">
@@ -58,7 +58,7 @@
               <div class="control-group">
                   <div class="controls">
                       <div class="col-md-11 xdisplay_inputx form-group has-feedback">
-                          <input type="text" class="form-control has-feedback-left" id="single_cal3" placeholder="Date" aria-describedby="date" value="{{ old('date', $lain->date ?? '') }}" name="date">
+                          <input autocomplete='off' type="text" class="form-control has-feedback-left" id="single_cal3" placeholder="Date" aria-describedby="date" value="{{ old('date', $dateOut ?? '') }}" name="date">
                           <span class="fa fa-calendar-o form-control-feedback left @error('date') is-invalid @enderror" aria-hidden="true"></span>
                       </div>
                       
@@ -68,25 +68,25 @@
                       </span>
                       @enderror
                   </div>
-              </div> 
+              </div>
               </fieldset>
           </div>
           <div class="field item form-group">
-              <label class="col-form-label col-md-3 col-sm-3  label-align">Material <code>*</code></label>
+              <label class="col-form-label col-md-3 col-sm-3  label-align">Product <code>*</code></label>
               <div class="col-md-6 col-sm-6">
-                  <select class="form-control @error('material_id') is-invalid @enderror" name="material_id">
+                  <select class="form-control @error('product_id') is-invalid @enderror" name="product_id">
                   @if(isset($matout))
-                      @foreach($material as $d)
-                          <option @if($d->id == $matout->material_id) selected @endif value="{{$d->id}}" >{{$d->material_name}} - {{$d->id}}</option>
+                      @foreach($product as $d)
+                          <option @if($d->id == $matout->product_id) selected @endif value="{{$d->id}}" >{{$d->product_name}}</option>
                       @endforeach
                   @else
-                      @foreach($material as $d)
-                          <option value="{{$d->id}}" >{{$d->material_name}} - {{$d->id}}</option>
+                      @foreach($product as $d)
+                          <option value="{{$d->id}}" >{{$d->product_name}}</option>
                       @endforeach
                   @endif
                   </select>
               </div>
-              @error('material_id')
+              @error('product_id')
               <span class="invalid-feedback" role="alert">
                   <strong>{{ $message }}</strong>
               </span>
@@ -120,8 +120,8 @@
             <div class="form-group">
               <div class="col-md-6 offset-md-3">
           <button type='submit' class="btn btn-primary">Submit</button>
-          @if(isset($matout))
-              <a href="{{ route('pengeluaran_material.index') }}" class="btn btn-danger">Cancel</a>
+          @if(isset($packout))
+              <a href="{{ route('pengeluaran_ruahan.index') }}" class="btn btn-danger">Cancel</a>
             @else
               <button type="reset" class="btn btn-success">Reset</button>
             @endif

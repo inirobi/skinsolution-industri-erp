@@ -127,3 +127,5 @@ Route::resource('/labelling', 'LabellingController');
 
 //pengeluaran
 Route::resource('/pengeluaran_material', 'MaterialOutController');
+Route::resource('/pengeluaran_ruahan', 'RuahanOutController');
+Route::resource('/pengeluaran_packaging', 'PackagingOutController');

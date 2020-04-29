@@ -11,7 +11,7 @@
 <!-- page content -->
 <div class="page-title">
   <div class="title_left">
-    <h3>Pengeluaran Material Lists</h3>
+    <h3>Pengeluaran Packaging</h3>
   </div>
 
   <div class="title_right">
@@ -32,7 +32,7 @@
     <div class="col-md-12 col-sm-12 ">
       <div class="x_panel">
         <div class="x_title">
-          <a href="{{route('pengeluaran_material.create')}}" class="btn btn-success" ><i class="fa fa-plus"></i> Add New Pengeluaran Material </a>
+          <a href="{{route('pengeluaran_packaging.create')}}" class="btn btn-success" ><i class="fa fa-plus"></i> Add New Packaging </a>
           <ul class="nav navbar-right panel_toolbox">
             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
             </li>
@@ -51,23 +51,23 @@
                 <th>No</th>
                 <th>Code</th>
                 <th>Date</th>
-                <th>Material</th>
+                <th>Product</th>
                 <th>Quantity</th>
                 <th>Keterangan</th>
                 <th>Action</th>
               </tr>
             </thead>
             <tbody>
-              @foreach($matout as $data)
+              @foreach($packout as $data)
               <tr>
                 <td>{{ $no++ }}</td>
                 <td>{{$data->code}}</td>
                 <td>{{$data->date}}</td>
-                <td>{{$data->material_id}}</td>
+                <td>{{$data->packaging_name}}</td>
                 <td>{{$data->quantity}}</td>
                 <td>{{$data->keterangan}}</td>
                 <td class="text-center">
-                  <a href="{{route('pengeluaran_material.edit', $data)}}" class="btn btn-warning" title="Edit"><i class="fa fa-edit"></i></a>
+                  <a href="{{route('pengeluaran_packaging.edit',$data->xx)}}" class="btn btn-warning" title="Edit"><i class="fa fa-edit"></i></a>
                 </td>
               </tr>
               @endforeach
