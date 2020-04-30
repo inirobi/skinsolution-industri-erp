@@ -49,6 +49,10 @@ Route::delete('/principal/supplier/{id}', 'PrincipalsController@SupplierDelete')
 //samples
 Route::resource('/samples', 'SamplesController');
 Route::get('/samples_stocks', 'SamplesController@dataStock');
+Route::resource('/income_samples', 'SamplePurchaseController');
+
+//penerimaan packaging
+Route::resource('/packaging_receipt', 'PackagingReceiptController');
 
 //purchases
 Route::resource('/purchases', 'PurchasesManagementController');
@@ -58,6 +62,8 @@ Route::delete('/purchases_penerimaan/view/{id}','PurchasesManagementController@d
 
 //po material
 Route::resource('/po_material', 'PoMaterialController'); 
+//po packaging
+Route::resource('/po_packaging', 'PoPackagingController'); 
 
 //===============end inventory===================
 
@@ -73,6 +79,10 @@ Route::resource('/delivery_order', 'DeliveryOrderController');
 //left_overs
 Route::resource('/left_overs', 'LeftOversController');
 
+//history
+Route::resource('/history', 'HistoryController');
+Route::get('/history/detail/{id}/{po_id}', 'HistoryController@detail')->name('history.detail');
+
 // penggajian
 Route::get('/pegawai', 'PenggajianController@pegawai');
 Route::get('/gaji', 'PenggajianController@gaji');
@@ -80,24 +90,6 @@ Route::get('/gaji', 'PenggajianController@gaji');
 Route::get('/pemesanan/customer', 'TransaksiPemesananController@customer');
 
 Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
-
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
-
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
-
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
-
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
 
 //==================accounting==============
 //pengeluaran_material
@@ -131,4 +123,32 @@ Route::get('/stok_produksi', 'ProductController@indexStock')->name('produksi.sto
 Route::resource('/pengeluaran_material', 'MaterialOutController');
 Route::resource('/pengeluaran_ruahan', 'RuahanOutController');
 Route::resource('/pengeluaran_packaging', 'PackagingOutController');
+Route::get('/pengeluaran_packaging2', 'PackagingOutController@index2')->name('pengeluaran_packaging2.index2');
+Route::get('/pengeluaran_packaging2/create2', 'PackagingOutController@create2')->name('pengeluaran_packaging2.create2');
+Route::post('/pengeluaran_packaging2', 'PackagingOutController@store2')->name('pengeluaran_packaging2.store2');
+Route::get('/pengeluaran_packaging2/{id}/edit2', 'PackagingOutController@edit2')->name('pengeluaran_packaging2.edit2');
+Route::put('/pengeluaran_packaging2/{id}', 'PackagingOutController@update2')->name('pengeluaran_packaging2.update2');
+
 Route::resource('/pengeluaran_labelling', 'LabellingOutController');
+Route::get('/pengeluaran_labelling2', 'LabellingOutController@index2')->name('pengeluaran_labelling2.index2');
+Route::get('/pengeluaran_labelling2/create2', 'LabellingOutController@create2')->name('pengeluaran_labelling2.create2');
+Route::post('/pengeluaran_labelling2', 'LabellingOutController@store2')->name('pengeluaran_labelling2.store2');
+Route::get('/pengeluaran_labelling2/{id}/edit2', 'LabellingOutController@edit2')->name('pengeluaran_labelling2.edit2');
+Route::put('/pengeluaran_labelling2/{id}', 'LabellingOutController@update2')->name('pengeluaran_labelling2.update2');
+
+
+//kegiatan
+Route::resource('/activity_packaging', 'PackagingActivityController');
+
+
+//retur
+Route::resource('/retur', 'ReturController');
+
+//formula
+Route::resource('/formula', 'FormulaController');
+
+//trial
+Route::resource('/trial', 'TrialDataController');
+
+//trial revisi
+Route::resource('/trial_revisi', 'TrialRevisionDataController');

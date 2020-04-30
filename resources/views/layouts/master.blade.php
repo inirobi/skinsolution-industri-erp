@@ -10,6 +10,7 @@
 
     <title>Gentelella Alela! | </title>
 
+    <link href="{{ asset('css/breadcrumb.css')}}" rel="stylesheet">
     <!-- Bootstrap -->
     <link href="{{ asset('assets/vendors/bootstrap/dist/css/bootstrap.min.css')}}" rel="stylesheet">
     <!-- Font Awesome -->
@@ -76,14 +77,14 @@
                       <li><a>Purchase Order<span class="fa fa-chevron-down"></span></a>
                           <ul class="nav child_menu">
                             <li class="sub_menu"><a href="{{ route('po_material.index') }}">Materials</a></li>
-                            <li><a href="#level2_2">Packaging</a></li>
+                            <li><a href="{{ route('po_packaging.index') }}">Packaging</a></li>
                           </ul>
                       </li>
                       <li><a>Penerimaan<span class="fa fa-chevron-down"></span></a>
                           <ul class="nav child_menu">
                             <li class="sub_menu"><a href="{{url('purchases_penerimaan')}}">Materials</a></li>
-                            <li><a href="#level2_2">Packaging</a></li>
-                            <li><a href="#level2_2">Sample</a></li>
+                            <li><a href="{{ route('packaging_receipt.index') }}">Packaging</a></li>
+                            <li><a href="{{ route('income_samples.index') }}">Sample</a></li>
                           </ul>
                       </li>
                       <li><a>Stok<span class="fa fa-chevron-down"></span></a>
@@ -103,26 +104,31 @@
                   </li>
                   <li><a><i class="fa fa-diamond"></i> Produksi <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="general_elements.html">Formula</a></li>
-                      <li><a href="media_gallery.html">Produk</a></li>
-                      <li><a href="typography.html">Trial Produk</a></li>
+                      <li><a href="{{ route('formula.index') }}">Formula</a></li>
+                      <li><a>Trial<span class="fa fa-chevron-down"></span></a>
+                          <ul class="nav child_menu">
+                            <li class="sub_menu"><a href="{{ route('trial.index') }}">Data</a></li>
+                            <li><a href="{{ route('trial_revisi.index') }}">Revisi</a></li>
+                          </ul>
+                      </li>
+                      <li><a href="{{ route('produksi.index') }}">Produk</a></li>
                       <li><a>Kegiatan<span class="fa fa-chevron-down"></span></a>
                           <ul class="nav child_menu">
                             <li class="sub_menu"><a href="level2.html">Produksi</a></li>
-                            <li><a href="#level2_2">Packaging</a></li>
+                            <li><a href="{{ route('activity_packaging.index') }}">Packaging</a></li>
                             <li><a href="{{ route('labelling.index') }}">Labelling</a></li>
                           </ul>
                       </li>
                       <li><a href="{{ route('produksi.stoct') }}">Stok Produk</a></li>
-                      <li><a href="icons.html">Retur</a></li>
+                      <li><a href="{{ route('retur.index') }}">Retur</a></li>
                       <li><a>Pengeluaran Bahan<span class="fa fa-chevron-down"></span></a>
                           <ul class="nav child_menu">
                             <li class="sub_menu"><a href="{{ route('pengeluaran_material.index') }}">Material</a></li>
                             <li><a href="{{ route('pengeluaran_ruahan.index') }}">Ruahan</a></li>
                             <li><a href="{{ route('pengeluaran_packaging.index') }}">Packaging</a></li>
                             <li><a href="{{ route('pengeluaran_labelling.index') }}">Labelling</a></li>
-                            <li><a href="#">Hasil Packaging</a></li>
-                            <li><a href="#">Hasil Labelling</a></li>
+                            <li><a href="{{ route('pengeluaran_packaging2.index2') }}">Hasil Packaging</a></li>
+                            <li><a href="{{ route('pengeluaran_labelling2.index2') }}">Hasil Labelling</a></li>
                           </ul>
                       </li>
                     </ul>
@@ -143,7 +149,7 @@
                           </ul>
                       </li>
                       <li><a href="{{route('delivery_order.index')}}">Delivery Order</a></li>
-                      <li><a href="e_commerce.html">History</a></li>
+                      <li><a href="{{route('history.index')}}">History</a></li>
                       <li><a href="{{route('left_overs.index')}}">Leftovers</a></li>
                     </ul>
                   </li>

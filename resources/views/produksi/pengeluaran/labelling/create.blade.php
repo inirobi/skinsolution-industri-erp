@@ -4,7 +4,13 @@
 <!-- page content -->
 <div class="page-title">
   <div class="title_left">
-    <h3>Add New Pengeluaran Labelling</h3>
+    <h3>
+      @if(isset($sts))
+          {{ __('Add New Pengeluaran Hasil Labelling') }}
+      @else
+          {{ __('Add New Pengeluaran Labelling') }}
+      @endif
+    </h3>
   </div>
 
   <div class="title_right">
@@ -25,10 +31,18 @@
     <div class="x_panel">
       <div class="x_content">
         @if(isset($matout))
-          <form action="{{ route('pengeluaran_labelling.update', $matout) }}" novalidate method="POST" enctype="multipart/form-data">
+          @if(isset($sts))
+            <form action="{{ route('pengeluaran_labelling2.update2', $matout->id) }}" novalidate method="POST" enctype="multipart/form-data">
+          @else
+            <form action="{{ route('pengeluaran_labelling.update', $matout->id) }}" novalidate method="POST" enctype="multipart/form-data">
+          @endif
           @method('PUT')
         @else
+          @if(isset($sts))
+            <form action="{{ route('pengeluaran_labelling2.store2') }}" method="POST" enctype="multipart/form-data">
+          @else
             <form action="{{ route('pengeluaran_labelling.store') }}" method="POST" enctype="multipart/form-data">
+          @endif
         @endif
 
         @csrf
@@ -36,9 +50,17 @@
           </p>
           <span class="section">
             @if(isset($matout))
+              @if(isset($sts))
+                {{ __('Update Pengeluaran Hasil Labelling') }}
+              @else
                 {{ __('Update Pengeluaran Labelling') }}
+              @endif
             @else
+              @if(isset($sts))
+                {{ __('Form Pengeluaran Hasil Labelling') }}
+              @else
                 {{ __('Form Pengeluaran Labelling') }}
+              @endif
             @endif
           </span>
           <div class="field item form-group">
@@ -58,7 +80,7 @@
               <div class="control-group">
                   <div class="controls">
                       <div class="col-md-11 xdisplay_inputx form-group has-feedback">
-                          <input type="text" class="form-control has-feedback-left" id="single_cal3" placeholder="Date" aria-describedby="date" value="{{ old('date', $lain->date ?? '') }}" name="date">
+                          <input type="text" class="form-control has-feedback-left" id="single_cal3" placeholder="Date" aria-describedby="date" value="{{ old('date', $dateOut ?? '') }}" name="date">
                           <span class="fa fa-calendar-o form-control-feedback left @error('date') is-invalid @enderror" aria-hidden="true"></span>
                       </div>
                       
@@ -71,27 +93,51 @@
               </div> 
               </fieldset>
           </div>
-          <div class="field item form-group">
-              <label class="col-form-label col-md-3 col-sm-3  label-align">Packaging <code>*</code></label>
-              <div class="col-md-6 col-sm-6">
-                  <select class="form-control @error('packaging_id') is-invalid @enderror" name="packaging_id">
-                  @if(isset($matout))
-                      @foreach($packaging as $d)
-                          <option @if($d->id == $matout->packaging_id) selected @endif value="{{$d->id}}" >{{$d->packaging_name}} - {{$d->id}}</option>
-                      @endforeach
-                  @else
-                      @foreach($packaging as $d)
-                          <option value="{{$d->id}}" >{{$d->packaging_name}} - {{$d->id}}</option>
-                      @endforeach
-                  @endif
-                  </select>
-              </div>
-              @error('packaging_id')
-              <span class="invalid-feedback" role="alert">
-                  <strong>{{ $message }}</strong>
-              </span>
-              @enderror
-          </div>
+          @if(isset($sts))
+            <div class="field item form-group">
+                <label class="col-form-label col-md-3 col-sm-3  label-align">Packaging <code>*</code></label>
+                <div class="col-md-6 col-sm-6">
+                    <select class="form-control @error('labelling_id') is-invalid @enderror" name="labelling_id">
+                    @if(isset($matout))
+                        @foreach($product as $d)
+                            <option @if($d->id == $matout->product_id) selected @endif value="{{$d->id}}" >{{$d->product_name}} - {{$d->id}}</option>
+                        @endforeach
+                    @else
+                        @foreach($product as $d)
+                            <option value="{{$d->id}}" >{{$d->product_name}} - {{$d->id}}</option>
+                        @endforeach
+                    @endif
+                    </select>
+                </div>
+                @error('labelling_id')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+                @enderror
+            </div>
+          @else
+            <div class="field item form-group">
+                <label class="col-form-label col-md-3 col-sm-3  label-align">Packaging <code>*</code></label>
+                <div class="col-md-6 col-sm-6">
+                    <select class="form-control @error('labelling_id') is-invalid @enderror" name="labelling_id">
+                    @if(isset($matout))
+                        @foreach($packaging as $d)
+                            <option @if($d->id == $matout->labelling_id) selected @endif value="{{$d->id}}" >{{$d->packaging_name}} - {{$d->id}}</option>
+                        @endforeach
+                    @else
+                        @foreach($packaging as $d)
+                            <option value="{{$d->id}}" >{{$d->packaging_name}} - {{$d->id}}</option>
+                        @endforeach
+                    @endif
+                    </select>
+                </div>
+                @error('labelling_id')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+                @enderror
+            </div>
+          @endif
 
           <div class="field item form-group">
             <label class="col-form-label col-md-3 col-sm-3  label-align">Quantity<code>*</code></label>
@@ -121,7 +167,11 @@
               <div class="col-md-6 offset-md-3">
           <button type='submit' class="btn btn-primary">Submit</button>
           @if(isset($matout))
-              <a href="{{ route('pengeluaran_labelling.index') }}" class="btn btn-danger">Cancel</a>
+            @if(isset($sts))
+                <a href="{{ route('pengeluaran_labelling2.index2') }}" class="btn btn-danger">Cancel</a>
+              @else
+                <a href="{{ route('pengeluaran_labelling.index') }}" class="btn btn-danger">Cancel</a>
+              @endif
             @else
               <button type="reset" class="btn btn-success">Reset</button>
             @endif

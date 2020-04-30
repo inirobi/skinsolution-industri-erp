@@ -4,7 +4,7 @@
 <!-- page content -->
 <div class="page-title">
   <div class="title_left">
-    <h3>Stock Sample Lists</h3>
+    <h3>Packaging Activity List</h3>
   </div>
 
   <div class="title_right">
@@ -25,7 +25,7 @@
     <div class="col-md-12 col-sm-12 ">
       <div class="x_panel">
         <div class="x_title">
-          <h2>Stock Samples</h2>
+        <a href="{{route('activity_packaging.create')}}" class="btn btn-success" ><i class="fa fa-plus"></i> Add New Packaging Activity </a>
           <ul class="nav navbar-right panel_toolbox">
             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
             </li>
@@ -42,20 +42,31 @@
             <thead>
               <tr>
                 <th>No</th>
-                <th>Material Code</th>
-                <th>Material Name</th>
-                <th>Supplier Name</th>
-                <th>Quantity</th>
+                <th>Activity Code</th>
+                <th>Date</th>
+                <th>Production Code</th>
+                <th>Product Name</th>
+                <th>Production Result</th>
+                <th>Packaging Result</th>
+                <th>Used Quantity</th>
+                <th>Status</th>
               </tr>
             </thead>
             <tbody>
-              @foreach($stocks as $data)
+              @foreach($packagingactivity as $data)
               <tr>
                 <td>{{ $no++ }}</td>
-                <td>{{ $data -> material_code }}</td>
-                <td>{{ $data -> material_name }}</td>
-                <td>{{ $data -> supplier_name }}</td>
-                <td>{{ $data -> quantity }}</td>
+                <td> {{$data->activity_code}} </td>
+                <td> {{$data->date}}</td>
+                <td> {{$data->product_activity->activity_code}}</td>
+                <td> {{$data->product->product_name}}</td>
+                <td> {{$data->production_result}}</td>
+                <td> {{$data->packaging_result}}</td>
+                <td> {{$data->used_quantity}}</td>
+                <td>
+                  @if($data->status=="Pending")<span class="badge badge-warning">Pending</span>@endif
+                  @if($data->status=="Release")<span class="badge bg-green">Release</span>@endif
+                </td>
               </tr>
               @endforeach
             </tbody>

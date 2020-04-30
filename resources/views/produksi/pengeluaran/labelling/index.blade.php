@@ -11,7 +11,13 @@
 <!-- page content -->
 <div class="page-title">
   <div class="title_left">
-    <h3>Pengeluaran Labelling Lists</h3>
+    <h3>
+      @if(isset($sts))
+          {{ __('Pengeluaran Hasil Labelling Lists') }}
+      @else
+          {{ __('Pengeluaran Labelling Lists') }}
+      @endif
+    </h3>
   </div>
 
   <div class="title_right">
@@ -32,7 +38,11 @@
     <div class="col-md-12 col-sm-12 ">
       <div class="x_panel">
         <div class="x_title">
-          <a href="{{route('pengeluaran_labelling.create')}}" class="btn btn-success" ><i class="fa fa-plus"></i> Add New Pengeluaran Labelling </a>
+          @if(isset($sts))
+            <a href="{{route('pengeluaran_labelling2.create2')}}" class="btn btn-success" ><i class="fa fa-plus"></i> Add New Pengeluaran Hasil Labelling </a>
+          @else
+            <a href="{{route('pengeluaran_labelling.create')}}" class="btn btn-success" ><i class="fa fa-plus"></i> Add New Pengeluaran Labelling </a>
+          @endif
           <ul class="nav navbar-right panel_toolbox">
             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
             </li>
@@ -51,7 +61,13 @@
                 <th>No</th>
                 <th>Code</th>
                 <th>Date</th>
-                <th>Packaging</th>
+                <th>
+                  @if(isset($sts))
+                      {{ __('Product') }}
+                  @else
+                      {{ __('Packaging') }}
+                  @endif
+                </th>
                 <th>Quantity</th>
                 <th>Keterangan</th>
                 <th>Action</th>
@@ -63,11 +79,19 @@
                 <td>{{ $no++ }}</td>
                 <td>{{$data->code}}</td>
                 <td>{{$data->date}}</td>
-                <td>{{$data->packaging_name}}</td>
+                @if(isset($sts))
+                  <td>{{$data->product_name}}</td>
+                @else
+                  <td>{{$data->packaging_name}}</td>
+                @endif
                 <td>{{$data->quantity}}</td>
                 <td>{{$data->keterangan}}</td>
                 <td class="text-center">
-                  <a href="{{route('pengeluaran_labelling.edit', $data->id)}}" class="btn btn-warning" title="Edit"><i class="fa fa-edit"></i></a>
+                  @if(isset($sts))
+                    <a href="{{route('pengeluaran_labelling2.edit2', $data->xx)}}" class="btn btn-warning" title="Edit"><i class="fa fa-edit"></i></a>
+                  @else
+                    <a href="{{route('pengeluaran_labelling.edit', $data->xx)}}" class="btn btn-warning" title="Edit"><i class="fa fa-edit"></i></a>
+                  @endif
                 </td>
               </tr>
               @endforeach

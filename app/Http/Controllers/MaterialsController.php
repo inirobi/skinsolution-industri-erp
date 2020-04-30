@@ -112,11 +112,11 @@ class MaterialsController extends Controller
             $materials = Materials::findOrFail($id);
             return view('inventory.bahan_baku.create', ['materials' => $materials]);
   
-          } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){
-            return redirect()
-                ->route('materials.index')
-                ->with('error', 'Data is not found.');
-          }
+        } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){
+        return redirect()
+            ->route('materials.index')
+            ->with('error', 'Data is not found.');
+        }
     }
 
     /**

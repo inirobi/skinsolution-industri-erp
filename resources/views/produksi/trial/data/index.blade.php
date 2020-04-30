@@ -11,13 +11,7 @@
 <!-- page content -->
 <div class="page-title">
   <div class="title_left">
-    <h3>
-      @if(isset($sts))
-          {{ __('Pengeluaran Hasil Packaging') }}
-      @else
-          {{ __('Pengeluaran Packaging') }}
-      @endif
-    </h3>
+    <h3>Trial Data List</h3>
   </div>
 
   <div class="title_right">
@@ -37,13 +31,8 @@
 <div class="row">
     <div class="col-md-12 col-sm-12 ">
       <div class="x_panel">
-        <div class="x_title"> 
-          @if(isset($sts))
-          <a href="{{route('pengeluaran_packaging2.create2')}}" class="btn btn-success" ><i class="fa fa-plus"></i>{{ __('Add New Hasil Packaging') }}</a>
-          @else
-          <a href="{{route('pengeluaran_packaging.create')}}" class="btn btn-success" ><i class="fa fa-plus"></i>{{ __('Add New Packaging') }}</a>
-          @endif 
-          
+        <div class="x_title">
+          <a href="#" class="btn btn-success" ><i class="fa fa-plus"></i>Add New Trial Data </a>
           <ul class="nav navbar-right panel_toolbox">
             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
             </li>
@@ -60,29 +49,31 @@
             <thead>
               <tr>
                 <th>No</th>
-                <th>Code</th>
-                <th>Date</th>
-                <th>Product</th>
-                <th>Quantity</th>
+                <th>Trial Number</th>
+                <th>PO Customer Number</th>
+                <th>Product Name</th>
+                <th>Willingness</th>
+                <th>Type</th>
                 <th>Keterangan</th>
                 <th>Action</th>
               </tr>
             </thead>
             <tbody>
-              @foreach($packout as $data)
+              @foreach($trial as $data)
               <tr>
                 <td>{{ $no++ }}</td>
-                <td>{{$data->code}}</td>
-                <td>{{$data->date}}</td>
-                <td>{{$data->packaging_name}}</td>
-                <td>{{$data->quantity}}</td>
-                <td>{{$data->keterangan}}</td>
+                <td> {{$data->trial_num}} </td>
+                <td> {{$data->po_customer->po_num}}</td>
+                <td> {{$data->po_customer_detail->product_name}}</td>
+                <td> {{$data->willingness}} </td>
+                <td> 
+                    @if($data->type==0)<span class="badge badge-info">Dekoratif</span>@endif
+                    @if($data->type==1)<span class="badge bg-green">Skin Care</span>@endif
+                </td>
+                <td> {{$data->keterangan}} </td>
                 <td class="text-center">
-                @if(isset($sts))
-                  <a href="{{route('pengeluaran_packaging2.edit2',$data->xx)}}" class="btn btn-warning" title="Edit"><i class="fa fa-edit"></i></a>
-                @else
-                  <a href="{{route('pengeluaran_packaging.edit',$data->xx)}}" class="btn btn-warning" title="Edit"><i class="fa fa-edit"></i></a>
-                @endif 
+                  <a href="#" class="btn btn-warning" title="Edit"><i class="fa fa-edit"></i></a>
+                  <a href="#" class="btn btn-danger" onclick="event.preventDefault();destroy('#');" title="Hapus"><i class="fa fa-trash"></i></a>
                 </td>
               </tr>
               @endforeach
@@ -97,8 +88,33 @@
 </div>
         <!-- /page content -->
 
+<!-- hapus -->
+<form id="destroy-form" method="POST">
+    @method('DELETE')
+    @csrf
+</form>
+
+
 
 @push('scripts')
+<script>
+
+function destroy(action){
+    swal({
+        title: 'Apakah anda yakin?',
+        text: 'Setelah dihapus, Anda tidak akan dapat mengembalikan data ini!',
+        icon: 'warning',
+        buttons: ["Cancel", "Yes!"],
+    }).then(function(value) {
+        if (value) {
+          document.getElementById('destroy-form').setAttribute('action', action);
+          document.getElementById('destroy-form').submit();
+        }else {
+        swal("Data kamu aman!");
+      }
+    });
+  }
+</script>
 <!-- bootstrap-daterangepicker -->
 <script src="{{ asset('assets/vendors/moment/min/moment.min.js')}}"></script>
 <script src="{{ asset('assets/vendors/bootstrap-daterangepicker/daterangepicker.js')}}"></script>

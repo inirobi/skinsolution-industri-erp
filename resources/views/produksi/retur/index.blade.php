@@ -4,7 +4,7 @@
 <!-- page content -->
 <div class="page-title">
   <div class="title_left">
-    <h3>Stock Sample Lists</h3>
+    <h3>Retur Lists</h3>
   </div>
 
   <div class="title_right">
@@ -25,7 +25,7 @@
     <div class="col-md-12 col-sm-12 ">
       <div class="x_panel">
         <div class="x_title">
-          <h2>Stock Samples</h2>
+        <a href="#" class="btn btn-success" ><i class="fa fa-plus"></i> Add New Retur </a>
           <ul class="nav navbar-right panel_toolbox">
             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
             </li>
@@ -42,20 +42,26 @@
             <thead>
               <tr>
                 <th>No</th>
-                <th>Material Code</th>
-                <th>Material Name</th>
-                <th>Supplier Name</th>
+                <th>Code Return</th>
+                <th>Date</th>
+                <th>PO Customer</th>
+                <th>Product</th>
                 <th>Quantity</th>
+                <th>Quantity Packaging</th>
+                <th>Reason</th>
               </tr>
             </thead>
             <tbody>
-              @foreach($stocks as $data)
+              @foreach($retur as $data)
               <tr>
                 <td>{{ $no++ }}</td>
-                <td>{{ $data -> material_code }}</td>
-                <td>{{ $data -> material_name }}</td>
-                <td>{{ $data -> supplier_name }}</td>
-                <td>{{ $data -> quantity }}</td>
+                <td> {{$data->kode_return}} </td>
+                <td> {{$data->tanggal_retur}}</td>
+                <td> {{$data->po_num}}</td>
+                <td> {{$data->product_name}}</td>
+                <td> {{$data->quantity_retur}} </td>
+                <td> {{$data->quantity_pack}}</td>
+                <td> {{$data->alasan}}</td>
               </tr>
               @endforeach
             </tbody>

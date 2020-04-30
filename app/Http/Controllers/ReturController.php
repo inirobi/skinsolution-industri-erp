@@ -3,10 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\ProductStock;
 use Illuminate\Support\Facades\DB;
 
-class ProductController extends Controller
+class ReturController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,15 +14,12 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $product = DB::table('products')
-            ->select('products.*','customers.*','formulas.*','trial_revision_datas.*')
-            ->join('customers','products.customer_id','customers.id')
-            ->join('formulas','products.formula_id','formulas.id')
-            ->join('trial_revision_datas','products.trial_revision_data_id','trial_revision_datas.id')
-            ->selectRaw('products.id as xx')
-            ->get();
+        $retur = DB::table('retur')        
+        ->join('po_products','retur.fk_no_po','po_products.id')
+        ->join('products','retur.fk_kode_produk','products.id')        
+        ->get();
         $no = 1;
-        return view('produksi.product.index', compact('product','no'));
+        return view('produksi.retur.index', compact('retur','no'));
     }
 
     /**
@@ -90,12 +86,5 @@ class ProductController extends Controller
     public function destroy($id)
     {
         //
-    }
-
-    public function indexStock()
-    {
-        $stocks = ProductStock::all();
-        $no = 1;
-        return view('produksi.product.stock', compact('stocks', 'no'));
     }
 }

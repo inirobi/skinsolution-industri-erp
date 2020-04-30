@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\ProductStock;
+use App\PackagingReceipt;
 use Illuminate\Support\Facades\DB;
 
-class ProductController extends Controller
+class PackagingReceiptController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,15 +15,9 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $product = DB::table('products')
-            ->select('products.*','customers.*','formulas.*','trial_revision_datas.*')
-            ->join('customers','products.customer_id','customers.id')
-            ->join('formulas','products.formula_id','formulas.id')
-            ->join('trial_revision_datas','products.trial_revision_data_id','trial_revision_datas.id')
-            ->selectRaw('products.id as xx')
-            ->get();
+        $packaging = PackagingReceipt::orderBy('id', 'desc')->get();
         $no = 1;
-        return view('produksi.product.index', compact('product','no'));
+        return view('inventory.penerimaan.packaging.index', compact('packaging','no'));
     }
 
     /**
@@ -44,7 +38,33 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if ($request->date == '' || $request->packaging_type=='') {
+            return redirect()
+                ->route('packaging_receipt.index')
+                ->with('error','Inputan tidak Valid!!!');
+        }
+
+        $cek = DB::table('packaging_receipts')
+            ->where('receipt_code',$request->receipt_code)
+            ->count();
+        
+        if($cek > 0){
+            return redirect()
+                ->route('packaging_receipt.index')
+                ->with('error','Code Already Exists!!');
+        }
+        $date = explode('/',$request->date);
+        $date = $date[2]."-".$date[0]."-".$date[1];
+        $packaging = PackagingReceipt::create([
+            'tanggal_recep' => $date,
+            'packaging_type' => $request->packaging_type,
+            'receipt_code' => $request->receipt_code,
+            'customer_id' => 0,
+        ]);
+
+        return redirect()
+            ->route('packaging_receipt.index')
+            ->with('success','Successfully PackagingReceipt Added');
     }
 
     /**
@@ -90,12 +110,5 @@ class ProductController extends Controller
     public function destroy($id)
     {
         //
-    }
-
-    public function indexStock()
-    {
-        $stocks = ProductStock::all();
-        $no = 1;
-        return view('produksi.product.stock', compact('stocks', 'no'));
     }
 }

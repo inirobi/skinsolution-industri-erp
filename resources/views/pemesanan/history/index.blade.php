@@ -25,7 +25,7 @@
   <div class="col-md-12 col-sm-12 ">
     <div class="x_panel">
       <div class="x_title">
-        <h2>Historys</h2>
+        <h2>History Delivery Order</h2>
         <ul class="nav navbar-right panel_toolbox">
           <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
           <li><a class="close-link"><i class="fa fa-close"></i></a></li>
@@ -44,16 +44,18 @@
                     <th>PO Number</th>
                     <th>Customer Name</th>
                     <th>Date</th>
+                    <th>Action</th>
                   </tr>
                 </thead>
                 <tbody>
                   @php $no=1 @endphp
-                  @foreach($inv as $data)
+                  @foreach($po as $data)
                   <tr>
                     <td>{{$no++}}</td>
                     <td> {{$data->po_num}} </td>
                     <td> {{$data->customer_name}}</td>
                     <td> {{$data->date}}</td>
+                    <td class='text-center'><a href="{{route('history.show',$data->id)}}" class="btn btn-info" title="Detail"><i class="fa fa-eye"></i></a></td>
                   </tr>
                   @endforeach
                 </tbody>

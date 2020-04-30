@@ -4,16 +4,18 @@
 <!-- page content -->
 <div class="page-title">
   <div class="title_left">
-    <h3>Data Suppliers</h3>
+    <h3>Supplier Lists</h3>
   </div>
 
   <div class="title_right">
-    <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
-      <div class="input-group">
-        <input type="text" class="form-control" placeholder="Search for...">
-        <span class="input-group-btn">
-          <button class="btn btn-secondary" type="button">Go!</button>
-        </span>
+    <div class="col-md-12 col-sm-5 col-xs-12 form-group pull-right top_search">
+      <div style='float:right'>
+        <div class="input-group">
+          <ul class="breadcrumb">
+            <li><a href="{{url('/home')}}">Home</a></li>
+            <li><a>Suppliers</a></li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
@@ -25,7 +27,7 @@
   <div class="col-md-12 col-sm-12 ">
     <div class="x_panel">
       <div class="x_title">
-        <a href="{{ route('suppliers.create') }}" class="btn btn-success"><i class="fa fa-plus"></i> Tambah </a>
+        <a href="{{ route('suppliers.create') }}" class="btn btn-success"><i class="fa fa-plus"></i> Add New Supplier </a>
         <ul class="nav navbar-right panel_toolbox">
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>

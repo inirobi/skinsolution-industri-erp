@@ -11,7 +11,6 @@ use App\Product;
 use App\PoProduct;
 use App\PoProductDetail;
 use App\Stock;
-use Illuminate\Http\Request;
 class HistoryController extends Controller
 {
     /**
@@ -21,9 +20,9 @@ class HistoryController extends Controller
      */
     public function index()
     {
-        $customer = Customer::All();
+        $no = 1;
         $po = PoProduct::All();
-        return view('pemesanan.history.index', compact('customer','po'));
+        return view('pemesanan.history.index', compact('no','po'));
     }
 
     /**
@@ -55,9 +54,19 @@ class HistoryController extends Controller
      */
     public function show($id)
     {
-        //
+        $inv = DB::table('po_product_details')->select('po_product_details.*','products.*')->join('products','products.id','=','po_product_details.product_id')->where('po_product_details.po_product_id',$id)->get();
+        $po = PoProduct::findOrFail($id);
+        $no = 1;
+        return view('pemesanan.history.view', compact('inv','po','no'));
     }
 
+    public function detail($id,$po_id)
+    {
+        $inv = DB::table('delivery_orders')->select('delivery_orders.*','delivery_order_details.*')->join('delivery_order_details','delivery_orders.id','=','delivery_order_details.delivery_order_id')->where('delivery_orders.po_product_id',$po_id)->where('delivery_order_details.product_id',$id)->get();
+        $pro = Product::findOrFail($id);
+        $no = 1;
+        return view('pemesanan.history.detail',  compact('inv','pro','no' ));
+    }
     /**
      * Show the form for editing the specified resource.
      *

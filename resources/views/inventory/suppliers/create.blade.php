@@ -4,16 +4,23 @@
 <!-- page content -->
 <div class="page-title">
   <div class="title_left">
-    <h3>Suppliers</h3>
+    <h3>Supplier</h3>
   </div>
 
   <div class="title_right">
-    <div class="col-md-5 col-sm-5 form-group pull-right top_search">
-      <div class="input-group">
-        <input type="text" class="form-control" placeholder="Search for...">
-        <span class="input-group-btn">
-          <button class="btn btn-default" type="button">Go!</button>
-        </span>
+    <div class="col-md-12 col-sm-5 col-xs-12 form-group pull-right top_search">
+      <div style='float:right'>
+        <div class="input-group">
+          <ul class="breadcrumb">
+            <li><a href="{{url('/home')}}">Home</a></li>
+            <li><a href="{{route('suppliers.index')}}">Suppliers</a></li>
+            @if(isset($suppliers))
+              <li><a>Update Supplier</a></li>
+            @else
+              <li><a>Add Supplier</a></li>
+            @endif
+          </ul>
+        </div>
       </div>
     </div>
   </div>

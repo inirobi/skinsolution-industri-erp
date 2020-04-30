@@ -4,7 +4,7 @@
 <!-- page content -->
 <div class="page-title">
   <div class="title_left">
-    <h3>Purchase Order Material List</h3>
+    <h3>Purchase Order Packaging List</h3>
   </div>
 
   <div class="title_right">
@@ -13,7 +13,7 @@
         <div class="input-group">
           <ul class="breadcrumb">
             <li><a href="{{url('/home')}}">Home</a></li>
-            <li><a>PO Materials</a></li>
+            <li><a>PO Packagings</a></li>
           </ul>
         </div>
       </div>
@@ -27,7 +27,7 @@
     <div class="col-md-12 col-sm-12 ">
       <div class="x_panel">
         <div class="x_title">
-          <a href="{{route('po_material.create')}}" class="btn btn-success"><i class="fa fa-plus"></i> Add New Purchase Order </a>
+          <a href="#" class="btn btn-success"><i class="fa fa-plus"></i> Add New Packagnig Order </a>
           <ul class="nav navbar-right panel_toolbox">
             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
             </li>
@@ -47,8 +47,6 @@
                 <th>PO Number</th>
                 <th>Date</th>
                 <th>Supplier Name</th>
-                <th>Currency</th>
-                <th>Kurs</th>
                 <th>PPN</th>
                 <th>Total</th>
                 <th>Total Pay</th>
@@ -56,29 +54,23 @@
               </tr>
             </thead>
             <tbody>
-              @if(!empty($purchase))
               @foreach($purchase as $data)
-              <?php
-                  $poMaterialdetail =  App\PoMaterialDetail::where('po_material_id', $data->id)->get(); 
+                @php
+                  $poPackagingdetail =  App\PoPackagingDetail::where('po_packaging_id', $data->id)->get(); 
                   $total = 0;
                   $PPN = 0;
-                  foreach ($poMaterialdetail as $dataDetail) {
+                  foreach ($poPackagingdetail as $dataDetail) {
                       $total = $total + ($dataDetail->quantity * $dataDetail->price);
                   }
-                  // if($data->currency=='USD'){$total = $total * $data->kurs;}                                                
+
                   $PPN = 0.10 * $total;
                   $totalWithPPN = $total + $PPN;
-              ?>
+                @endphp
               <tr>
                 <td>{{ $no++ }}</td>
                 <td> {{$data->po_num}} </td>
-                <td> {{$data->po_date}}</td>
-                <td> {{$data->supplier_name}}</td>
-                <td> 
-                    @if($data->currency=='IDR') IDR (Rp) @endif
-                    @if($data->currency=='USD') USD ($) @endif
-                </td>
-                <td> {{$data->kurs}} </td>
+                <td> {{$data->date}}</td>
+                <td> {{$data->supplier->supplier_name}}</td>
                 <td> 
                     @if($data->ppn==0) 0 @endif
                     @if($data->ppn==1) 10% @endif
@@ -89,7 +81,7 @@
                     @if($data->ppn==1) {{number_format($totalWithPPN,2)}} @endif
                 </td>
                 <td class="text-center">
-                  <a class="btn btn-info" href="{{route('po_material.show',$data->id)}}" title="Detail" class="btn btn-small text-primary">
+                  <a class="btn btn-info" href="#" title="Detail" class="btn btn-small text-primary">
                     <i class="fa fa-eye"></i>
                   </a>
                   <a href="#" class="btn btn-warning" title="Edit"><i class="fa fa-edit"></i></a>
@@ -98,7 +90,6 @@
                 </td>
               </tr>
               @endforeach
-              @endif
             </tbody>
           </table>
         </div>

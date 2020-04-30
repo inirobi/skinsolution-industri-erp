@@ -19,7 +19,9 @@ class PoPackagingController extends Controller
      */
     public function index()
     {
-        //
+        $purchase = PoPackaging::orderBy('id', 'desc')->get();
+        $no = 1;
+        return view('inventory.purchases.po_packaging.index', compact('purchase','no'));
     }
 
     /**

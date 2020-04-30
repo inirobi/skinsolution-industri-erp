@@ -25,10 +25,21 @@
     <div class="x_panel">
       <div class="x_content">
         @if(isset($packout))
-          <form action="{{ route('pengeluaran_packaging.update', $packout->id) }}" novalidate method="POST" enctype="multipart/form-data">
+          @if(isset($sts))
+            <form action="{{ route('pengeluaran_packaging2.update2', $packout->id) }}" novalidate method="POST" enctype="multipart/form-data">
+          @else
+            <form action="{{ route('pengeluaran_packaging.update', $packout->id) }}" novalidate method="POST" enctype="multipart/form-data">
+          @endif
+          
           @method('PUT')
+          
         @else
+        @if(isset($sts))
+          <form action="{{ route('pengeluaran_packaging2.store2') }}" method="POST" enctype="multipart/form-data">
+          @else
             <form action="{{ route('pengeluaran_packaging.store') }}" method="POST" enctype="multipart/form-data">
+          @endif
+          
         @endif
 
         @csrf
@@ -36,9 +47,17 @@
           </p>
           <span class="section">
             @if(isset($packout))
-                {{ __('Update Pengeluaran Packaging') }}
+                @if(isset($sts))
+                    {{ __('Update Pengeluaran Hasil Packaging') }}
+                @else
+                    {{ __('Update Pengeluaran Packaging') }}
+                @endif
             @else
-                {{ __('Form Pengeluaran Packaging') }}
+              @if(isset($sts))
+                {{ __('Form Pengeluaran Hasil Packaging') }}
+              @else
+              {{ __('Form Pengeluaran Packaging') }}
+              @endif
             @endif
           </span>
           <div class="field item form-group">
@@ -76,9 +95,15 @@
               <div class="col-md-6 col-sm-6">
                   <select class="form-control @error('packaging_id') is-invalid @enderror" name="packaging_id">
                   @if(isset($packout))
+                    @if(isset($sts))
                       @foreach($packaging as $d)
-                          <option @if($d->id == $packout->packaging_id) selected @endif value="{{$d->id}}" >{{$d->packaging_name}} - {{$d->id}}</option>
+                        <option @if($d->id == $packout->product_id) selected @endif value="{{$d->id}}" >{{$d->packaging_name}} - {{$d->id}}</option>
                       @endforeach
+                    @else
+                      @foreach($packaging as $d)
+                        <option @if($d->id == $packout->packaging_id) selected @endif value="{{$d->id}}" >{{$d->packaging_name}} - {{$d->id}}</option>
+                      @endforeach
+                    @endif
                   @else
                       @foreach($packaging as $d)
                           <option value="{{$d->id}}" >{{$d->packaging_name}} - {{$d->id}}</option>

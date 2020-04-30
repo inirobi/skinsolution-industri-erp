@@ -6,6 +6,23 @@
     <div class="title_left">
         <h3>Packaging</h3>
     </div>
+    <div class="title_right">
+    <div class="col-md-12 col-sm-5 col-xs-12 form-group pull-right top_search">
+      <div style='float:right'>
+        <div class="input-group">
+          <ul class="breadcrumb">
+            <li><a href="{{url('/home')}}">Home</a></li>
+            <li><a href="{{route('packagings.index')}}">Packagings</a></li>
+          @if(isset($data))
+            <li>Update Packaging</li>
+          @else
+            <li>Add Packaging</li>
+          @endif
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 <div class="clearfix"></div>
 
@@ -25,9 +42,9 @@
                         </p>
                         <span class="section">
                             @if(isset($data))
-                            {{ __('Update Packagings') }}
+                            {{ __('Update Packaging') }}
                             @else
-                            {{ __('Form Packagings') }}
+                            {{ __('Form Packaging') }}
                             @endif
                         </span>
                         <div class="field item form-group">

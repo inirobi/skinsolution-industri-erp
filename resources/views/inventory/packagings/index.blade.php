@@ -4,8 +4,20 @@
 <!-- page content -->
 <div class="page-title">
     <div class="title_left">
-        <h3>Data Packagings</h3>
+        <h3>Packaging Lists</h3>
     </div>
+    <div class="title_right">
+    <div class="col-md-12 col-sm-5 col-xs-12 form-group pull-right top_search">
+      <div style='float:right'>
+        <div class="input-group">
+          <ul class="breadcrumb">
+            <li><a href="{{url('/home')}}">Home</a></li>
+            <li><a>Packagings</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div class="clearfix"></div>
@@ -14,7 +26,7 @@
     <div class="col-md-12 col-sm-12 ">
         <div class="x_panel">
             <div class="x_title">
-                <a href="{{ route('packagings.create') }}" class="btn btn-success"><i class="fa fa-plus"></i> Tambah
+                <a href="{{ route('packagings.create') }}" class="btn btn-success"><i class="fa fa-plus"></i> Add New Packaging
                 </a>
 
                 <ul class="nav navbar-right panel_toolbox">

@@ -23,6 +23,19 @@ class LabellingoutController extends Controller
             ->get();
         return view('produksi.pengeluaran.labelling.index', compact('matout','no'));
     }
+    
+    public function index2()
+    {
+        $no = 1;
+        $matout = DB::table('pengeluaran_labelling2')
+        ->select('pengeluaran_labelling2.*','products.*')
+        ->join('products','pengeluaran_labelling2.product_id','products.id')
+        ->selectRaw('pengeluaran_labelling2.id as xx')
+        ->orderBy('pengeluaran_labelling2.id', 'desc')
+        ->get();
+        $sts='labelling status';
+        return view('produksi.pengeluaran.labelling.index', compact('matout','no','sts'));
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -34,6 +47,12 @@ class LabellingoutController extends Controller
         $packaging = DB::table('packagings')->get();
         return view('produksi.pengeluaran.labelling.create', compact('packaging'));
     }
+    public function create2()
+    {
+        $sts='labelling status';
+        $product = DB::table('products')->get();
+        return view('produksi.pengeluaran.labelling.create', compact('product','sts'));
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -43,7 +62,75 @@ class LabellingoutController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $date = explode('/',$request->date);
+        $date = $date[2]."-".$date[0]."-".$date[1];
+        try {
+            $stock= DB::table('packaging_stocks')
+                ->where('packaging_stocks.packaging_id',$request->labelling_id)
+                ->selectRaw('sum(quantity) as qty')
+                ->get();
+            $stock_sum = floor($stock[0]->qty);
+            if($stock_sum < $request->quantity){
+                return redirect()->back()->with('error','Quantity Kurang');
+            }
+            DB::table('pengeluaran_labelling')
+                ->insert([
+                    'code' => $request->code,
+                    'date' => $date,
+                    'labelling_id' => $request->labelling_id,
+                    'quantity' => $request->quantity,
+                    'keterangan' => $request->keterangan,
+                ]);
+            foreach($stock as $d){
+                $qty=$d->qty - $request->quantity;
+                DB::table('packaging_stocks')->where('packaging_id',$request->labelling_id)
+                    ->update([
+                        'quantity' => $qty,
+                    ]);
+            }
+            return redirect()->route('pengeluaran_labelling.index')->with('success', 'Successfully Pengeluaran Material Added.');
+  
+          } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){
+            return redirect()
+                ->route('pengeluaran_labelling.index')
+                ->with('error', 'Data is not found.');
+          }
+    }
+    public function store2(Request $request)
+    {
+        $date = explode('/',$request->date);
+        $date = $date[2]."-".$date[0]."-".$date[1];
+        try {
+            $stock= DB::table('product_stocks')
+                ->where('product_stocks.product_id',$request->labelling_id)
+                ->selectRaw('sum(labelling_quantity) as qty')
+                ->get();
+            $stock_sum = floor($stock[0]->qty);
+            if($stock_sum < $request->quantity){
+                return redirect()->back()->with('error','Quantity Kurang');
+            }
+            DB::table('pengeluaran_labelling2')
+                ->insert([
+                    'code' => $request->code,
+                    'date' => $date,
+                    'product_id' => $request->labelling_id,
+                    'quantity' => $request->quantity,
+                    'keterangan' => $request->keterangan,
+                ]);
+            foreach($stock as $d){
+                $qty=$d->qty - $request->quantity;
+                DB::table('product_stocks')->where('product_id',$request->labelling_id)
+                    ->update([
+                        'labelling_quantity' => $qty,
+                    ]);
+            }
+            return redirect()->route('pengeluaran_labelling2.index2')->with('success', 'Successfully Pengeluaran Material Added.');
+  
+          } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){
+            return redirect()
+                ->route('pengeluaran_labelling2.index2')
+                ->with('error', 'Data is not found.');
+          }
     }
 
     /**
@@ -65,7 +152,21 @@ class LabellingoutController extends Controller
      */
     public function edit($id)
     {
-        //
+        $matout = DB::table('pengeluaran_labelling')->where('id',$id)->first();
+        $packaging = DB::table('packagings')->get();
+        $dateOut = explode('-',$matout->date);
+        $dateOut = $dateOut[1]."-".$dateOut[2]."-".$dateOut[0];
+        return view('produksi.pengeluaran.labelling.create', compact('matout','packaging','dateOut'));
+    }
+
+    public function edit2($id)
+    {
+        $matout = DB::table('pengeluaran_labelling2')->where('id',$id)->first();
+        $sts='labelling status';
+        $product = DB::table('products')->get();
+        $dateOut = explode('-',$matout->date);
+        $dateOut = $dateOut[1]."-".$dateOut[2]."-".$dateOut[0];
+        return view('produksi.pengeluaran.labelling.create', compact('matout','product','dateOut','sts'));
     }
 
     /**
@@ -77,7 +178,103 @@ class LabellingoutController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try {
+            $matout = DB::table('pengeluaran_labelling')->where('id',$id)->first();
+            
+            $stock= DB::table('packaging_stocks')
+                ->select(DB::raw('sum(quantity) as qty_product'))
+                ->where('packaging_stocks.packaging_id',$matout->labelling_id)
+                ->get();
+
+            $stock_awal = $stock[0]->qty_product+$matout->quantity;
+            DB::table('packaging_stocks')->where('packaging_id',$matout->labelling_id)
+                ->update([
+                    'quantity' => $stock_awal,
+                ]);
+            $stock2= DB::table('packaging_stocks')
+                ->select(DB::raw('sum(quantity) as qty_product'))
+                ->where('packaging_stocks.packaging_id',$request->labelling_id)
+                ->get();
+                $stock_sum = floor($stock2[0]->qty_product);
+                if($stock_sum < $request->quantity){
+                    return redirect()->back()->with('error','Production Quantity Kurang');
+                }
+            foreach($stock2 as $d){
+                $qty=$stock_sum-$request->quantity;
+                DB::table('packaging_stocks')->where('packaging_id',$request->labelling_id)
+                    ->update([
+                        'quantity' => $qty,
+                    ]);
+            }
+
+            $date = explode('/',$request->date);
+            $date = $date[2]."-".$date[0]."-".$date[1];
+            DB::table('pengeluaran_labelling')->where('id',$id)
+            ->update([
+                'code' => $matout->code,
+                'date' => $date,
+                'labelling_id' => $request->labelling_id,
+                'quantity' => $request->quantity,
+                'keterangan' => $request->keterangan,
+            ]);
+
+            return redirect()->route('pengeluaran_labelling.index')->with('success', 'Successfully Updateed.');
+  
+        } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){
+        return redirect()
+            ->route('pengeluaran_labelling.index')
+            ->with('error', 'Data is not found.');
+        }
+    }
+    public function update2(Request $request, $id)
+    {
+        try {
+            $matout = DB::table('pengeluaran_labelling2')->where('id',$id)->first();
+            
+            $stock= DB::table('product_stocks')
+                ->select(DB::raw('sum(labelling_quantity) as qty_product'))
+                ->where('product_stocks.product_id',$matout->product_id)
+                ->get();
+
+            $stock_awal = $stock[0]->qty_product+$matout->quantity;
+            DB::table('product_stocks')->where('product_id',$matout->product_id)
+                ->update([
+                    'labelling_quantity' => $stock_awal,
+                ]);
+            $stock2= DB::table('product_stocks')
+                ->select(DB::raw('sum(labelling_quantity) as qty_product'))
+                ->where('product_stocks.product_id',$request->labelling_id)
+                ->get();
+                $stock_sum = floor($stock2[0]->qty_product);
+                if($stock_sum < $request->quantity){
+                    return redirect()->back()->with('error','Production Quantity Kurang');
+                }
+            foreach($stock2 as $d){
+                $qty=$stock_sum-$request->quantity;
+                DB::table('product_stocks')->where('product_id',$request->labelling_id)
+                    ->update([
+                        'labelling_quantity' => $qty,
+                    ]);
+            }
+
+            $date = explode('/',$request->date);
+            $date = $date[2]."-".$date[0]."-".$date[1];
+            DB::table('pengeluaran_labelling2')->where('id',$id)
+            ->update([
+                'code' => $matout->code,
+                'date' => $date,
+                'product_id' => $request->labelling_id,
+                'quantity' => $request->quantity,
+                'keterangan' => $request->keterangan,
+            ]);
+
+            return redirect()->route('pengeluaran_labelling2.index2')->with('success', 'Successfully Updateed.');
+  
+        } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){
+        return redirect()
+            ->route('pengeluaran_labelling2.index2')
+            ->with('error', 'Data is not found.');
+        }
     }
 
     /**
