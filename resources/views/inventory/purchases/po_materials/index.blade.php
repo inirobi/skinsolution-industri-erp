@@ -42,7 +42,7 @@
                   <div class="card-box table-responsive">
           <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
             <thead>
-              <tr>
+              <tr> 
                 <th>No</th>
                 <th>PO Number</th>
                 <th>Date</th>
@@ -89,12 +89,9 @@
                     @if($data->ppn==1) {{number_format($totalWithPPN,2)}} @endif
                 </td>
                 <td class="text-center">
-                  <a class="btn btn-info" href="{{route('po_material.show',$data->id)}}" title="Detail" class="btn btn-small text-primary">
-                    <i class="fa fa-eye"></i>
-                  </a>
-                  <a href="#" class="btn btn-warning" title="Edit"><i class="fa fa-edit"></i></a>
-
-                  <a href="#" class="btn btn-danger" title="Hapus"><i class="fa fa-trash"></i></a>
+                  <a class="btn btn-info" href="{{route('po_material.show',$data->id)}}" title="Detail" class="btn btn-small text-primary"><i class="fa fa-eye"></i></a>
+                  <a href="{{route('po_material.edit',$data->id)}}" class="btn btn-warning" title="Edit"><i class="fa fa-edit"></i></a>
+                  <a href="{{ route('po_material.destroy', $data->id) }}" class="btn btn-danger" onclick="event.preventDefault();destroy('{{ route('po_material.destroy', $data->id) }}')" title="Hapus"><i class="fa fa-trash"></i></a>
                 </td>
               </tr>
               @endforeach

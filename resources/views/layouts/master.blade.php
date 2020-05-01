@@ -173,48 +173,8 @@
                       <li><a href="pricing_tables.html">Notifikasi Pembayaran PO</a></li>
                     </ul>
                   </li>
-                  <li><a><i class="fa fa-user"></i> Customer <span class="fa fa-chevron-down"></span></a>
-                    <ul class="nav child_menu">
-                        <li><a href="#level1_1">Produk</a>
-                        <li><a>Purchase Order<span class="fa fa-chevron-down"></span></a>
-                          <ul class="nav child_menu">
-                            <li class="sub_menu"><a href="level2.html">Trial</a>
-                            </li>
-                            <li><a href="#level2_1">Produksi</a>
-                            </li>
-                            <li><a href="#level2_2">Sisa</a>
-                            </li>
-                          </ul>
-                        </li>
-                        <li><a href="#level1_2">Packaging</a>
-                        </li>
-                        <li><a>Stok<span class="fa fa-chevron-down"></span></a>
-                          <ul class="nav child_menu">
-                            <li class="sub_menu"><a href="level2.html">Produk</a>
-                            </li>
-                            <li><a href="#level2_1">Packaging</a>
-                            </li>
-                          </ul>
-                        </li>
-                        <li><a href="#level1_2">Pengiriman</a></li>
-                        <li><a href="#level1_2">Invoice</a></li>
-                    </ul>
-                  </li>
-                  <li><a><i class="fa fa-credit-card"></i> Penggajian <span class="fa fa-chevron-down"></span></a>
-                    <ul class="nav child_menu">
-                        <li><a href="{{ url('pegawai') }}">Pegawai</a></li>
-                        <li><a href="{{ url('gaji') }}">Gaji</a></li>
-                        <li><a href="#level1_1">Cashbond</a></li>
-                        <li><a href="#level1_2">Presensi</a>
-                        </li>
-                        <li><a href="#level1_2">Ijin Kerja</a></li>
-                        <li><a href="#level1_2">Cuti</a></li>
-                        <li><a href="#level1_2">Surat Peringatan</a></li>
-                        <li><a href="#level1_2">Transaksi Penggajian</a></li>
-                        <li><a href="#level1_2">Slip Gaji</a></li>
-                        <li><a href="#level1_2">Laporan Penggajian</a></li>
-                    </ul>
-                  </li>
+                  <li><a href="#"><i class="fa fa-user"></i> Customer </a></li>
+                  <li><a href="#"><i class="fa fa-credit-card"></i> Penggajian</span></a></li>
                 </ul>
               </div>
               <div class="menu_section">

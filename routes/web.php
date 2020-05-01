@@ -76,6 +76,8 @@ Route::delete('/purchases_penerimaan/view/{id}','PurchasesManagementController@d
 
 //po material
 Route::resource('/po_material', 'PoMaterialController'); 
+Route::post('/po_material/view/store/', 'PoMaterialController@ViewStore')->name('po_material.viewStore');
+Route::delete('/po_material/view/destroy/{id}', 'PoMaterialController@destroyView')->name('po_material.destroyView');
 //po packaging
 Route::resource('/po_packaging', 'PoPackagingController'); 
 

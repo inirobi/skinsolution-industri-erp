@@ -10,6 +10,7 @@ use App\Material;
 use App\NotifMaterials;
 use App\MaterialSupplier;
 use App\Petty;
+use App\Materials;
 use Illuminate\Support\Facades\DB;
 
 class PoMaterialController extends Controller
@@ -25,8 +26,7 @@ class PoMaterialController extends Controller
         ->select('po_materials.*','suppliers.supplier_name')
         ->join('suppliers','suppliers.id','=','po_materials.supplier_id')
         ->orderBy('po_materials.id', 'desc')->get();
-        $supplier = Suppliers::all();
-        return view('inventory.purchases.po_materials.index', ['purchase' =>$purchase,'supplier' => $supplier, 'no'=>1]);
+        return view('inventory.purchases.po_materials.index', ['purchase' =>$purchase, 'no'=>1]);
     }
 
     /**
@@ -36,7 +36,8 @@ class PoMaterialController extends Controller
      */
     public function create()
     {
-        return view('inventory.purchases.po_materials.create');
+        $supplier = Suppliers::all();
+        return view('inventory.purchases.po_materials.create',compact('supplier'));
     }
 
     /**
@@ -47,7 +48,60 @@ class PoMaterialController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $cek = DB::table('po_materials')
+        ->where('po_num',$request->po_num)
+        ->count();
+        
+        if($cek > 0){
+            return redirect()
+                ->route('po_material.index')
+                ->withErrors('Code Already Exists!!');
+        }
+        $date = explode('/',$request->date);
+        $date = $date[2]."-".$date[0]."-".$date[1];
+
+        date_default_timezone_set('Asia/Jakarta');   
+        if($request->terms == "7 Days"){
+            $tempo = date('m/d/Y ', strtotime('+1 friday', strtotime($date)));    
+        }
+        else if($request->terms == "14 Days"){
+            $tempo = date('m/d/Y', strtotime('+2 friday', strtotime($date)));    
+        }
+        else if($request->terms == "30 Days"){
+            $tempo = date('m/d/Y', strtotime('+4 friday', strtotime($date)));die;
+        }
+        else if($request->terms == "Cash"){
+            $tempo = "00-00-0000";
+        }
+        
+        if($request->terms=='Cash'){
+            $status='Paid';
+            $petty=new Petty();
+            $petty->date= $date;
+            $petty->money='0';
+            $petty->status='0';
+            $petty->saldo='0';
+            $petty->keterangan='Pembayaran PO Material';
+            $petty->save();
+        }else{
+            $status='Unpaid';
+        }
+        $PoMaterial=new PoMaterial();
+        $PoMaterial->po_num=$request->po_num;
+        $PoMaterial->supplier_id=$request->supplier_id;
+        $PoMaterial->currency=$request->currency;
+        $PoMaterial->po_date=$date;
+        $PoMaterial->tempo=$tempo;
+        $PoMaterial->ppn=$request->ppn;
+        $PoMaterial->kurs=$request->kurs;
+        $PoMaterial->description=$request->description;
+        $PoMaterial->terms=$request->terms;
+        $PoMaterial->status=$status;
+        $PoMaterial->save();
+        
+        return redirect()
+            ->route('po_material.index')
+            ->with('success','Successfully PurchaseOrder Material Added');
     }
 
     /**
@@ -58,16 +112,73 @@ class PoMaterialController extends Controller
      */
     public function show($id)
     {
-        $purchases = DB::table('po_material_details')
-                ->select('po_materials.*', 'suppliers.supplier_name','materials.id', 'materials.material_code', 'materials.material_name', 'po_material_details.quantity', 'po_material_details.price')
-                ->join('po_materials','po_materials.id', '=', 'po_material_details.po_material_id') 
-                ->join('materials','materials.id', '=', 'po_material_details.material_id') 
-                ->join('material_suppliers','material_suppliers.id', '=', 'materials.id')
-                ->join('suppliers','suppliers.id', '=', 'material_suppliers.supplier_id')
-                ->where('po_material_details.po_material_id',$id)
-                ->get();
+        $purchase = PoMaterial::findOrFail($id);
+        $materialSupplier = MaterialSupplier::where('supplier_id', $purchase->supplier_id)->get();
+        $matId = array();
+        foreach($materialSupplier as $data){
+            $matId[] = $data->material_id;
+        }
+        $material = DB::table('materials')
+                    ->whereIn('id', $matId)
+                    ->get();
+        $purchase_view = PoMaterialDetail::where('po_material_id', $id)->get();
+        
         $materials = Materials::all();
-        return view('inventory.purchases.po_materials.detail',['purchases' => $purchases, 'id' => $id, 'materials' => $materials ]);
+        $supplier = Suppliers::all();
+        return view('inventory.purchases.po_materials.detail',compact('purchase','material','purchase_view'));
+    }
+
+    public function ViewStore(Request $request)
+    {
+        PoMaterialDetail::create($request->all());
+        $material = Material::findOrFail($request->material_id);
+        $po = PoMaterial::findOrFail($request->po_material_id);
+        $price = $request->price / 1000;
+        if($po->currency=='USD'){$price = $price * $po->kurs;}
+        if($material->price < $price){
+            Material::whereId($request->material_id)
+            ->update([
+                'price' => $price,
+            ]);        
+
+        }
+
+           if($po->status=='Paid'){
+            $poPackagingdetail = PoMaterialDetail::where('po_material_id', $request->po_material_id)->get(); 
+            $total = ($request->quantity * $request->price);
+            $PPN = 0;
+          
+            $total = 0;
+       
+            foreach ($poPackagingdetail as $dataDetail) {
+                echo $price=$dataDetail->price;
+                echo $po->currency;
+                echo $po->kurs;
+                if($po->currency=='USD'){$price = $price * $po->kurs;}
+              echo  $total = $total + ($dataDetail->quantity * $price);
+                
+            }
+            
+            $PPN = 0.10 * $total;
+            if($po->ppn=='1'){
+            $total = $total + $PPN;
+            }
+          
+             $petty=Petty::where('date',$po->po_date)->get();
+               foreach($petty as $dd){
+                $dd->date= $po->po_date;
+                $dd->money=$total;
+                $dd->status='0';
+                $dd->saldo='0';
+                $dd->keterangan='Pembayaran PO Material';
+                $dd->update();
+                }
+           
+        }
+      return redirect()
+        ->route('po_material.show',$request->input('po_material_id'))
+        ->with('success','Successfully PurchaseOrder Added');
+   
     }
 
     /**
@@ -78,7 +189,11 @@ class PoMaterialController extends Controller
      */
     public function edit($id)
     {
-        //
+        $purchase = PoMaterial::findOrFail($id);
+        $dateOut = explode('-',$purchase->po_date);
+        $dateOut = $dateOut[1]."-".$dateOut[2]."-".$dateOut[0];
+        $supplier = Suppliers::all();
+        return view('inventory.purchases.po_materials.create', compact('purchase','supplier','dateOut'));
     }
 
     /**
@@ -90,8 +205,39 @@ class PoMaterialController extends Controller
      */
     public function update(Request $request, $id)
     {
-        echo $id."<br>";
-        var_dump($request);die;
+        $this->validate($request,[
+            'po_num' => 'required',
+            'date' => 'required',
+        ]);
+        try {
+            $kurs = $request->kurs;
+            if ($request->currency == 'IDR') {
+                $kurs = '';
+            }
+
+            $date = explode('/',$request->date);
+            $date = $date[2]."-".$date[0]."-".$date[1];
+
+            PoMaterial::whereId($id)
+                ->update([
+                    'po_num' => $request->po_num,
+                    'po_date' => $date,
+                    'currency' => $request->currency,
+                    'supplier_id' => $request->supplier_id,
+                    'kurs' => $kurs,
+                    'ppn' => $request->ppn,
+                    'description' => $request->description,
+                ]); 
+          
+          return redirect()
+            ->route('po_material.index')
+            ->with('success', 'Successfully Updated.');
+
+        } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){
+          return redirect()
+            ->route('po_material.index')
+            ->with('error', 'Data is not found.');
+        }
 
     }
 
@@ -103,7 +249,31 @@ class PoMaterialController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try{
+            PoMaterial::whereId($id)->delete();
+            return redirect()
+                ->route('po_material.index')
+                ->with('success','Successfully PurchaseOrder Delete');
+        } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){
+            return redirect()
+                ->route('po_material.index')
+                ->with('error', 'Data is not found.');
+            }
+    }
+    
+    public function destroyView($id)
+    {
+        try{
+            $purchase = PoMaterialDetail::findOrFail($id);
+            PoMaterialDetail::whereId($id)->delete();
+            return redirect()
+                ->route('po_material.show',$purchase->po_material_id)
+                ->with('success','Successfully PurchaseOrder Delete');
+        } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){
+            return redirect()
+                ->route('po_material.index')
+                ->with('error', 'Data is not found.');
+            }
     }
 
     public function pengeluaran_material()

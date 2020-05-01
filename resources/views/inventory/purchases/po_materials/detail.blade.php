@@ -8,12 +8,15 @@
   </div>
 
   <div class="title_right">
-    <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
-      <div class="input-group">
-        <input type="text" class="form-control" placeholder="Search for...">
-        <span class="input-group-btn">
-          <button class="btn btn-secondary" type="button">Go!</button>
-        </span>
+    <div class="col-md-12 col-sm-5 col-xs-12 form-group pull-right top_search">
+      <div style='float:right'>
+        <div class="input-group">
+          <ul class="breadcrumb">
+            <li><a href="{{url('/home')}}">Home</a></li>
+                <li><a href="{{route('po_material.index')}}">PO Materials</a></li>
+                <li><a>PO Materials View</a></li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
@@ -24,7 +27,7 @@
   <div class="col-md-12 col-sm-12">
     <div class="x_panel">
       <div class="x_title">
-          <h2>Purchase Order Material</h2>
+          <h2>Purchase Order  View</h2>
           <ul class="nav navbar-right panel_toolbox">
             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
             </li>
@@ -38,7 +41,7 @@
           <div class="field item form-group">
             <label class="col-form-label col-md-3 col-sm-3  label-align">Date<code>*</code></label>
             <div class="col-md-6 col-sm-6">
-                <input type="text" class="form-control has-feedback-left" id="single_cal1" aria-describedby="inputSuccess2Status" value="{{$purchases[0]->po_date}}" disabled>
+                <input type="text" class="form-control has-feedback-left" id="single_cal1" aria-describedby="inputSuccess2Status" value="{{$purchase->po_date}}" disabled>
                 <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
                 <span id="inputSuccess2Status" class="sr-only">(success)</span>
             </div>
@@ -46,14 +49,14 @@
           <div class="field item form-group">
             <label class="col-form-label col-md-3 col-sm-3  label-align">Supplier<code>*</code></label>
               <div class="col-md-6 col-sm-6">
-                <input type="text" class="form-control" value="{{$purchases[0]->supplier_name}}" disabled>
+                <input type="text" class="form-control" value="{{$purchase->suppliers->supplier_name}}" disabled>
                 <span class="fa fa-user form-control-feedback right" aria-hidden="true"></span>
               </div>
           </div>
           <div class="field item form-group">
             <label class="col-form-label col-md-3 col-sm-3  label-align">PO Num<code>*</code></label>
               <div class="col-md-6 col-sm-6">
-                <input type="text" class="form-control" value="{{$purchases[0]->po_num}}" disabled>
+                <input type="text" class="form-control" value="{{$purchase->po_num}}" disabled>
                 <span class="fa fa-user form-control-feedback right" aria-hidden="true"></span>
               </div>
           </div>
@@ -85,25 +88,25 @@
                 <th>No</th>
                 <th>Material</th>
                 <th>Quantity (KG)</th>
-                <th>Price ({{$purchases[0]->currency}})</th>
-                <th>Total Price ({{$purchases[0]->currency}})</th>
+                <th>Price ({{$purchase->currency}})</th>
+                <th>Total Price ({{$purchase->currency}})</th>
                 <th>Action</th>
               </tr>
             </thead>
             <tbody>
-              @foreach($purchases as $data)
+              @foreach($purchase_view as $data)
               @php 
                   $total_price =  $data->quantity * $data->price; 
                   $no=1;
               @endphp
               <tr>
                 <td>{{$no++}}</td>
-                <td> {{$data->material_name}} - {{$data->material_code}} </td>
+                <td> {{$data->material->material_name}} - {{$data->material->material_code}} </td>
                 <td> {{$data->quantity}}</td>
                 <td> {{number_format($data->price,2)}}</td>
                 <td> {{number_format($total_price,2)}}</td>
                 <td class="text-center">
-                  <a href="" class="btn btn-danger" onclick="" title="Hapus"><i class="fa fa-trash"></i></a>
+                <a href="{{ route('po_material.destroyView', $data->id) }}" class="btn btn-danger" onclick="event.preventDefault();destroy('{{ route('po_material.destroyView', $data->id) }}')" title="Hapus"><i class="fa fa-trash"></i></a>
                 </td>
               </tr>
               @endforeach
@@ -123,32 +126,32 @@
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="modalAddLabel">Add New Supplier</h5>
+        <h5 class="modal-title" id="modalAddLabel">Add New Material</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <form action="{{route('po_material.store')}}" role="form" method="post">
+        <form action="{{route('po_material.viewStore')}}" role="form" method="post">
           {{csrf_field()}}
-          <input type="hidden" class="form-control" value="{{$id}}" name="po_material_id">
+          <input type="hidden" name="po_material_id" value="{{$purchase->id}}" >
           <div class="form-group">
             <label for="kode" class="col-form-label">Material</label>
-              <select class="form-control" name="supplier_id">
-                  @foreach($materials as $a)
-                      <option value="{{$a->id}}" >{{$a->material_name}}</option>
-                  @endforeach
-              </select>
+            <select class="form-control" name="material_id">
+              @foreach($material as $d)
+                <option value="{{$d->id}}" >{{$d->material_name}}</option>
+              @endforeach
+            </select>
           </div>
 
           <div class="form-group">
             <label class="control-label col-md-2">Quantity</label>
-            <input type="text" class="form-control" placeholder="Quantity" required name="quantity">
+            <input type="number" class="form-control" placeholder="Quantity" required name="quantity">
           </div>
 
           <div class="form-group">
             <label class="control-label col-md-2">Price</label>
-            <input id="tch1" type="text" class="form-control" placeholder="Price" required name="price">
+            <input type="number" class="form-control" placeholder="Quantity" required name="price">
           </div>
 
           <button type='submit' class="btn btn-primary">Submit</button>
@@ -166,6 +169,16 @@
     @method('DELETE')
     @csrf
 </form>
+
+@push('styles')
+    <!-- bootstrap-daterangepicker -->
+    <link href="{{ asset('assets/vendors/bootstrap-daterangepicker/daterangepicker.css')}}" rel="stylesheet">
+    <!-- bootstrap-datetimepicker -->
+    <link href="
+    {{ asset('assets/vendors/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css')}}" rel="stylesheet">
+@endpush
+
+@push('scripts')
 <script type="text/javascript">
   function destroy(action){
     swal({
@@ -183,5 +196,10 @@
     });
   }
 </script>
-        <!-- /page content -->
+<!-- bootstrap-daterangepicker -->
+<script src="{{ asset('assets/vendors/moment/min/moment.min.js')}}"></script>
+<script src="{{ asset('assets/vendors/bootstrap-daterangepicker/daterangepicker.js')}}"></script>
+<!-- bootstrap-datetimepicker -->    
+<script src="{{ asset('assets/vendors/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js')}}"></script>
+@endpush
 @endsection
