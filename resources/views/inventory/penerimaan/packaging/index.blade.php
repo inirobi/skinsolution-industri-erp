@@ -53,13 +53,13 @@
             <tbody>
               @foreach($packaging as $data)
               <tr>
-                <td> {{$no}} </td>
+                <td> {{$no++}} </td>
                 <td> {{$data->tanggal_recep}}</td>
                 <td> {{$data->receipt_code}}</td>
                 <td> {{$data->packaging_type}} </td>
                 <td class="text-center">
-                  <a class="btn btn-info" href="#" title="Detail" class="btn btn-small text-primary"><i class="fa fa-eye"></i></a>
-                  <a href="#" class="btn btn-warning" title="Edit"><i class="fa fa-edit"></i></a>
+                  <a class="btn btn-info" href="{{route('packaging_receipt.show',$data->id)}}" title="Detail" class="btn btn-small text-primary"><i class="fa fa-eye"></i></a>
+                  <a href="#" onclick="editConfirm( '{{$data->id}}', '{{$data->tanggal_recep}}', '{{$data->packaging_type}}', '{{$data->receipt_code}}')" class="btn btn-warning" title="Edit"><i class="fa fa-edit"></i></a>
                   <a href="#" class="btn btn-danger" onclick="event.preventDefault();destroy('#')" title="Hapus"><i class="fa fa-trash"></i></a>
                 </td>
             </tr>
@@ -75,7 +75,7 @@
 </div>
 <!-- /page content -->
 
-<!-- modal detail -->
+<!-- modal Add -->
 <div class="modal fade bd-example-modal-lg" id="modalAdd" tabindex="-1" role="dialog" aria-labelledby="modalDetailLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
@@ -135,6 +135,67 @@
   </div>
 </div>
 
+<!-- modal Update -->
+<div class="modal fade bd-example-modal-lg" id="modalUpdate" tabindex="-1" role="dialog" aria-labelledby="modalDetailLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalDetailLabel">Add New Sample Income</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="post" role="form" id='editReceipt'>
+          @method('PUT')
+          {{csrf_field()}}
+          <div class="form-group">
+            <label for="nama" class="col-form-label">Date:</label>
+            <fieldset>
+              <div class="control-group">
+                  <div class="controls">
+                      <div class="col-md-12 xdisplay_inputx form-group has-feedback">
+                          <input type="text" class="form-control has-feedback-left" id="dt" placeholder="Date" aria-describedby="date" value="{{ old('date', $lain->date ?? '') }}" name="date" disabled>
+                          <span class="fa fa-calendar-o form-control-feedback left @error('date') is-invalid @enderror" aria-hidden="true"></span>
+                      </div>
+                  </div>
+              </div> 
+            </fieldset>
+          </div>
+          <div class="form-group">
+              <label class="col-form-label  label-align">Packaging Type <code>*</code></label>
+              <div class="col-md-12 ">
+                <div id="packaging_type2" class="btn-group" data-toggle="buttons">
+                  <label class="btn btn-primary" data-toggle-class="btn-primary"
+                      data-toggle-passive-class="btn-default" id="btn-customer2">
+                      <input type="radio" value="CS" id="packaging_type2" name="packaging_type2"
+                          checked="checked" class="join-btn">
+                      &nbsp; Customer
+                  </label>
+                  <label class="btn btn-secondary" data-toggle-class="btn-primary"
+                      data-toggle-passive-class="btn-default" id="btn-supplier2">
+                      <input type="radio" value="SS" id="packaging_type2" name="packaging_type2"
+                          class="join-btn">
+                      &nbsp; Supplier
+                  </label>
+                </div>
+              </div>
+          </div>
+          <div class="form-group">
+            <br>
+            <label for="kategori" class="col-form-label">Receipt Code:</label>
+            <input type="text" class="form-control" name="receipt_code" id="receipt_code" required>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary"><i class="fa fa-floppy-o"></i> Save</button>
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 @push('styles')
     <!-- bootstrap-daterangepicker -->
@@ -147,48 +208,49 @@
 
 @push('scripts')
 <script>
-    $.get('{{url("packagings/customer/ajax")}}', function (data) {
-        $('#vendor').empty();
-        $.each(data, function (index, subcatObj) {
-            $('#vendor').append('<option value="' + subcatObj.id + '">' + subcatObj.customer_name +
-                '</option>')
-        });
-    });
+
+function editConfirm(id,date,packaging_type2,receipt_code)
+{
+  console.log(packaging_type2);
+  if(packaging_type2=='CS'){
+    $('#btn-supplier2').attr('class', 'btn btn-secondary');
+    $('#btn-customer2').attr('class', 'btn btn-primary');
+  }
+  if(packaging_type2=='SS'){
+    $('#btn-supplier2').attr('class', 'btn btn-primary');
+    $('#btn-customer2').attr('class', 'btn btn-secondary');
+  }
+    $('#dt').attr('value',date);
+    $('#receipt_code').attr('value',receipt_code);
+    $('#packaging_type2').val(packaging_type2);
+    $('#editReceipt').attr('action',"{{ url('packaging_receipt') }}/"+id)
+    $('#modalUpdate').modal();
+}
+
 
 
     $('input[type=radio][name=packaging_type]').change(function () {
         var source = this.value;
-
         if (source == "SS") {
             $('#btn-customer').attr('class', 'btn btn-secondary');
             $('#btn-supplier').attr('class', 'btn btn-primary');
-            $.get('{{url("packagings/supplier/ajax")}}', function (data) {
-                $('#vendor').empty();
-                $.each(data, function (index, subcatObj) {
-                    $('#vendor').append('<option value="' + subcatObj.id + '">' + subcatObj
-                        .supplier_name + '</option>')
-                });
-            });
-
-
         }
         if (source == "CS") {
             $('#btn-customer').attr('class', 'btn btn-primary');
             $('#btn-supplier').attr('class', 'btn btn-secondary');
-            $.get('{{url("packagings/customer/ajax")}}', function (data) {
-                $('#vendor').empty();
-                $.each(data, function (index, subcatObj) {
-                    $('#vendor').append('<option value="' + subcatObj.id + '">' + subcatObj
-                        .customer_name + '</option>')
-                });
-            });
         }
-
-
-
-
     });
-
+    $('input[type=radio][name=packaging_type2]').change(function () {
+        var source = this.value;
+        if (source == "SS") {
+            $('#btn-customer2').attr('class', 'btn btn-secondary');
+            $('#btn-supplier2').attr('class', 'btn btn-primary');
+        }
+        if (source == "CS") {
+            $('#btn-customer2').attr('class', 'btn btn-primary');
+            $('#btn-supplier2').attr('class', 'btn btn-secondary');
+        }
+    });
 </script>
 </script>
     <!-- bootstrap-daterangepicker -->
