@@ -80,6 +80,8 @@ Route::post('/po_material/view/store/', 'PoMaterialController@ViewStore')->name(
 Route::delete('/po_material/view/destroy/{id}', 'PoMaterialController@destroyView')->name('po_material.destroyView');
 //po packaging
 Route::resource('/po_packaging', 'PoPackagingController'); 
+Route::post('/po_packaging/view/store/', 'PoPackagingController@ViewStore')->name('po_packaging.viewStore');
+Route::delete('/po_packaging/view/destroy/{id}', 'PoPackagingController@destroyView')->name('po_packaging.destroyView');
 
 //===============end inventory===================
 

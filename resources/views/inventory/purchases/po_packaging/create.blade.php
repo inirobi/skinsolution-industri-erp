@@ -4,7 +4,7 @@
 <!-- page content -->
 <div class="page-title">
   <div class="title_left">
-    <h3>Purchase Order Materials</h3>
+    <h3>Purchase Order Packagings</h3>
   </div>
 
   <div class="title_right">
@@ -13,11 +13,11 @@
         <div class="input-group">
           <ul class="breadcrumb">
             <li><a href="{{url('/home')}}">Home</a></li>
-                <li><a href="{{route('po_material.index')}}">PO Materials</a></li>
+                <li><a href="{{route('po_packaging.index')}}">PO Packagings</a></li>
               @if(isset($purchase))
-                <li><a>Update PO Materials</a></li>
+                <li><a>Update PO Packagings</a></li>
               @else
-                <li><a>Add PO Materials</a></li>
+                <li><a>Add PO Packagings</a></li>
               @endif
           </ul>
         </div>
@@ -32,10 +32,10 @@
     <div class="x_panel">
       <div class="x_content">
         @if(isset($purchase))
-          <form action="{{route('po_material.update',$purchase->id)}}" novalidate method="POST" enctype="multipart/form-data">
+          <form action="{{route('po_packaging.update',$purchase->id)}}" novalidate method="POST" enctype="multipart/form-data">
           @method('PUT')
         @else
-            <form action="{{route('po_material.store')}}" method="POST" enctype="multipart/form-data">
+            <form action="{{route('po_packaging.store')}}" method="POST" enctype="multipart/form-data">
         @endif
 
         @csrf
@@ -43,15 +43,15 @@
           </p>
           <span class="section">
             @if(isset($purchase))
-                {{ __('Update Purchase Order Material') }}
+                {{ __('Update Purchase Order Packaging') }}
             @else
-                {{ __('Add New Purchase Order Material') }}
+                {{ __('Add New Purchase Order Packaging') }}
             @endif
           </span>
           <div class="field item form-group">
             <label class="col-form-label col-md-3 col-sm-3  label-align">PO Number<code>*</code></label>
             <div class="col-md-6 col-sm-6">
-              <input class="form-control @error('material_code') is-invalid @enderror" value="{{ old('po_num', $purchase->po_num ?? '') }}" name="po_num" required="required" />
+              <input class="form-control @error('po_num') is-invalid @enderror" value="{{ old('po_num', $purchase->po_num ?? '') }}" name="po_num" required="required" />
             </div>
             @error('po_num')
                 <span class="invalid-feedback" role="alert">
@@ -62,7 +62,7 @@
           <div class="field item form-group">
             <label class="col-form-label col-md-3 col-sm-3  label-align">Date<code>*</code></label>
             <div class="col-md-6 col-sm-6 date">
-                <input type="text" class="form-control has-feedback-left @error('date') is-invalid @enderror" id="single_cal1" aria-describedby="inputSuccess2Status" name='date' value="{{ old('date', $dateOut ?? '') }}">
+                <input type="text" class="form-control has-feedback-left @error('date') is-invalid @enderror" id="single_cal1" aria-describedby="inputSuccess2Status" name='date' value="{{ old('date', $purchase->po_date ?? '') }}">
                 <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
                 <span id="inputSuccess2Status" class="sr-only">(success)</span>
             </div>
@@ -76,19 +76,19 @@
             <label class="col-form-label col-md-3 col-sm-3  label-align">Supllier<code>*</code></label>
             <div class="col-md-6 col-sm-6">
               <select class="form-control" name="supplier_id">
-              @if(isset($purchase))
-                @foreach($supplier as $d)
-                    <option  value="{{$d->id}}" 
-                    @if ($d->id == old('supplier_id', $purchase->supplier_id))
-                        selected="selected"
-                    @endif
-                    >{{$d->supplier_name}}</option>
-                @endforeach
-                
-              @else
-                @foreach($supplier as $d)
-                    <option  value="{{$d->id}}" >{{$d->supplier_name}}</option>
-                @endforeach  
+                @if(isset($purchase))
+                    @foreach($supplier as $d)
+                        <option  value="{{$d->id}}" 
+                        @if ($d->id == old('supplier_id', $purchase->supplier_id))
+                            selected="selected"
+                        @endif
+                        >{{$d->supplier_name}}</option>
+                    @endforeach
+                    
+                @else
+                    @foreach($supplier as $d)
+                        <option  value="{{$d->id}}" >{{$d->supplier_name}}</option>
+                    @endforeach  
               @endif
               </select>
             </div>
@@ -102,7 +102,8 @@
             <label class="col-form-label col-md-3 col-sm-3  label-align">Terms<code>*</code></label>
             <div class="col-md-6 col-sm-6">
               <select class="form-control" name="terms">
-              @if(isset($purchase))
+                  <option
+                  @if(isset($purchase))
                   <option
                     @if ('Cash'== old('supplier_id', $purchase->terms))
                         selected="selected"
@@ -137,29 +138,7 @@
                 </span>
             @enderror
           </div>
-          <div class="field item form-group">
-            <label class="col-form-label col-md-3 col-sm-3  label-align">Currency<code>*</code></label>
-            <div class="col-md-12 ">
-              <div id="currency" class="btn-group" data-toggle="buttons">
-                <label class="btn btn-primary" data-toggle-class="btn-primary"
-                    data-toggle-passive-class="btn-default" id="btn-idr">
-                    <input type="radio" value="IDR" id="currency" name="currency" class="join-btn" checked="checked">
-                    &nbsp; IDR (Rp)
-                </label>
-                <label class="btn btn-secondary" data-toggle-class="btn-primary"
-                    data-toggle-passive-class="btn-default" id="btn-usd">
-                    <input type="radio" value="USD" id="currency" name="currency" class="join-btn" >
-                    &nbsp; USD ($)
-                </label>
-              </div>
-            </div>
-          </div>
-          <div class="field item form-group" id="kurs">
-            <label class="col-form-label col-md-3 col-sm-3  label-align">Kurs<code>*</code></label>
-            <div class="col-md-6 col-sm-6">
-              <input class="form-control " value="{{ old('kurs', $purchase->kurs ?? '') }}" type="text" name="kurs">
-            </div>
-          </div>
+          
           <div class="field item form-group">
             <label class="col-form-label col-md-3 col-sm-3  label-align">PPN<code>*</code></label>
             <div class="col-md-12 ">
@@ -188,8 +167,8 @@
             <div class="form-group">
               <div class="col-md-6 offset-md-3">
                 <button type='submit' class="btn btn-primary">Submit</button>
-                @if(isset($materials))
-                  <a href="{{ route('materials.index') }}" class="btn btn-danger">Cancel</a>
+                @if(isset($packagings))
+                  <a href="{{ route('packagings.index') }}" class="btn btn-danger">Cancel</a>
                 @else
                   <button type="reset" class="btn btn-success">Reset</button>
                 @endif
@@ -234,17 +213,6 @@
       if (source == "1") {
           $('#btn-yes').attr('class', 'btn btn-primary');
           $('#btn-no').attr('class', 'btn btn-secondary');
-      }
-  });
-  $('input[type=radio][name=currency]').change(function () {
-      var source = this.value;
-      if (source == "USD") {
-          $('#btn-idr').attr('class', 'btn btn-secondary');
-          $('#btn-usd').attr('class', 'btn btn-primary');
-      }
-      if (source == "IDR") {
-          $('#btn-idr').attr('class', 'btn btn-primary');
-          $('#btn-usd').attr('class', 'btn btn-secondary');
       }
   });
 </script>
