@@ -233,6 +233,17 @@ Route::get('/product_activity/view/store/data-checker/{id}',function($id)
 
 //retur
 Route::resource('/retur', 'ReturController');
+Route::get('/retur/add/ajax-state/{id}',function($id)
+{
+    $subcategories=DB::table('po_product_details')  
+        ->select('po_products.*','po_product_details.*','products.*')          
+        ->join('products','products.id','po_product_details.product_id')
+        ->join('po_products','po_products.id','po_product_details.po_product_id')
+        ->selectRaw('products.id as xx')
+        ->where('po_products.id',$id)->get();
+
+        return $subcategories;
+});
 
 //formula
 Route::resource('/formula', 'FormulaController');

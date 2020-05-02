@@ -67,7 +67,7 @@ class LabellingController extends Controller
                 
         if (!empty($stocks)) {
             if ($stocks == 0 || $product_stocks == 0 || $xx->packaging_result == 0) {
-                return redirect()->back()>with('error','Data Kosong');
+                return redirect()->back()->with('error','Data Kosong');
             }
             else if($request->result <= $xx->packaging_result ){
                 
