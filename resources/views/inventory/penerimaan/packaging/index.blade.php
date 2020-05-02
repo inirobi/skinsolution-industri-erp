@@ -60,7 +60,7 @@
                 <td class="text-center">
                   <a class="btn btn-info" href="{{route('packaging_receipt.show',$data->id)}}" title="Detail" class="btn btn-small text-primary"><i class="fa fa-eye"></i></a>
                   <a href="#" onclick="editConfirm( '{{$data->id}}', '{{$data->tanggal_recep}}', '{{$data->packaging_type}}', '{{$data->receipt_code}}')" class="btn btn-warning" title="Edit"><i class="fa fa-edit"></i></a>
-                  <a href="#" class="btn btn-danger" onclick="event.preventDefault();destroy('#')" title="Hapus"><i class="fa fa-trash"></i></a>
+                  <a href="{{ route('packaging_receipt.destroy', $data->id) }}" class="btn btn-danger" onclick="event.preventDefault();destroy('{{ route('packaging_receipt.destroy', $data->id) }}')" title="Hapus"><i class="fa fa-trash"></i></a>
                 </td>
             </tr>
               @endforeach
@@ -196,6 +196,12 @@
   </div>
 </div>
 
+<!-- hapus -->
+<form id="destroy-form" method="POST">
+    @method('DELETE')
+    @csrf
+</form>
+
 
 @push('styles')
     <!-- bootstrap-daterangepicker -->
@@ -205,13 +211,28 @@
     {{ asset('assets/vendors/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css')}}" rel="stylesheet">
 @endpush
 
-
+ 
 @push('scripts')
 <script>
 
+function destroy(action){
+    swal({
+        title: 'Apakah anda yakin?',
+        text: 'Setelah dihapus, Anda tidak akan dapat mengembalikan data ini!',
+        icon: 'warning',
+        buttons: ["Cancel", "Yes!"],
+    }).then(function(value) {
+        if (value) {
+          document.getElementById('destroy-form').setAttribute('action', action);
+          document.getElementById('destroy-form').submit();
+        }else {
+        swal("Data kamu aman!");
+      }
+    });
+  }
+
 function editConfirm(id,date,packaging_type2,receipt_code)
 {
-  console.log(packaging_type2);
   if(packaging_type2=='CS'){
     $('#btn-supplier2').attr('class', 'btn btn-secondary');
     $('#btn-customer2').attr('class', 'btn btn-primary');

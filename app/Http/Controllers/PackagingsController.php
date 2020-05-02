@@ -269,7 +269,7 @@ class PackagingsController extends Controller
     {
         $stocks = DB::table('packaging_stocks')
             ->join('packagings', 'packaging_stocks.packaging_id', '=', 'packagings.id')
-            ->select('packaging_stocks.*', 'packagings.packaging_code', 'packagings.packaging_name', 'packagings.packaging_type')
+            ->select('packaging_stocks.*', 'packagings.*')
             ->orderBy('packagings.updated_at', 'desc')
             ->get();
         return view('inventory.packagings.stocks',['stocks'=> $stocks, 'no'=>1]);

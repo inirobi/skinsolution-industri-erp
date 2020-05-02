@@ -54,7 +54,7 @@
             <tbody>
               @foreach($purchase as $data)
               <tr>
-                <td> {{$no}} </td>
+                <td> {{$no++}} </td>
                 <td> {{$data->purchase_num}} </td>
                 <td> {{$data->sample_material->material_name}} </td>
                 <td> {{$data->date}}</td>

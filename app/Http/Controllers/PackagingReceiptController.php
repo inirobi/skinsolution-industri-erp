@@ -149,6 +149,16 @@ class PackagingReceiptController extends Controller
                 ->with('error','Inputan tidak Valid!!!');
         }
 
+        $cek = DB::table('packaging_receipts')
+            ->where('receipt_code',$request->receipt_code)
+            ->count();
+        
+        if($cek > 0){
+            return redirect()
+                ->route('packaging_receipt.index')
+                ->with('error','Code Already Exists!!');
+        }
+
         PackagingReceipt::whereId($id)
             ->update([
                 'packaging_type' => $request->packaging_type2,
@@ -168,6 +178,15 @@ class PackagingReceiptController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            PackagingReceipt::whereId($id)->delete();
+            return redirect()
+                ->route('packaging_receipt.index')
+                ->with('success', 'Successfully PackagingReceipt Delete.');
+          } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){
+            return redirect()
+                ->route('packaging_receipt.index')
+                ->with('error', 'Data Not found!.');
+          }
     }
 }

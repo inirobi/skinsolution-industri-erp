@@ -62,7 +62,7 @@
           <div class="field item form-group">
             <label class="col-form-label col-md-3 col-sm-3  label-align">Date<code>*</code></label>
             <div class="col-md-6 col-sm-6 date">
-                <input type="text" class="form-control has-feedback-left @error('date') is-invalid @enderror" id="single_cal1" aria-describedby="inputSuccess2Status" name='date' value="{{ old('date', $purchase->po_date ?? '') }}">
+                <input type="text" class="form-control has-feedback-left @error('date') is-invalid @enderror" id="single_cal1" aria-describedby="inputSuccess2Status" name='date' value="{{ old('date', $dateOut ?? '') }}">
                 <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
                 <span id="inputSuccess2Status" class="sr-only">(success)</span>
             </div>
@@ -155,12 +155,6 @@
                     &nbsp; No
                 </label>
               </div>
-            </div>
-          </div>
-          <div class="field item form-group">
-            <label class="col-form-label col-md-3 col-sm-3  label-align">Description<code>*</code></label>
-            <div class="col-md-6 col-sm-6">
-              <textarea rows="3" class="form-control" name="description">{{ old('description', $purchase->description ?? '') }}</textarea>
             </div>
           </div>
           <div class="ln_solid">

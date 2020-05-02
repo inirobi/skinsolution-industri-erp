@@ -29,6 +29,8 @@
     </div>
   </div>
 </div>
+<form id="addPackaging Receipt View" action='#' novalidate method="POST" enctype="multipart/form-data">
+{{csrf_field()}}
 <div class="row">
   <div class="col-md-12 col-sm-12">
     <div class="x_panel">
@@ -43,8 +45,6 @@
       <div class="x_content">
         <div class="row">
           <div class="col-sm-12">
-            <form id="addPackaging Receipt View" action='#' novalidate method="POST" enctype="multipart/form-data">
-            {{csrf_field()}}
             <div class="field item form-group">
             <input type="hidden" id="packaging_receipt_id" name="packaging_receipt_id" value="{{$id}}">
             <label class="col-form-label col-md-3 col-sm-3  label-align">PO Number : </label>
@@ -57,8 +57,7 @@
                 </select>
             </div>
           </div>
-        </form>
-      </div>
+        </div>
       </div>
       </div>
     </div>
@@ -80,10 +79,9 @@
         <div class="row">
           <div class="col-sm-12">
             <div class="card-box table-responsive">
-            <table id="datatable" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
+            <table class="table table-striped" style="width:100%">
                 <thead>
                   <tr>
-                    <th>No</th>
                     <th>Packaging Code</th>
                     <th>Packaging Name</th>
                     <th>Quantity</th>
@@ -98,38 +96,34 @@
     </div>
   </div>
 </div>
+</form>
         <!-- /page content -->
 
 
 @push('scripts')
     <script>
         $('#po_packaging_id').on('change', function(e){
-                var po_packaging_id = e.target.value;
-                var idx=0;
-                $.get('{{ url('') }}/packaging_receipt/view/add/ajax-state?po_packaging_id=' + po_packaging_id, function(data) {
-                    $('#packaging_detail').empty();
-                    $.each(data, function(index, subcatObj){
-                        $('#packaging_detail')
-                            .append('<tr><td><input value="'
-                            +subcatObj.packaging_code+'" class="form-control text-capitalize" type="text" disabled></td><td><input value="'
-                            +subcatObj.packaging_name+'" class="form-control  text-capitalize" type="text" disabled></td><td><input value="'
-                            +subcatObj.quantity+'" id="quantity'+idx+'" class="form-control text-capitalize" placeholder="Quantity" type="number" name="quantity[]"></td><td>'
-                            +'<input id="packaging_id'+idx+'" type="hidden" name="packaging_id[]" value="'+subcatObj.id+'"></td><td>');
-
-                            idx++;
-                    }); 
-
-
-                });
-            });
-
-
+          var po_packaging_id = e.target.value;
+          var idx=0;
+          $.get('{{ url('') }}/packaging_receipt/view/add/ajax-state/' + po_packaging_id, function(data) {
+            $('#packaging_detail').empty();
+            $.each(data, function(index, subcatObj){
+            $('#packaging_detail')
+            .append('<tr><td><input value="'
+            +subcatObj.packaging_code+'" class="form-control text-capitalize" type="text" disabled></td><td><input value="'
+            +subcatObj.packaging_name+'" class="form-control  text-capitalize" type="text" disabled></td><td><input value="'
+            +subcatObj.quantity+'" id="quantity'+idx+'" class="form-control text-capitalize" placeholder="Quantity" type="number" name="quantity[]"></td><td>'
+            +'<input id="packaging_id'+idx+'" type="hidden" name="packaging_id[]" value="'+subcatObj.id+'"></td><td>');
+            idx++;
+          }); 
+        });
+   });
         $('#SubmitPackagingReceiptDetail').click( function(){
             var idx=0;
             var packaging_receipt_id = $("#packaging_receipt_id").val();
             var po_packaging_id = $("#po_packaging_id").val();
 
-            $.get('{{ url('') }}/packaging_receipt/view/add/ajax-state?po_packaging_id=' + po_packaging_id, function(dataDetail) {                
+            $.get('{{ url('') }}/packaging_receipt/view/add/ajax-state/' + po_packaging_id, function(dataDetail) {                
                 $.each(dataDetail, function(index, subcatObj){                                    
                     var packaging_id = $("#packaging_id"+idx).val();
                     var quantity = $("#quantity"+idx).val();

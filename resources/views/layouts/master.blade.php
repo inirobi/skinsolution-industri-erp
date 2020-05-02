@@ -82,7 +82,7 @@
                       </li>
                       <li><a>Penerimaan<span class="fa fa-chevron-down"></span></a>
                           <ul class="nav child_menu">
-                            <li class="sub_menu"><a href="{{url('purchases_penerimaan')}}">Materials</a></li>
+                            <li class="sub_menu"><a href="{{route('purchases_material.index')}}">Materials</a></li>
                             <li><a href="{{ route('packaging_receipt.index') }}">Packaging</a></li>
                             <li><a href="{{ route('income_samples.index') }}">Sample</a></li>
                           </ul>

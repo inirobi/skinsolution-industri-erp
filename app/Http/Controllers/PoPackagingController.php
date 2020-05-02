@@ -60,18 +60,15 @@ class PoPackagingController extends Controller
                     ->route('po_packaging.index')
                     ->withErrors('Code Already Exists!!');
             }
-            $date = explode('/',$request->date);
-            $date = $date[2]."-".$date[0]."-".$date[1];
-
             date_default_timezone_set('Asia/Jakarta');   
             if($request->terms == "7 Days"){
-                $tempo = date('m/d/Y ', strtotime('+1 friday', strtotime($date)));    
+                $tempo = date('m/d/Y ', strtotime('+1 friday', strtotime($request->date)));    
             }
             else if($request->terms == "14 Days"){
-                $tempo = date('m/d/Y', strtotime('+2 friday', strtotime($date)));    
+                $tempo = date('m/d/Y', strtotime('+2 friday', strtotime($request->date)));    
             }
             else if($request->terms == "30 Days"){
-                $tempo = date('m/d/Y', strtotime('+4 friday', strtotime($date)));die;
+                $tempo = date('m/d/Y', strtotime('+4 friday', strtotime($request->date)));die;
             }
             else if($request->terms == "Cash"){
                 $tempo = "00-00-0000";
@@ -80,7 +77,7 @@ class PoPackagingController extends Controller
             if($request->terms=='Cash'){
                 $status='Paid';
                 $petty=new Petty();
-                $petty->date= $date;
+                $petty->date= $request->date;
                 $petty->money='0';
                 $petty->status='0';
                 $petty->saldo='0';
@@ -92,7 +89,7 @@ class PoPackagingController extends Controller
             $PoPackaging=new PoPackaging();
             $PoPackaging->po_num=$request->po_num;
             $PoPackaging->supplier_id=$request->supplier_id;
-            $PoPackaging->po_date=$date;
+            $PoPackaging->po_date=$request->date;
             $PoPackaging->tempo=$tempo;
             $PoPackaging->ppn=$request->ppn;
             $PoPackaging->terms=$request->terms;
@@ -151,13 +148,10 @@ class PoPackagingController extends Controller
             'date' => 'required',
         ]);
         try {
-            $date = explode('/',$request->date);
-            $date = $date[2]."-".$date[0]."-".$date[1];
-
             PoPackaging::whereId($id)
             ->update([
                 'po_num' => $request->po_num,
-                'po_date' => $date,
+                'po_date' => $request->date,
                 'terms' => $request->terms,
                 'supplier_id' => $request->supplier_id,
                 'ppn' => $request->ppn,

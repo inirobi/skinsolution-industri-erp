@@ -1,4 +1,8 @@
 <?php
+use App\PoMaterialDetail;
+use Carbon\Carbon;
+// use Illuminate\Support\Facades\Input;
+use App\PoProduct;
 
 /*
 |--------------------------------------------------------------------------
@@ -56,23 +60,32 @@ Route::resource('/packaging_receipt', 'PackagingReceiptController');
 Route::post('/packaging_receipt/storeCS', 'PackagingReceiptController@storeCS')->name('packaging_receipt.storeCS');
 Route::get('/packaging_receipt/showSS/{id}', 'PackagingReceiptController@viewAddSS')->name('packaging_receipt.showSS');
 Route::post('/packaging_receipt/view/storess/', 'PackagingReceiptController@ViewStorAjax')->name('packaging_receipt.view.store.ss');
-Route::get('/packaging_receipt/view/add/ajax-state',function()
+Route::get('/packaging_receipt/view/add/ajax-state/{id}',function($id)
     {
-        $po_packaging_id = Input::get("po_packaging_id");
+        // $po_packaging_id = Input::get("po_packaging_id");
         $data=DB::table('po_packaging_details')
                 ->select('packagings.id','packagings.packaging_code','packagings.packaging_name',
                     'po_packaging_details.quantity')
                 ->join('packagings','po_packaging_details.packaging_id','=','packagings.id')
-                ->where('po_packaging_details.po_packaging_id',$po_packaging_id)->get();
+                ->where('po_packaging_details.po_packaging_id',$id)->get();
         return $data;
 
     });
 
 //purchases
-Route::resource('/purchases', 'PurchasesManagementController');
-Route::get('/purchases_penerimaan','PurchasesManagementController@indexPurchases');
-Route::get('/purchases_penerimaan/view/{id}','PurchasesManagementController@showPurchases');
-Route::delete('/purchases_penerimaan/view/{id}','PurchasesManagementController@destroyPurchases');
+Route::resource('/purchases_material', 'PurchasesManagementController');
+Route::get('/purchase/add/ajax-state/{id}',function($id)
+{
+    // $po_material_id = Input::get("po_material_id");
+    $data=DB::table('po_material_details')
+            ->select('materials.id','materials.material_code','materials.material_name',
+                'po_material_details.quantity')
+            ->join('materials','po_material_details.material_id','=','materials.id')
+            ->where('po_material_details.po_material_id',$id)->get();
+    //$subcategories= Supplier::where('id',$categories->supplier_id)->get();
+    return $data;
+
+});
 
 //po material
 Route::resource('/po_material', 'PoMaterialController'); 

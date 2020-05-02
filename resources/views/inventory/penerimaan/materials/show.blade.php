@@ -4,17 +4,20 @@
 <!-- page content -->
 <div class="page-title">
   <div class="title_left">
-    <h3>Purchase View</h3>
+    <h3>Receipment Materials View</h3>
   </div>
 
   <div class="title_right">
-    <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+    <div class="col-md-12 col-sm-5 col-xs-12 form-group pull-right top_search">
+    <div style='float:right'>
       <div class="input-group">
-        <input type="text" class="form-control" placeholder="Search for...">
-        <span class="input-group-btn">
-          <button class="btn btn-secondary" type="button">Go!</button>
-        </span>
+        <ul class="breadcrumb">
+          <li><a href="{{url('/home')}}">Home</a></li>
+          <li><a href="{{route('purchases_material.index')}}">Receipment Materials</a></li>
+          <li>Receipment Materials View</li>
+        </ul>
       </div>
+    </div>
     </div>
   </div>
 </div>
@@ -24,7 +27,7 @@
   <div class="col-md-12 col-sm-12">
     <div class="x_panel">
       <div class="x_title">
-          <h2>Purchase</h2>
+          <h2>Receipment Materials View</h2>
           <ul class="nav navbar-right panel_toolbox">
             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
             </li>

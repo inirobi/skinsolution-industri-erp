@@ -55,7 +55,10 @@
                 <td>{{ $data -> packaging_code }}</td>
                 <td>{{ $data -> packaging_name }}</td>
                 <td>{{ $data -> packaging_type }}</td>
-                <td>{{ $data -> quantity }}</td>
+                <td>
+                  @if($data->quantity <= $data->stock_minimum)<span class="badge badge-danger">{{$data->quantity}}</span>@endif
+                  @if($data->quantity > $data->stock_minimum)<span class="badge bg-green">{{$data->quantity}}</span>@endif
+                </td>
               </tr>
               @endforeach
             </tbody>

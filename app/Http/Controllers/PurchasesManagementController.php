@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Purchases;
+use App\Purchase;
 use App\PurchaseDetail;
+use App\PoMaterial;
 
 class PurchasesManagementController extends Controller
 {
@@ -20,18 +22,8 @@ class PurchasesManagementController extends Controller
         ->select('purchases.*','po_materials.po_num')
         ->join('po_materials','purchases.po_material_id','po_materials.id')
         ->orderBy('purchases.id', 'desc')->get();
-        return view('inventory.bahan_baku.purchases', ['purchases' => $purchase, 'no' => 1]);
+        return view('inventory.penerimaan.materials.index', ['purchases' => $purchase, 'no' => 1]);
     }
-
-    public function indexPurchases()
-    {
-        $purchase = DB::table('purchases')
-        ->select('purchases.*','po_materials.po_num')
-        ->join('po_materials','purchases.po_material_id','po_materials.id')
-        ->orderBy('purchases.id', 'desc')->get();
-        return view('inventory.bahan_baku.purchases', ['purchases' => $purchase, 'no' => 1]);
-    }
-
     /**
      * Show the form for creating a new resource.
      *
@@ -39,7 +31,8 @@ class PurchasesManagementController extends Controller
      */
     public function create()
     {
-        //
+        $poMaterial = PoMaterial::orderBy('id', 'desc')->get();
+        return view('inventory.penerimaan.materials.create', compact('poMaterial'));
     }
 
     /**
@@ -50,7 +43,31 @@ class PurchasesManagementController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $cek = DB::table('purchases')
+        ->where('purchase_num',$request->purchase_num)
+        ->count();
+        
+        if($cek > 0){
+            return redirect('admin/purchase')->withErrors('Code Already Exists!!');
+        }
+        
+        $purchase = Purchase::create([
+            'date' => $request->date,
+            'purchase_num' => $request->purchase_num,
+            'delivery_orders_num' => $request->delivery_orders_num,
+            'po_material_id' => $request->po_material_id,
+        ]);
+
+        $data=DB::table('po_material_details')
+                ->select('materials.id','materials.material_code','materials.material_name',
+                    'po_material_details.quantity')
+                ->join('materials','po_material_details.material_id','=','materials.id')
+                ->where('po_material_details.po_material_id',$request->po_material_id)->get();
+
+
+        return redirect()
+            ->route('purchases_material.index')
+            ->with('success','Successfully Purchase Added');
     }
 
     /**
@@ -66,19 +83,8 @@ class PurchasesManagementController extends Controller
         ->select('materials.material_name','purchase_details.*')
         ->leftJoin('materials','materials.id','=','purchase_details.material_id')
         ->where('purchase_details.purchase_id',$id)->get();
-        return view('inventory.bahan_baku.purchasesShow',['purchases' => $purchase, 'purchase_view' => $purchase_view, 'no' => 1]);
+        return view('inventory.penerimaan.materials.show',['purchases' => $purchase, 'purchase_view' => $purchase_view, 'no' => 1]);
     }
-
-    public function showPurchases($id)
-    {
-        $purchase = Purchases::findOrFail($id);
-        $purchase_view= DB::table('purchase_details')
-        ->select('materials.material_name','purchase_details.*')
-        ->leftJoin('materials','materials.id','=','purchase_details.material_id')
-        ->where('purchase_details.purchase_id',$id)->get();
-        return view('inventory.bahan_baku.purchasesShow',['purchases' => $purchase, 'purchase_view' => $purchase_view, 'no' => 1]);
-    }
-
     /**
      * Show the form for editing the specified resource.
      *
