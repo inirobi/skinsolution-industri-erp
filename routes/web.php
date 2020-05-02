@@ -169,8 +169,67 @@ Route::put('/pengeluaran_labelling2/{id}', 'LabellingOutController@update2')->na
 
 
 //kegiatan
+//=>packaging
 Route::resource('/activity_packaging', 'PackagingActivityController');
+//=>product
+Route::resource('/activity_product', 'ProductActivityController');
+Route::get('/activity_product/view_sub/{id}/{product_id}', 'ProductActivityController@ViewSub')->name('product_activity.viewsub');
+Route::post('/product_activity/view/store/ajax-state', 'ProductActivityController@ViewStoreAjax')->name('product_activity.view.store');
+Route::get('/product_activity/view/add/{id}', 'ProductActivityController@ViewAdd')->name('activity_product.view.add');
+Route::get('/product_activity/view/add/ajax-state/{id}',function($id)
+{
+    $a=DB::table('products')
+            ->select('materials.id','materials.material_name',
+                        'formula_details.quantity','formula_details.weighing')
+            ->join('formulas','products.formula_id','=','formulas.id')
+            ->join('formula_details','formula_details.formula_id','=','formulas.id')
+            ->join('materials','formula_details.material_id','=','materials.id')
+            ->where('products.id',$id)
+            ->where('formula_details.source_material',1)
+            ->orderBy('materials.material_name', 'ASC')->get();
 
+    $b=DB::table('products')
+            ->select('sample_materials.id','sample_materials.material_name',
+                        'formula_details.quantity','formula_details.weighing')
+            ->join('formulas','products.formula_id','=','formulas.id')
+            ->join('formula_details','formula_details.formula_id','=','formulas.id')
+            ->join('sample_materials','formula_details.material_id','=','sample_materials.id')
+            ->where('products.id',$id)
+            ->where('formula_details.source_material',0)
+            ->orderBy('sample_materials.material_name', 'ASC')->get();
+
+    //$subcategories= Supplier::where('id',$categories->supplier_id)->get();
+    return $a->merge($b);
+});
+
+Route::get('/product_activity/view/store/data-checker/{id}',function($id)
+{
+    $a=DB::table('products')
+            ->select('materials.id','materials.material_name',
+                        'stocks.quantity','formula_details.weighing')
+            ->join('formulas','products.formula_id','=','formulas.id')
+            ->join('formula_details','formula_details.formula_id','=','formulas.id')
+            ->join('materials','formula_details.material_id','=','materials.id')
+            ->join('stocks','stocks.material_id','=','materials.id')
+            ->where('products.id',$id)
+            ->where('formula_details.source_material',1)
+            ->orderBy('materials.material_name', 'ASC')->get();
+
+    $b=DB::table('products')
+            ->select('sample_materials.id','sample_materials.material_name',
+                        'sample_stocks.quantity','formula_details.weighing')
+            ->join('formulas','products.formula_id','=','formulas.id')
+            ->join('formula_details','formula_details.formula_id','=','formulas.id')
+            ->join('sample_materials','formula_details.material_id','=','sample_materials.id')
+            ->join('sample_stocks','sample_stocks.sample_material_id','=','sample_stocks.id')
+            ->where('products.id',$id)
+            ->where('formula_details.source_material',0)
+            ->orderBy('sample_materials.material_name', 'ASC')->get();
+
+    //$subcategories= Supplier::where('id',$categories->supplier_id)->get();
+    return $a->merge($b);
+
+});
 
 //retur
 Route::resource('/retur', 'ReturController');

@@ -114,7 +114,7 @@
                       <li><a href="{{ route('produksi.index') }}">Produk</a></li>
                       <li><a>Kegiatan<span class="fa fa-chevron-down"></span></a>
                           <ul class="nav child_menu">
-                            <li class="sub_menu"><a href="level2.html">Produksi</a></li>
+                            <li class="sub_menu"><a href="{{ route('activity_product.index') }}">Produksi</a></li>
                             <li><a href="{{ route('activity_packaging.index') }}">Packaging</a></li>
                             <li><a href="{{ route('labelling.index') }}">Labelling</a></li>
                           </ul>

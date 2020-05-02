@@ -15,13 +15,15 @@
   </div>
 
   <div class="title_right">
-    <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+    <div class="col-md-12 col-sm-5 col-xs-12 form-group pull-right top_search">
+    <div style='float:right'>
       <div class="input-group">
-        <input type="text" class="form-control" placeholder="Search for...">
-        <span class="input-group-btn">
-          <button class="btn btn-secondary" type="button">Go!</button>
-        </span>
+        <ul class="breadcrumb">
+          <li><a href="{{url('/home')}}">Home</a></li>
+          <li>Products</li>
+        </ul>
       </div>
+    </div>
     </div>
   </div>
 </div>
@@ -32,7 +34,7 @@
     <div class="col-md-12 col-sm-12 ">
       <div class="x_panel">
         <div class="x_title">
-          <a href="#" class="btn btn-success" ><i class="fa fa-plus"></i> Add New Product </a>
+          <a href="{{route('produksi.create')}}" class="btn btn-success" ><i class="fa fa-plus"></i> Add New Product </a>
           <ul class="nav navbar-right panel_toolbox">
             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
             </li>
@@ -59,6 +61,9 @@
             </thead>
             <tbody>
               @foreach($product as $data)
+                @php
+                  $xx = App\TrialRevisionData::where('id', $data->trial_revision_data_id)->first(); 
+                  @endphp
               <tr>
                 <td>{{ $no++ }}</td>
                 <td> {{$data->product_code}}</td>
@@ -67,8 +72,9 @@
                 <td><a href="#">{{$data->formula_num}}</a></td>
                 <td><a href="#">{{$data->revision_num}}</a></td>
                 <td class="text-center">
-                  <a href="#" class="btn btn-warning" title="Edit"><i class="fa fa-edit"></i></a>
-                  <a href="#" class="btn btn-danger" onclick="event.preventDefault();destroy('#');" title="Hapus"><i class="fa fa-trash"></i></a>
+                  <a href="{{route('produksi.edit',$data->xx)}}" class="btn btn-warning" title="Edit"><i class="fa fa-edit"></i></a>
+                  <a href="{{route('produksi.show',$data->xx)}}" class="btn btn-info" title="Detail"><i class="fa fa-eye"></i></a>
+                  <a href="{{route('produksi.destroy',$data->xx)}}" class="btn btn-danger" onclick="event.preventDefault();destroy('{{route('produksi.destroy',$data->xx)}}');" title="Hapus"><i class="fa fa-trash"></i></a>
                 </td>
               </tr>
               @endforeach

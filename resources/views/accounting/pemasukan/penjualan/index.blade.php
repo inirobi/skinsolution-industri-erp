@@ -106,11 +106,11 @@
         @method('PUT')
           {{csrf_field()}}
           <div class="form-group">
-            <label class="control-label col-md-2">Tanggal</label>
             <fieldset>
               <div class="control-group">
+                  <label class="control-label col-md-2">Tanggal</label>
                   <div class="controls">
-                      <div class="col-md-11 xdisplay_inputx form-group has-feedback">
+                      <div class="col-md-12 xdisplay_inputx form-group has-feedback">
                           <input type="text" class="form-control has-feedback-left" id="single_cal3" placeholder="Date" aria-describedby="date" name="date">
                           <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
                       </div>
@@ -182,11 +182,11 @@
         <form action="{{ route('penjualan.store') }}" role="form" method="post">
           {{csrf_field()}}
           <div class="form-group">
-            <label class="control-label col-md-2">Tanggal</label>
             <fieldset>
               <div class="control-group">
+                <label class="control-label col-md-2">Tanggal</label>
                 <div class="controls">
-                  <div class="col-md-11 xdisplay_inputx form-group has-feedback">
+                  <div class="col-md-12 xdisplay_inputx form-group has-feedback">
                     <input type="text" class="form-control has-feedback-left" id="single_cal3" placeholder="Date" aria-describedby="date" name='date' required>
                     <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
                   </div>
