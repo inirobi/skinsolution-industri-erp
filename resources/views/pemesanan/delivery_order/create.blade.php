@@ -8,12 +8,19 @@
   </div>
 
   <div class="title_right">
-    <div class="col-md-5 col-sm-5 form-group pull-right top_search">
-      <div class="input-group">
-        <input type="text" class="form-control" placeholder="Search for...">
-        <span class="input-group-btn">
-          <button class="btn btn-default" type="button">Go!</button>
-        </span>
+    <div class="col-md-12 col-sm-5 col-xs-12 form-group pull-right top_search">
+      <div style='float:right'>
+        <div class="input-group">
+          <ul class="breadcrumb">
+            <li><a href="{{url('/home')}}">Home</a></li>
+            <li><a href="{{ route('delivery_order.index') }}">Delivery Orders</a></li>
+            @if(isset($inv))
+              <li><a> Update Delivery Order</a></li>
+            @else
+              <li><a>Add Delivery Order</a></li>
+            @endif
+          </ul>
+        </div>
       </div>
     </div>
   </div>
@@ -55,7 +62,7 @@
           <div class="field item form-group">
             <label class="col-form-label col-md-3 col-sm-3  label-align">Date<code>*</code></label>
             <div class="col-md-6 col-sm-6">
-                <input type="date" name="date" class="form-control has-feedback-left @error('date') is-invalid @enderror" id="single_cal1" aria-describedby="inputSuccess2Status" value="{{ old('date', $inv->date ?? '') }}">
+                <input type="text" name="date" class="form-control has-feedback-left @error('date') is-invalid @enderror" id="single_cal1" aria-describedby="inputSuccess2Status" value="{{ old('date', $inv->date ?? '') }}">
                 <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
                 <span id="inputSuccess2Status" class="sr-only">(success)</span>
             </div>
@@ -114,5 +121,21 @@
 </div>
 <!-- /page content -->
 
-@include('layouts.validasi_footer')
+
+@push('styles')
+    <!-- bootstrap-daterangepicker -->
+    <link href="{{ asset('assets/vendors/bootstrap-daterangepicker/daterangepicker.css')}}" rel="stylesheet">
+    <!-- bootstrap-datetimepicker -->
+    <link href="
+    {{ asset('assets/vendors/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css')}}" rel="stylesheet">
+@endpush
+
+
+@push('scripts')
+    <!-- bootstrap-daterangepicker -->
+    <script src="{{ asset('assets/vendors/moment/min/moment.min.js')}}"></script>
+    <script src="{{ asset('assets/vendors/bootstrap-daterangepicker/daterangepicker.js')}}"></script>
+    <!-- bootstrap-datetimepicker -->    
+    <script src="{{ asset('assets/vendors/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js')}}"></script>
+@endpush
 @endsection

@@ -144,8 +144,8 @@
                       <li><a href="{{ route('customers.index') }}">Customer</a></li>
                       <li><a>Purchase Order<span class="fa fa-chevron-down"></span></a>
                           <ul class="nav child_menu">
-                            <li class="sub_menu"><a href="level2.html">Trial</a></li>
-                            <li><a href="#level2_2">Produksi</a></li>
+                            <li class="sub_menu"><a href="{{route('po_customer.index')}}">Trial</a></li>
+                            <li><a href="{{route('po_product_pemesanan.index')}}">Produksi</a></li>
                           </ul>
                       </li>
                       <li><a href="{{route('delivery_order.index')}}">Delivery Order</a></li>
@@ -166,11 +166,12 @@
                       <li><a>Pemasukan<span class="fa fa-chevron-down"></span></a>
                           <ul class="nav child_menu">
                             <li class="sub_menu"><a href="{{route('penjualan.index')}}">Penjualan</a></li>
-                            <li><a href="#level2_2">Invoice</a></li>
+                            <li><a href="{{route('invoice.index')}}">Invoice</a></li>
                             <li><a href="#level2_2">Pembayaran Invoice</a></li>
                           </ul>
                       </li>
-                      <li><a href="pricing_tables.html">Notifikasi Pembayaran PO</a></li>
+                      <li><a href="{{route('bayar.notif_po')}}">Notifikasi Pembayaran PO</a></li>
+                      <li><a href="{{route('petty.index')}}">Cash Flow</a></li>
                     </ul>
                   </li>
                   <li><a href="#"><i class="fa fa-user"></i> Customer </a></li>
@@ -183,7 +184,7 @@
                   <li><a><i class="fa fa-file-text"></i> Laporan <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li><a href="e_commerce.html">Laporan Pemasukan</a></li>
-                      <li><a href="e_commerce.html">Laporan Pengeluaran</a></li>
+                      <li><a href="{{route('laporan.pengeluaran')}}">Laporan Pengeluaran</a></li>
                       <li><a href="e_commerce.html">Laporan Laba</a></li>
                       <li><a href="e_commerce.html">Laporan Hutang</a></li>
                       <li><a href="e_commerce.html">Laporan Piutang</a></li>

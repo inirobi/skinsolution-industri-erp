@@ -91,7 +91,7 @@
           {{csrf_field()}}
           
           <div class="control-group">
-            <label class="control-label col-md-2">Date</label>
+            <label class="control-label col-md-3">Date</label>
             <div class="controls">
               <div class="col-md-12 xdisplay_inputx form-group has-feedback">
                 <input type="text" class="form-control has-feedback-left" id="single_cal3" placeholder="Date" aria-describedby="date" name='date' required>
@@ -101,7 +101,7 @@
           </div>
           
           <div class="form-group">
-            <label class="control-label col-md-2">Po Product Number</label>
+            <label class="control-label col-md-3">Po Product Number</label>
             <select class="form-control" name="po_customer_ids" id="po_customer_ids">
               <option disabled selected value> -- Select PO Number -- </option>
                 @foreach($add as $d)
@@ -111,22 +111,22 @@
           </div>
           
           <div class="form-group">
-            <label class="control-label col-md-2">Product</label>
+            <label class="control-label col-md-3">Product</label>
             <select class="form-control" name="products" id="products"></select>
           </div>
 
           <div class="form-group">
-            <label class="control-label col-md-2">Quantity</label>
+            <label class="control-label col-md-3">Quantity Product</label>
             <input type="number" class="form-control" required name="quantity">
           </div>
 
           <div class="form-group">
-            <label class="control-label col-md-2">Quantity Packaging</label>
+            <label class="control-label col-md-3">Quantity Packaging</label>
             <input type="number" class="form-control" required name="quantity_pack">
           </div>
 
           <div class="form-group">
-            <label class="control-label col-md-2">Reason</label>
+            <label class="control-label col-md-3">Reason</label>
             <textarea name='reason' class='form-control'></textarea>
           </div>
           <div class="modal-footer">

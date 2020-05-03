@@ -31,6 +31,10 @@ Route::get('/materials_stocks', 'MaterialsController@dataStock');
 Route::get('/material/supplier', 'MaterialsController@supplierStore');
 Route::delete('/material/supplier/{id}', 'MaterialsController@SupplierDelete');
 
+Route::get('/material/kontradiksi/{id}', 'MaterialsController@kontradiksiShow')->name('material.kontradiksi.show');
+Route::get('/material/kontradiksi', 'MaterialsController@kontradiksiStore')->name('material.kontradiksi.store');
+Route::delete('/material/kontradiksi/{id}', 'MaterialsController@kontradiksiDelete')->name('material.kontradiksi.delete');
+
 //suplier
 Route::resource('/suppliers', 'SuppliersController');
 
@@ -100,7 +104,17 @@ Route::delete('/po_packaging/view/destroy/{id}', 'PoPackagingController@destroyV
 
 
 //==========pemesanan====================//
-
+//purchase Order
+    //=>product
+Route::resource('/po_product_pemesanan', 'PoProductController');
+Route::delete('/po_product_pemesanan/view/destroy/{id}', 'PoProductController@viewDestroy')->name('po_product_pemesanan.viewDestroy');
+Route::post('/po_product_pemesanan/view/store', 'PoProductController@viewStore')->name('po_product_pemesanan.viewStore');
+ 
+    //=>Trial
+Route::resource('/po_customer', 'PoCustomerController');
+Route::delete('/po_customer/view/destroy/{id}', 'PoCustomerController@viewDestroy')->name('po_customer.viewDestroy');
+Route::post('/po_customer/view/store', 'PoCustomerController@viewStore')->name('po_customer.viewStore');
+    
 //packaging
 Route::resource('/customers', 'CustomersController');
 
@@ -144,6 +158,14 @@ Route::resource('/pengeluaran_gaji', 'PengeluaranGajiController');
 //pemasukan pejualan
 Route::resource('/penjualan', 'PenjualanController');
 
+//invoice
+Route::resource('/invoice', 'InvoiceController');
+Route::get('/invoice/xx', 'InvoiceController@xx')->name('invoice.xx');
+Route::get('/invoice/state', 'InvoiceController@state')->name('invoice.state');
+
+//notifikasi pembayaran invoice
+Route::get('/bayar/notif', 'PettyCashController@bayar')->name('bayar.notif_po');
+Route::resource('/petty', 'PettyCashController');
 
 //==========================Produksi============================
 Route::resource('/labelling', 'LabellingController');
@@ -253,3 +275,7 @@ Route::resource('/trial', 'TrialDataController');
 
 //trial revisi
 Route::resource('/trial_revisi', 'TrialRevisionDataController');
+
+//=================Laporan=====================
+Route::get('/laporanPengeluaran', 'LaporanController@pengeluaran')->name('laporan.pengeluaran');
+Route::post('/laporanStorePengeluaran', 'LaporanController@storePengeluaran')->name('laporan.store.pengeluaran');

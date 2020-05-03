@@ -15,17 +15,18 @@
   </div>
 
   <div class="title_right">
-    <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
-      <div class="input-group">
-        <input type="text" class="form-control" placeholder="Search for...">
-        <span class="input-group-btn">
-          <button class="btn btn-secondary" type="button">Go!</button>
-        </span>
+    <div class="col-md-12 col-sm-5 col-xs-12 form-group pull-right top_search">
+      <div style='float:right'>
+        <div class="input-group">
+          <ul class="breadcrumb">
+            <li><a href="{{url('/home')}}">Home</a></li>
+            <li><a>Sales</a></li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
 </div>
-
 <div class="clearfix"></div>
 
 <div class="row">
@@ -187,7 +188,7 @@
                 <label class="control-label col-md-2">Tanggal</label>
                 <div class="controls">
                   <div class="col-md-12 xdisplay_inputx form-group has-feedback">
-                    <input type="text" class="form-control has-feedback-left" id="single_cal3" placeholder="Date" aria-describedby="date" name='date' required>
+                    <input type="text" class="form-control has-feedback-left" id="single_cal2" placeholder="Date" aria-describedby="date" name='date' required>
                     <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
                   </div>
                 </div>

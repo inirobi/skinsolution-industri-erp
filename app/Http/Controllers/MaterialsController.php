@@ -7,6 +7,7 @@ use App\Materials;
 use Illuminate\Support\Facades\DB;
 use App\MaterialSupplier;
 use App\Suppliers;
+use App\MaterialKontradiksi;
 
 class MaterialsController extends Controller
 {
@@ -195,31 +196,30 @@ class MaterialsController extends Controller
 
     // suppliers
 
-    public function supplierStore(Request $request)
+    public function kontradiksiStore(Request $request)
     {
-        $x = DB::table('material_suppliers')->where([
-                ['supplier_id', '=', $request->supplier_id],
+        $x = DB::table('material_kontradiksi')->where([
+                ['material_kontradiksi_id', '=', $request->material_kontradiksi_id],
                 ['material_id', '=', $request->material_id],
             ])->count();
         if($x>0){
             return redirect()->back()->with('error', 'Supplier Already Exist');
-        }
-        else{
-            $sup = MaterialSupplier::create([
+        }else{
+            $sup = MaterialKontradiksi::create([
                 'id' => null,
                 'material_id' => $request->material_id,
-                'supplier_id' => $request->supplier_id,
+                'material_kontradiksi_id' => $request->material_kontradiksi_id,
             ]);
             return redirect()->back()->with('success', 'Successfully Created.');
         }
         
     }
 
-    public function SupplierDelete($id)
+    public function kontradiksiDelete($id)
     {
 
         try {
-            MaterialSupplier::whereId($id)->delete();
+            MaterialKontradiksi::whereId($id)->delete();
             return redirect()->back()->with('success', 'Successfully Deleted.');
   
           } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){
@@ -227,5 +227,17 @@ class MaterialsController extends Controller
                 ->route('materials.index')
                 ->with('error', 'Data is not found.');
           }   
+    }
+
+    public function kontradiksiShow($id)
+    {
+        $datas= DB::table('material_kontradiksi')
+            ->select('material_kontradiksi.*','materials.material_name','materials.material_code','materials.category')
+            ->join('materials','materials.id','=','material_kontradiksi.material_kontradiksi_id')
+            ->selectRaw('material_kontradiksi.id as id_x')
+            ->where('material_kontradiksi.material_id',$id)->get();
+
+        $material= Materials::whereNotIn('id',[$id])->get();
+        return view('inventory.bahan_baku.kontradiksi',['datas' => $datas, 'id' => $id, 'material' => $material]);
     }
 }

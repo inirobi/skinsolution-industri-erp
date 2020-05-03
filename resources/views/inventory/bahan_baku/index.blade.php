@@ -51,6 +51,7 @@
                 <th>Stock Minimum</th>
                 <th>Cantegory</th>
                 <th>Price</th>
+                <th>Contradiction</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -65,6 +66,7 @@
                 <td>{{ $data -> stock_minimum }}</td>
                 <td>{{ $data -> category }}</td>
                 <td>${{ $data -> price }}</td>
+                <td class="text-center"><a href="{{ route('material.kontradiksi.show', $data) }}"><i class="fa fa-pencil"></i> List</a></td>
                 <td class="text-center">
                   <a class="btn btn-info" href="{{ route('materials.show', $data) }}" title="Detail" class="btn btn-small text-primary">
                     <i class="fa fa-eye"></i>
