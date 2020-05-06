@@ -306,14 +306,19 @@ class PoMaterialController extends Controller
     }
     public function pengeluaran_material_detail($id)
     {
-        $purchase = DB::table('po_material_details')
-                    ->join('materials','po_material_details.material_id','=','materials.id')
-                    ->join('po_materials','po_material_details.po_material_id','=','po_materials.id')
-                    ->join('suppliers', 'po_materials.supplier_id','=','suppliers.id')
-                    ->where('po_materials.id', $id)
+        $purchase = PoMaterial::findOrFail($id);
+        $materialSupplier = MaterialSupplier::where('supplier_id', $purchase->supplier_id)->get();
+        $matId = array();
+        foreach($materialSupplier as $data){
+            $matId[] = $data->material_id;
+        }
+
+        $material = DB::table('materials')
+                    ->whereIn('id', $matId)
                     ->get();
-     
-        return view('accounting.pengeluaran.material.view', ['purchase'=>$purchase]);
+
+        $purchase_view = PoMaterialDetail::where('po_material_id', $id)->get();
+        return view('accounting.pengeluaran.material.view', compact('purchase', 'purchase_view', 'material'));
     }
     public function pengeluaran_material_update(Request $request)
     {

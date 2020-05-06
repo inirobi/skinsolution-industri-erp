@@ -51,9 +51,7 @@ class PackagingActivityController extends Controller
         ->count();
         
         if($cek > 0){
-            return redirect()
-                ->route('activity_packaging.create')
-                ->with('error','Code Already Exists!!');
+            return redirect('admin/packaging_activity')->with('error','Code Already Exists!!');
         }
 
         $stocks = DB::table('product_stocks')->where('product_id', $request->input('product_id'))->sum('production_quantity');
@@ -100,7 +98,7 @@ class PackagingActivityController extends Controller
         }
         
         return redirect()
-            ->route('activity_packaging.create')
+            ->route('activity_packaging.index')
             ->with('success','Successfully Created');
         
     }

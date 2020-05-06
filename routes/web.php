@@ -168,9 +168,36 @@ Route::get('/bayar/notif', 'PettyCashController@bayar')->name('bayar.notif_po');
 Route::resource('/petty', 'PettyCashController');
 
 //==========================Produksi============================
+//labelling
 Route::resource('/labelling', 'LabellingController');
 Route::resource('/produksi', 'ProductController');
 Route::get('/stok_produksi', 'ProductController@indexStock')->name('produksi.stoct');
+
+Route::get('/labelling/add/ajax-state/{id}',function($id)
+    {
+        $x=DB::table('packaging_activities')
+        ->join('products','packaging_activities.product_id','products.id')
+        ->join('packaging_stocks','packaging_stocks.packaging_id','products.id_labelling')
+        ->join('product_stocks','product_stocks.product_id','products.id')
+        ->where('packaging_activities.id',$id)->count();
+    
+        if($x == 0){
+            $subcategories=DB::table('packaging_activities')
+            ->select('packaging_activities.packaging_result')
+            ->where('packaging_activities.id',$id)->get();   
+        }
+        else{
+            $subcategories=DB::table('packaging_activities')
+            ->select('packaging_activities.id','packaging_activities.packaging_result','packaging_stocks.quantity','product_stocks.packaging_quantity')
+            ->join('products','packaging_activities.product_id','products.id')
+            ->join('packaging_stocks','packaging_stocks.packaging_id','products.id_labelling')
+            ->join('product_stocks','product_stocks.product_id','products.id')
+            ->where('packaging_activities.id',$id)->get();
+        }
+        
+        return $subcategories;
+
+    });
 
 //pengeluaran
 Route::resource('/pengeluaran_material', 'MaterialOutController');
@@ -181,6 +208,7 @@ Route::get('/pengeluaran_packaging2/create2', 'PackagingOutController@create2')-
 Route::post('/pengeluaran_packaging2', 'PackagingOutController@store2')->name('pengeluaran_packaging2.store2');
 Route::get('/pengeluaran_packaging2/{id}/edit2', 'PackagingOutController@edit2')->name('pengeluaran_packaging2.edit2');
 Route::put('/pengeluaran_packaging2/{id}', 'PackagingOutController@update2')->name('pengeluaran_packaging2.update2');
+
 
 Route::resource('/pengeluaran_labelling', 'LabellingOutController');
 Route::get('/pengeluaran_labelling2', 'LabellingOutController@index2')->name('pengeluaran_labelling2.index2');
@@ -193,6 +221,32 @@ Route::put('/pengeluaran_labelling2/{id}', 'LabellingOutController@update2')->na
 //kegiatan
 //=>packaging
 Route::resource('/activity_packaging', 'PackagingActivityController');
+Route::get('/packaging_activity/add/ajax-state/{id}',function($id)
+{
+    $subcategories=DB::table('product_activity_details')
+        ->select('product_activity_details.id','product_activity_details.result_real', 'po_product_details.pack')
+        ->join('product_activities','product_activities.id','=','product_activity_details.product_activity_id')
+        ->join('po_product_details','po_product_details.po_product_id','=','product_activities.po_product_id')
+        ->where('product_activity_details.product_activity_id',$id)->get();
+        return $subcategories;
+
+});
+Route::get('/packaging_activity/addprdcode/ajax-state/{id}',function($id)
+{
+    $query_real = "";
+    $subcategories=DB::table('product_activity_details')
+        ->distinct('product_activity_details.product_id')
+        ->join('products','products.id','=','product_activity_details.product_id')
+        ->where('product_activity_details.product_activity_id',$id)->first();
+
+        if(!empty($subcategories)){
+            $query_real=DB::table('products')
+            ->where('products.id',$subcategories->product_id)->get();                
+        }
+
+        return $query_real;
+
+});
 //=>product
 Route::resource('/activity_product', 'ProductActivityController');
 Route::get('/activity_product/view_sub/{id}/{product_id}', 'ProductActivityController@ViewSub')->name('product_activity.viewsub');

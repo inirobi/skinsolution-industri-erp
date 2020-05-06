@@ -48,7 +48,8 @@
               <div class="control-group">
                 <div class="controls">
                   <div class="col-md-11 xdisplay_inputx form-group has-feedback">
-                    <input type="text" class="form-control has-feedback-left" id="single_cal3" placeholder="Date" aria-describedby="date" value="{{ $purchase[0] -> po_date }}" disabled>
+                    <input type="text" class="form-control has-feedback-left" id="single_cal3" placeholder="Date" aria-describedby="date" value="{{$purchase->po_date}}" disabled>
+                    
                     <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
                   </div>
                 </div>
@@ -58,7 +59,8 @@
           <div class="field item form-group">
             <label class="col-form-label col-md-3 col-sm-3  label-align">Supplier : </label>
             <div class="col-md-6 col-sm-6">
-              <input class="form-control" value="{{ $purchase[0] -> supplier_name }}" name="customer_code" disabled />
+              <input class="form-control" value="{{$purchase->suppliers->supplier_name}}" name="customer_code" disabled />
+              
             </div>
           </div>
         </form>
@@ -90,24 +92,24 @@
                     <th>PO Number</th>
                     <th>Material</th>
                     <th>Quantity</th>
-                    <th>Price (IDR)</th>
-                    <th>Total Price (IDR)</th>
+                    <th>Price ({{$purchase->currency}})</th>
+                    <th>Total Price ({{$purchase->currency}})</th>
                   </tr>
                 </thead>
                 <tbody>
-                  @php $no=1; $total=0; @endphp
-                  @foreach($purchase as $data)
+                  @php $no=1; @endphp
+                  @foreach($purchase_view as $data)
+                    @php 
+                      $total_price =  $data->quantity * $data->price;
+                    @endphp
                     <tr>
-                        <td> {{$data-> po_num}} </td>
-                        <td> {{$data-> material_name}}</td>
-                        <td> {{$data -> quantity}} </td>
-                        <td> {{number_format($data->price,2)}}</td>
-                        <td> 
-                            @php $total+=$data->price;
-                                echo number_format($total,2)
-                            @endphp
-                        </td>
-                       @endforeach
+                      <td> {{$data->po_material_id}} </td>
+                      <td> {{$data->material->material_name}} - {{$data->material->material_code}} </td>
+                      <td> {{$data->quantity}}</td>
+                      <td> {{number_format($data->price,2)}}</td>
+                      <td> {{number_format($total_price,2)}}</td>
+                    </tr>
+                  @endforeach
                 </tbody>
               </table>
             </div>

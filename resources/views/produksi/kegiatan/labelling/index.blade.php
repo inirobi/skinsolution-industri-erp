@@ -74,7 +74,7 @@
                   @if($data->status=="Release")<span class="badge bg-green">Release</span>@endif
                 </td>
                 <td class="text-center">
-                  <a href="#" class="btn btn-warning" title="Edit"><i class="fa fa-edit"></i></a>
+                  <a href="{{route('labelling.edit',$data->id)}}" class="btn btn-warning" title="Edit"><i class="fa fa-edit"></i></a>
                   <a href="{{route('labelling.destroy',$data->id)}}" class="btn btn-danger" onclick="event.preventDefault();destroy('{{route('labelling.destroy',$data->id)}}');" title="Hapus"><i class="fa fa-trash"></i></a>
                 </td>
               </tr>

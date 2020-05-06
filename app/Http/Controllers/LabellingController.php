@@ -126,7 +126,9 @@ class LabellingController extends Controller
      */
     public function edit($id)
     {
-        //
+        $pckg = PackagingActivity::all();
+        $labelling = Labelling::find($id);
+        return view('produksi.kegiatan.labelling.edit', compact('pckg','labelling'));
     }
 
     /**
@@ -138,7 +140,17 @@ class LabellingController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $sup = Labelling::where('id', $request->id)
+            ->update([
+                'labelling_code' => $request->labelling_code,
+                'date' => $request->date    ,
+                'packaging_activity_id' => $request->packaging_activity_id,
+                'packaging_result' => $request->packaging_result,
+                'result' => $request->result,
+                'used_quantity' => $request->used_quantity,
+        ]);
+
+            return redirect()->route('labelling.index')->with('success','Successfully Updated');
     }
 
     /**

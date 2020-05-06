@@ -4,7 +4,7 @@
 <!-- page content -->
 <div class="page-title">
   <div class="title_left">
-    <h3>Add New Labelling</h3>
+    <h3>Edit Labelling</h3>
   </div>
 
   <div class="title_right">
@@ -14,7 +14,7 @@
           <ul class="breadcrumb">
             <li><a href="{{url('/home')}}">Home</a></li>
             <li><a href="{{route('labelling.index')}}">Labelling</a></li>
-            <li><a>Add Labelling</a></li>
+            <li><a>Edit Labelling</a></li>
           </ul>
         </div>
       </div>
@@ -27,17 +27,18 @@
   <div class="col-md-12 col-sm-12">
     <div class="x_panel">
       <div class="x_content">
-          <form action="{{ route('labelling.store') }}" method="POST" enctype="multipart/form-data">
-        @csrf
+          <form action="{{ route('labelling.update', $labelling->id) }}" novalidate method="POST" enctype="multipart/form-data">
+            @method('PUT')
+            @csrf
           <p>Wajib disi <code>*</code>
           </p>
           <span class="section">
-                {{ __('Form Labelling') }}
+                {{ __('Edit Labelling') }}
           </span>
           <div class="field item form-group">
             <label class="col-form-label col-md-3 col-sm-3  label-align">Labelling Code<code>*</code></label>
             <div class="col-md-6 col-sm-6">
-              <input class="form-control @error('labelling_code') is-invalid @enderror" value="{{ old('labelling_code', $labellings->labelling_code ?? '') }}" name="labelling_code" required="required" />
+              <input class="form-control @error('labelling_code') is-invalid @enderror" value="{{ old('labelling_code', $labelling->labelling_code ?? '') }}" name="labelling_code" required="required" />
             </div>
             @error('labelling_code')
                 <span class="invalid-feedback" role="alert">
@@ -51,7 +52,7 @@
               <div class="control-group">
                   <div class="controls">
                       <div class="col-md-11 xdisplay_inputx form-group has-feedback">
-                          <input type="text" class="form-control has-feedback-left" id="single_cal3" placeholder="Date" aria-describedby="date" value="{{ old('date', $lain->date ?? '') }}" name="date">
+                          <input type="text" class="form-control has-feedback-left" id="single_cal3" placeholder="Date" aria-describedby="date" value="{{ old('date', $labelling->date ?? '') }}" name="date">
                           <span class="fa fa-calendar-o form-control-feedback left @error('date') is-invalid @enderror" aria-hidden="true"></span>
                       </div>
                       
@@ -69,7 +70,7 @@
               <div class="col-md-6 col-sm-6">
                   <select class="form-control @error('packaging_activity_id') is-invalid @enderror" id="packaging_activity_id" name="packaging_activity_id">
                       @foreach($pckg as $d)
-                          <option value="{{$d->id}}" >{{$d->activity_code}}</option>
+                          <option @php if($d->id==$labelling->packaging_activity_id) echo'selected';@endphp value="{{$d->id}}" >{{$d->activity_code}}</option>
                       @endforeach
                   </select>
               </div>
@@ -81,9 +82,9 @@
           </div>
 
           <div class="field item form-group">
-            <label class="col-form-label col-md-3 col-sm-3  label-align">Packaging Result<code>*</code></label>
+            <label class="col-form-label col-md-3 col-sm-3  label-align">Packaging Activity Result<code>*</code></label>
             <div class="col-md-6 col-sm-6">
-              <input class="form-control number @error('packaging_result') is-invalid @enderror" id="packaging_result" value="{{ old('packaging_result', $labellings->packaging_result ?? '') }}" type="number" name="packaging_result" required='required'>
+              <input class="form-control number @error('packaging_result') is-invalid @enderror" id="packaging_result" value="{{ old('packaging_result', $labelling->packaging_result ?? '') }}" type="number" name="packaging_result" required='required'>
             </div>
             @error('packaging_result')
                 <span class="invalid-feedback" role="alert">
@@ -95,7 +96,7 @@
           <div class="field item form-group">
             <label class="col-form-label col-md-3 col-sm-3  label-align">Labelling Result<code>*</code></label>
             <div class="col-md-6 col-sm-6">
-              <input class="form-control  @error('result') is-invalid @enderror" value="{{ old('result', $labellings->result ?? '') }}" type="number" name="result" required='required' />
+              <input class="form-control  @error('result') is-invalid @enderror" value="{{ old('result', $labelling->result ?? '') }}" type="number" name="result" required='required' />
             </div>
             @error('result')
                 <span class="invalid-feedback" role="alert">
@@ -103,24 +104,11 @@
                 </span>
             @enderror
           </div>
-          <div class="field item form-group">
-            <label class="col-form-label col-md-3 col-sm-3  label-align">Packaging Quantity<code>*</code></label>
-            <div class="col-md-6 col-sm-6">
-              <input id="packaging_quantity" class="form-control"  disabled type="number" />
-            </div>
-          </div>
-          
-          <div class="field item form-group">
-            <label class="col-form-label col-md-3 col-sm-3  label-align">Packaging Stock<code>*</code></label>
-            <div class="col-md-6 col-sm-6">
-              <input class="form-control " type="number" id="packaging_stock" disabled>
-            </div>
-          </div>
 
           <div class="field item form-group">
             <label class="col-form-label col-md-3 col-sm-3  label-align">Used Quantity<code>*</code></label>
             <div class="col-md-6 col-sm-6">
-              <input class="form-control number @error('used_quantity') is-invalid @enderror" value="{{ old('used_quantity', $labellings->used_quantity ?? '') }}" type="number" name="used_quantity" required='required'>
+              <input class="form-control number @error('used_quantity') is-invalid @enderror" value="{{ old('used_quantity', $labelling->used_quantity ?? '') }}" type="number" name="used_quantity" required='required'>
             </div>
             @error('used_quantity')
                 <span class="invalid-feedback" role="alert">
@@ -129,22 +117,11 @@
             @enderror
           </div>
           
-          <div class="field item form-group">
-            <label class="col-form-label col-md-3 col-sm-3  label-align">Description <code>*</code></label>
-            <div class="col-md-6 col-sm-6">
-              <textarea required="required" name='description' rows="3" class="form-control  @error('description') is-invalid @enderror" name="description" required autocomplete="description">{{ old('description', $labellings->description ?? '') }}</textarea>
-            </div>
-            @error('description')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-            @enderror
-          </div>
           <div class="ln_solid">
             <div class="form-group">
               <div class="col-md-6 offset-md-3">
                 <button type='submit' class="btn btn-primary">Submit</button>
-                <button type="reset" class="btn btn-success">Reset</button>
+                <a href="{{route('labelling.index')}}" class="btn btn-danger">Cancel</a>
               </div>
             </div>
           </div>

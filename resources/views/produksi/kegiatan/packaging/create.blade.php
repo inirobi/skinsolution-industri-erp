@@ -62,9 +62,9 @@
               </fieldset>
           </div>
           <div class="field item form-group">
-              <label class="col-form-label col-md-3 col-sm-3  label-align">Production Code <code>*</code></label>
+              <label class="col-form-label col-md-3 col-sm-3  label-align">Product Code <code>*</code></label>
               <div class="col-md-6 col-sm-6">
-                  <select class="form-control @error('product_activity_id') is-invalid @enderror" name="product_activity_id">
+                  <select class="form-control @error('product_activity_id') is-invalid @enderror" name="product_activity_id" id="product_activity_id">
                       @foreach($poprd as $d)
                         @if($d->status=="Release")
                           <option value="{{$d->id}}" >{{$d->activity_code}}</option>
@@ -82,17 +82,27 @@
           <div class="field item form-group">
               <label class="col-form-label col-md-3 col-sm-3  label-align">Product Code <code>*</code></label>
               <div class="col-md-6 col-sm-6">
-                  <select class="form-control @error('production_result') is-invalid @enderror" name="production_result">
-                    @foreach($prd as $d)
-                        <option value="{{$d->id}}" >{{$d->product_name}}</option>
-                        @endforeach
+                  <select class="form-control @error('product_id') is-invalid @enderror" id="product_code_detail" name="product_id">
+                    <option disabled selected value> -- Select Production Code -- </option>
                   </select>
               </div>
-              @error('production_result')
+              @error('product_id')
               <span class="invalid-feedback" role="alert">
                   <strong>{{ $message }}</strong>
               </span>
               @enderror
+          </div>
+
+          <div class="field item form-group">
+            <label class="col-form-label col-md-3 col-sm-3  label-align">Production Result<code>*</code></label>
+            <div class="col-md-6 col-sm-6">
+              <input id="production_result" class="form-control number @error('production_result') is-invalid @enderror" type="number" name="production_result" required='required'>
+            </div>
+            @error('production_result')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+            @enderror
           </div>
 
           <div class="field item form-group">
@@ -119,8 +129,8 @@
             @enderror
           </div>
 
-          <div class="field item form-group">
             <label class="col-form-label col-md-3 col-sm-3  label-align">Ruahan<code>*</code></label>
+          <div class="field item form-group">
             <div class="col-md-6 col-sm-6">
               <input class="form-control number @error('ruahan') is-invalid @enderror" type="number" name="ruahan" required='required'>
             </div>
@@ -167,6 +177,20 @@
 
 
 @push('scripts')
+<script>
+    $('#product_activity_id').on('change', function(e){
+        var product_activity_id = e.target.value;
+        $.get('{{ url('') }}/packaging_activity/addprdcode/ajax-state/' + product_activity_id, function(data) {
+            $('#product_code_detail').empty();
+            $.each(data, function(index, subcatObj){
+                $('#product_code_detail').append('<option value="'+subcatObj.id+'">'+subcatObj.product_name+'</option>')
+            });
+        });
+
+        $.get('{{ url('') }}/packaging_activity/add/ajax-state/' + product_activity_id, function(data) {
+            $('#production_result').attr('value',data[0].result_real);
+        });
+    });
 </script>
     <!-- bootstrap-daterangepicker -->
 <script src="{{ asset('assets/vendors/moment/min/moment.min.js')}}"></script>
