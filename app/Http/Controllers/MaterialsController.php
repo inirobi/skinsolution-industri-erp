@@ -8,6 +8,10 @@ use Illuminate\Support\Facades\DB;
 use App\MaterialSupplier;
 use App\Suppliers;
 use App\MaterialKontradiksi;
+use App\PoMaterial;
+use App\PoMaterialDetail;
+
+use PDF; 
 
 class MaterialsController extends Controller
 {
@@ -160,6 +164,14 @@ class MaterialsController extends Controller
               ->route('materials.index')
               ->with('error', 'Data is not found.');
         }
+    }
+
+    public function Print($id)
+    {
+        $purchase = PoMaterial::where('id',$id)->get();
+        $purchase_view = PoMaterialDetail::where('po_material_id', $id)->get();
+        $pdf = PDF::loadView('inventory.bahan_baku.print',compact('purchase','purchase_view'));
+        return $pdf->stream();
     }
 
     /**

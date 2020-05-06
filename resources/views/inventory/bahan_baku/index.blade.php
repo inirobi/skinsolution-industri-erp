@@ -68,6 +68,9 @@
                 <td>${{ $data -> price }}</td>
                 <td class="text-center"><a href="{{ route('material.kontradiksi.show', $data) }}"><i class="fa fa-pencil"></i> List</a></td>
                 <td class="text-center">
+                  <!-- <a class="btn btn-info" href="{{ route('material.print', $data->id) }}" target="_blank" title="Detail" class="btn btn-small text-primary">
+                    <i class="fa fa-print"></i>
+                  </a> -->
                   <a class="btn btn-info" href="{{ route('materials.show', $data) }}" title="Detail" class="btn btn-small text-primary">
                     <i class="fa fa-eye"></i>
                   </a>

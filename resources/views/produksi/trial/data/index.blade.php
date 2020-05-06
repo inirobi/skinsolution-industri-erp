@@ -32,7 +32,7 @@
     <div class="col-md-12 col-sm-12 ">
       <div class="x_panel">
         <div class="x_title">
-          <a href="#" class="btn btn-success" ><i class="fa fa-plus"></i>Add New Trial Data </a>
+          <a data-toggle="modal" href="#modalAdd" class="btn btn-success" ><i class="fa fa-plus"></i>Add New Trial Data </a>
           <ul class="nav navbar-right panel_toolbox">
             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
             </li>
@@ -72,8 +72,8 @@
                 </td>
                 <td> {{$data->keterangan}} </td>
                 <td class="text-center">
-                  <a href="#" class="btn btn-warning" title="Edit"><i class="fa fa-edit"></i></a>
-                  <a href="#" class="btn btn-danger" onclick="event.preventDefault();destroy('#');" title="Hapus"><i class="fa fa-trash"></i></a>
+                  <a onclick="editConfirm({{$data}})" class="btn btn-warning" title="Edit"><i class="fa fa-edit"></i></a>
+                  <a href="{{route('trial.destroy',$data->id)}}" class="btn btn-danger" onclick="event.preventDefault();destroy('{{route('trial.destroy',$data->id)}}');" title="Hapus"><i class="fa fa-trash"></i></a>
                 </td>
               </tr>
               @endforeach
@@ -94,10 +94,219 @@
     @csrf
 </form>
 
+<!-- modal add -->
+<div class="modal fade bd-example-modal-lg" id="modalAdd" tabindex="-1" role="dialog" aria-labelledby="modalAddLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalAddLabel">Add New Trial Data</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="{{ route('trial.store') }}" role="form" method="post">
+          {{csrf_field()}}
+          
+          <div class="form-group">
+            <label class="control-label">Trial Number</label>
+            <input name='trial_num' type='text' class='form-control' required>
+          </div>
+
+          <div class="form-group">
+            <label class="control-label">Po Customer Number</label>
+            <select class="form-control" name="po_customer_id" id="po_customer_id">
+              @foreach($pocustomer as $d)
+                <option value="{{$d->id}}" >{{$d->po_num}}</option>
+              @endforeach
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="control-label">Product</label>
+            <select class="form-control" name="po_customer_detail_id" id="po_customer_detail_id"></select>
+          </div>
+
+          <div class="form-group">
+            <label class="control-label">Willingness</label>
+            <input name='willingness' type='text' class='form-control' required>
+          </div>
+
+          <div class="item form-group">
+            <label class="col-form-label col-md-2">Type <code>*</code> :</label>
+            <div class="col-md-6 col-sm-6 ">
+              <div class="btn-group" data-toggle="buttons">
+                  <label class="btn btn-primary" data-toggle-class="btn-primary"
+                      data-toggle-passive-class="btn-default" id="btn-yes">
+                      <input type="radio" value="1" name="type"
+                          checked="checked" class="join-btn">
+                      &nbsp; Skin Care
+                  </label>
+                  <label class="btn btn-secondary" data-toggle-class="btn-primary"
+                      data-toggle-passive-class="btn-default" id="btn-no">
+                      <input type="radio" value="0" name="type"
+                          class="join-btn">
+                      &nbsp; Dekoratif
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label">Keterangan</label>
+              <textarea name='keterangan' class='form-control' required></textarea>
+            </div>
+            <div class="modal-footer">
+              <button type='submit' class="btn btn-primary"><i class="fa fa-floppy-o"></i> Save</button>
+              <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- modal edit -->
+<div class="modal fade bd-example-modal-lg" id="modalEdit" tabindex="-1" role="dialog" aria-labelledby="modalEditLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalEditLabel">Edit Trial Data</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form role="form" id='editTrial' method="post">
+          @method('PUT')
+          @csrf
+          
+          <div class="form-group">
+            <label class="control-label">Trial Number</label>
+            <input name='trial_num' id="trial_num" type='text' class='form-control' required>
+          </div>
+
+          <div class="form-group">
+            <label class="control-label">Po Customer Number</label>
+            <select class="form-control" name="po_customer_id" id="po_customer_id2">
+              @foreach($pocustomer as $d)
+                <option value="{{$d->id}}" >{{$d->po_num}}</option>
+              @endforeach
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="control-label">Product</label>
+            <select class="form-control" name="po_customer_detail_id" id="po_customer_detail_id2"></select>
+          </div>
+
+          <div class="form-group">
+            <label class="control-label">Willingness</label>
+            <input name='willingness' id="willingness" type='text' class='form-control' required>
+          </div>
+
+          <div class="item form-group">
+            <label class="col-form-label col-md-2">Type <code>*</code> :</label>
+            <div class="col-md-6 col-sm-6 ">
+              <div class="btn-group" data-toggle="buttons">
+                  <label class="btn btn-primary" data-toggle-class="btn-primary"
+                      data-toggle-passive-class="btn-default" id="btn-yes2">
+                      <input type="radio" id='id1' value="1" name="type"
+                          checked="checked" class="join-btn">
+                      &nbsp; Skin Care
+                  </label>
+                  <label class="btn btn-secondary" data-toggle-class="btn-primary"
+                      data-toggle-passive-class="btn-default" id="btn-no2">
+                      <input type="radio" id='id2' value="0" name="type"
+                          class="join-btn">
+                      &nbsp; Dekoratif
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label">Keterangan</label>
+              <textarea name='keterangan' id="keterangan" class='form-control' required></textarea>
+            </div>
+            <div class="modal-footer">
+              <button type='submit' class="btn btn-primary"><i class="fa fa-floppy-o"></i> Save</button>
+              <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 @push('scripts')
 <script>
+$('#po_customer_id').on('change', function(e){
+  var po_id = e.target.value;
+  $.get('{{ url('') }}/trial/add/ajax-state/' + po_id, function(data) {
+      $('#po_customer_detail_id').empty();
+      $.each(data, function(index, subcatObj){
+      $('#po_customer_detail_id').append('<option value="'+subcatObj.id+'">'+subcatObj.product_name+'</option>')
+    });
+  });
+});
+$('#po_customer_id2').on('change', function(e){
+  var po_id = e.target.value;
+  $.get('{{ url('') }}/trial/add/ajax-state/' + po_id, function(data) {
+      $('#po_customer_detail_id2').empty();
+      $.each(data, function(index, subcatObj){
+      $('#po_customer_detail_id2').append('<option value="'+subcatObj.id+'">'+subcatObj.product_name+'</option>')
+    });
+  });
+});
+
+function editConfirm(data)
+{
+  console.log(data);
+    $('#keterangan').html(data.keterangan);
+    $('#willingness').attr('value',data.willingness);
+    $('#po_customer_id2').attr('value',data.po_customer_id);
+    $('#po_customer_detail_id2').append('<option value="'+data.po_customer_detail.id+'">'+data.po_customer_detail.product_name+'</option>');
+    $('#trial_num').attr('value',data.trial_num);
+
+      if (data.type == "0") {
+      $('input[type=radio][name=type]').attr('value',0);
+          $('#btn-yes2').attr('class', 'btn btn-secondary');
+          $('#btn-no2').attr('class', 'btn btn-primary');
+      }
+      if (data.type == "1") {
+        $('input[type=radio][name=type]').attr('value',1);
+        $('#btn-yes2').attr('class', 'btn btn-primary');
+        $('#btn-no2').attr('class', 'btn btn-secondary');
+      }
+    $('#editTrial').attr('action',"{{ url('trial') }}/"+data.id)
+    $('#modalEdit').modal();
+}
+
+$('input[type=radio][name=type]').change(function () {
+  $('#id1').attr('value',1);
+  $('#id2').attr('value',0);
+    var source = this.value;
+
+    if (source == "0") {
+        $('#btn-yes').attr('class', 'btn btn-secondary');
+        $('#btn-no').attr('class', 'btn btn-primary');
+    }
+    if (source == "1") {
+        $('#btn-yes').attr('class', 'btn btn-primary');
+        $('#btn-no').attr('class', 'btn btn-secondary');
+    }
+});
+$('input[type=radio][name=type]').change(function () {
+    var source = this.value;
+
+    if (source == "0") {
+        $('#btn-yes2').attr('class', 'btn btn-secondary');
+        $('#btn-no2').attr('class', 'btn btn-primary');
+    }
+    if (source == "1") {
+        $('#btn-yes2').attr('class', 'btn btn-primary');
+        $('#btn-no2').attr('class', 'btn btn-secondary');
+    }
+});
 
 function destroy(action){
     swal({

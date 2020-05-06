@@ -35,6 +35,7 @@ Route::get('/material/kontradiksi/{id}', 'MaterialsController@kontradiksiShow')-
 Route::get('/material/kontradiksi', 'MaterialsController@kontradiksiStore')->name('material.kontradiksi.store');
 Route::delete('/material/kontradiksi/{id}', 'MaterialsController@kontradiksiDelete')->name('material.kontradiksi.delete');
 
+Route::get('/material/print/{id}', 'MaterialsController@Print')->name('material.print');
 //suplier
 Route::resource('/suppliers', 'SuppliersController');
 
@@ -326,7 +327,15 @@ Route::resource('/formula', 'FormulaController');
 
 //trial
 Route::resource('/trial', 'TrialDataController');
+Route::get('/trial/add/ajax-state/{id}',function($id)
+{
+    $subcategories=DB::table('po_customer_details')
+        ->select('po_customer_details.id','po_customer_details.product_name')
+        ->where('po_customer_details.po_customer_id',$id)->get();
 
+        return $subcategories;
+
+});
 //trial revisi
 Route::resource('/trial_revisi', 'TrialRevisionDataController');
 

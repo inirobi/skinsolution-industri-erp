@@ -146,10 +146,6 @@ class ProductActivityController extends Controller
 
     public function ViewStoreAjax(Request $request)
     {   
-        echo '<pre>';
-        var_dump($request->all());
-        echo '</pre><hr>';
-        die;
         ProductActivityDetail::create($request->all());
         $stock = Stock::where('material_id', $request->material_id)->first();        
             if (!empty($stock) && $stock->quantity >= $request->weighing) {

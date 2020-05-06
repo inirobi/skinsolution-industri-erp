@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\TrialData;
+use App\PoCustomer;
+use Illuminate\Support\Facades\DB;
 class TrialDataController extends Controller
 {
     /**
@@ -14,8 +16,9 @@ class TrialDataController extends Controller
     public function index()
     {
         $trial = TrialData::orderBy('id', 'desc')->get();
+        $pocustomer = PoCustomer::all();
         $no = 1;
-        return view('produksi.trial.data.index', compact('trial','no'));
+        return view('produksi.trial.data.index', compact('trial','no','pocustomer'));
     }
 
     /**
@@ -36,7 +39,26 @@ class TrialDataController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try{
+            $cek = DB::table('trial_datas')
+            ->where('trial_num',$request->trial_num)
+            ->count();
+            
+            if($cek > 0){
+                return redirect()
+                    ->route('trial.index')
+                    ->with('error','Code Already Exists!!');
+            }
+            
+            TrialData::create($request->all());
+            return redirect()
+                ->route('trial.index')
+                ->with('success','Successfully Trial Data Added');
+        }catch(Exception $e){
+            return redirect()
+                ->route('trial.index')
+                ->with('error', $e->toString());
+        }
     }
 
     /**
@@ -58,7 +80,7 @@ class TrialDataController extends Controller
      */
     public function edit($id)
     {
-        //
+        
     }
 
     /**
@@ -70,7 +92,24 @@ class TrialDataController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try{
+            TrialData::whereId($id)
+            ->update([
+                'trial_num' => $request->trial_num,
+                'po_customer_id' => $request->po_customer_id,
+                'po_customer_detail_id' => $request->po_customer_detail_id,
+                'willingness' => $request->willingness,
+                'type' => $request->type,
+                'keterangan' => $request->keterangan,
+            ]);
+            return redirect()
+                ->route('trial.index')
+                ->with('success','Successfully Trial Data Updated');
+        }catch(Exception $e){
+            return redirect()
+                ->route('trial.index')
+                ->with('error', $e->toString());
+        }
     }
 
     /**
@@ -81,6 +120,15 @@ class TrialDataController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try{
+            TrialData::whereId($id)->delete();
+            return redirect()
+                ->route('trial.index')
+                ->with('success','Successfully Deleted');
+        }catch(Exception $e){
+            return redirect()
+                ->route('trial.index')
+                ->with('error', $e->toString());
+        }
     }
 }

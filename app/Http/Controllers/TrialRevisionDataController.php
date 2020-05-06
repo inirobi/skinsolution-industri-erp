@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\TrialRevisionData;
+use App\TrialData;
+use Illuminate\Support\Facades\DB;
 
 class TrialRevisionDataController extends Controller
 {
@@ -14,9 +16,10 @@ class TrialRevisionDataController extends Controller
      */
     public function index()
     {
+        $trialdata = TrialData::all();
         $trial = TrialRevisionData::orderBy('id', 'desc')->get();
         $no = 1;
-        return view('produksi.trial.revisi.index', compact('trial','no'));
+        return view('produksi.trial.revisi.index', compact('trial','no','trialdata'));
     }
 
     /**
@@ -37,7 +40,33 @@ class TrialRevisionDataController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try{
+            $cek = DB::table('trial_revision_datas')
+                ->where('revision_num',$request->revision_num)
+                ->count();
+                
+                if($cek > 0){
+                    return redirect()
+                        ->route('trial_revisi.index')
+                        ->with('error','Code Already Exists!!');
+                }
+                
+                TrialRevisionData::create([
+                    'revision_num' => $request->revision_num,
+                    'trial_data_id' => $request->trial_data_id,
+                    'created_from' => $request->created_from,
+                    'created_to' => $request->created_to,
+                    'prosedur' => $request->prosedur,
+                    'keterangan' => $request->keterangan,
+                ]);
+            return redirect()
+                ->route('trial_revisi.index')
+                ->with('success','Successfully Trial Revision Added');
+        }catch(Exception $e){
+            return redirect()
+                ->route('trial_revisi.index')
+                ->with('error', $e->toString());
+        }
     }
 
     /**
@@ -59,7 +88,7 @@ class TrialRevisionDataController extends Controller
      */
     public function edit($id)
     {
-        //
+        
     }
 
     /**
@@ -71,7 +100,24 @@ class TrialRevisionDataController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try{ 
+            TrialRevisionData::whereId($id)
+            ->update([
+                'revision_num' => $request->revision_num,
+                'trial_data_id' => $request->trial_data_id,
+                'created_from' => $request->created_from,
+                'created_to' => $request->created_to,
+                'prosedur' => $request->prosedur,
+                'keterangan' => $request->keterangan,
+            ]);
+            return redirect()
+                ->route('trial_revisi.index')
+                ->with('success','Successfully Trial Revision Updated');
+        }catch(Exception $e){
+            return redirect()
+                ->route('trial_revisi.index')
+                ->with('error', $e->toString());
+        }
     }
 
     /**
@@ -82,6 +128,15 @@ class TrialRevisionDataController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try{ 
+            TrialRevisionData::whereId($id)->delete();
+            return redirect()
+                ->route('trial_revisi.index')
+                ->with('success','Successfully Deleted');
+        }catch(Exception $e){
+            return redirect()
+                ->route('trial_revisi.index')
+                ->with('error', $e->toString());
+        }
     }
 }
