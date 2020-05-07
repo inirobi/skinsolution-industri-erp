@@ -324,7 +324,19 @@ Route::get('/retur/add/ajax-state/{id}',function($id)
 
 //formula
 Route::resource('/formula', 'FormulaController');
-
+Route::post('/formula/view', 'FormulaController@storeView')->name('formula.store.view');
+Route::delete('/formula/view/{id}', 'FormulaController@destroyView')->name('formula.destroy.view');
+Route::get('/formula/view/add/ajax-state/{id}',function($id)
+{
+    if($id){
+        $subcategories=DB::table('materials')
+        ->select('materials.id','materials.material_name')->get();
+    }else{
+        $subcategories=DB::table('sample_materials')
+        ->select('sample_materials.id','sample_materials.material_name')->get();
+    }
+    return $subcategories;
+});
 //trial
 Route::resource('/trial', 'TrialDataController');
 Route::get('/trial/add/ajax-state/{id}',function($id)
@@ -342,3 +354,9 @@ Route::resource('/trial_revisi', 'TrialRevisionDataController');
 //=================Laporan=====================
 Route::get('/laporanPengeluaran', 'LaporanController@pengeluaran')->name('laporan.pengeluaran');
 Route::post('/laporanStorePengeluaran', 'LaporanController@storePengeluaran')->name('laporan.store.pengeluaran');
+
+Route::get('/laporanPemasukkan', 'LaporanController@pemasukkan')->name('laporan.pemasukkan');
+Route::post('/laporanStorePemasukkan', 'LaporanController@storePemasukkan')->name('laporan.store.pemasukkan');
+
+Route::get('/laba', 'PettyCashController@laba')->name('laba.index');
+Route::post('/laba', 'PettyCashController@laba')->name('laba.store');

@@ -3,7 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Formula;
+use App\TrialRevisionData;
+use App\Material;
+use App\SampleMaterial;
+use App\FormulaDetail;
+use App\Stock;
+use App\SampleStock;
 
 class FormulaController extends Controller
 {
@@ -14,9 +21,10 @@ class FormulaController extends Controller
      */
     public function index()
     {
-        $formula = Formula::orderBy('id', 'desc')->get();
+        $formula = Formula::orderBy('updated_at', 'desc')->get();
         $no = 1;
-        return view('produksi.formula.index', compact('formula','no'));
+        $revision = TrialRevisionData::all();
+        return view('produksi.formula.index', compact('formula','no','revision'));
     }
 
     /**
@@ -37,7 +45,27 @@ class FormulaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $cek = DB::table('formulas')
+                ->where('formula_num',$request->formula_num)
+                ->count();
+            
+            if($cek > 0){
+                return redirect()
+                    ->route('formula.index')
+                    ->with('error','Code Already Exists!!');
+            }
+            
+            Formula::create($request->all());
+          return redirect()
+              ->route('formula.index')
+              ->with('success', 'Successfully Formula Created.');
+
+        }catch(Exception $e){
+          return redirect()
+              ->route('formula.index')
+              ->with('error', $e->toString());
+        }
     }
 
     /**
@@ -48,7 +76,17 @@ class FormulaController extends Controller
      */
     public function show($id)
     {
-        //
+        try{
+            $formula = Formula::findOrFail($id);
+            $material = Material::all();
+            $sampleMaterial = SampleMaterial::all();
+            $formula_view = FormulaDetail::where('formula_id', $id)->get();
+            return view('produksi.formula.view', compact('formula', 'material', 'formula_view','sampleMaterial'));
+        }catch(Exception $e){
+          return redirect()
+              ->route('formula.index')
+              ->with('error', $e->toString());
+        }
     }
 
     /**
@@ -71,7 +109,20 @@ class FormulaController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try{
+            Formula::whereId($id)
+                ->update([
+                    'formula_num' => $request->formula_num,
+                    'trial_revision_data_id' => $request->trial_revision_data_id,
+                ]);
+            return redirect()
+                ->route('formula.index')
+                ->with('success', 'Successfully Updated.');
+        }catch(Exception $e){
+          return redirect()
+              ->route('formula.index')
+              ->with('error', $e->toString());
+        }
     }
 
     /**
@@ -82,6 +133,81 @@ class FormulaController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try{
+            Formula::whereId($id)->delete();
+            return redirect()
+                ->route('formula.index')
+                ->with('success', 'Successfully Formula Delete.');
+        }catch(Exception $e){
+          return redirect()
+              ->route('formula.index')
+              ->with('error', $e->toString());
+        }
+    }
+
+    public function storeView(Request $request)
+    {
+        $formulaDetail = FormulaDetail::where('formula_id', $request->formula_id)->get();
+        $totalQty = 0;
+        foreach($formulaDetail as $fd){
+            $totalQty = $totalQty + $fd->quantity;
+        }
+        $totalQty = $request->quantity + $totalQty;
+        if($totalQty <= 100){
+            if($request->source_material){
+                $stock = Stock::where('material_id', $request->material_id)->first();
+                if (!empty($stock) && $stock->quantity >= $request->weighing) {
+                    FormulaDetail::create($request->all());
+                    Stock::where('material_id', $request->material_id)
+                    ->update([
+                        'quantity' => $stock->quantity - $request->weighing,
+                    ]);
+                }else{
+                    return redirect()
+                        ->route('formula.show',$request->input('formula_id'))
+                        ->with('error','Quantity material not enough to create product!!');
+                }
+    
+            }else{
+                $stock = SampleStock::where('sample_material_id', $request->material_id)->first();
+                if (!empty($stock) && $stock->quantity >= $request->weighing) {
+                    FormulaDetail::create($request->all());
+                    SampleStock::where('sample_material_id', $request->material_id)
+                    ->update([
+                        'quantity' => $stock->quantity - $request->weighing,
+                    ]);
+                }else{
+                    return redirect()
+                        ->route('formula.show',$request->input('formula_id'))
+                        ->with('error','Quantity material not enough to create product!!');
+                }
+    
+            }
+    
+        }else{
+            return redirect()
+                ->route('formula.show',$request->input('formula_id'))
+                ->with('error','Maximal total quantity is 100');
+
+        }
+
+        
+        return redirect()
+            ->route('formula.show',$request->input('formula_id'))
+            ->with('success','Successfully Formula Created');
+    }
+    public function destroyView($id)
+    {
+        try{
+            $formula = FormulaDetail::findOrFail($id);
+            FormulaDetail::whereId($id)->delete();
+            return redirect()
+                ->route('formula.show',$formula->formula_id)
+                ->with('success','Successfully Formula Delete');
+        }catch(Exception $e){
+            return redirect()
+                ->route('formula.show',$formula->formula_id)
+                ->with('error', $e->toString());
+        }
     }
 }

@@ -11,7 +11,7 @@
 @section('content')
 <div class="page-title">
   <div class="title_left">
-    <h3>Laporan Pengeluaran</h3>
+    <h3>Laporan Pemasukkan</h3>
   </div>
 
   <div class="title_right">
@@ -20,7 +20,7 @@
         <div class="input-group">
           <ul class="breadcrumb">
             <li><a href="{{url('/home')}}">Home</a></li>
-            <li><a>Laporan Pengeluaran</a></li>
+            <li><a>Laporan Pemasukkan</a></li>
           </ul>
         </div>
       </div>
@@ -41,7 +41,7 @@
       <div class="x_content">
         <div class="row">
           <div class="col-sm-12">
-            <form action="{{route('laporan.store.pengeluaran')}}" novalidate method="POST" enctype="multipart/form-data">
+            <form action="{{route('laporan.store.pemasukkan')}}" novalidate method="POST" enctype="multipart/form-data">
             {{csrf_field()}}
               <div class="field item form-group">
                 <label class="col-form-label col-md-3 col-sm-3  label-align">Date Start : </label>
@@ -66,18 +66,17 @@
                 </div>
               </div>
               <div class="field item form-group">
-                <label class="col-form-label col-md-3 col-sm-3  label-align">Activity Code : </label>
+                <label class="col-form-label col-md-3 col-sm-3  label-align">Jenis Pemasukkan : </label>
                 <div class="col-md-6 col-sm-6">
-                  <select class="form-control" name="jenis_po">
-                      <option  value="0">-- Pilih PO -- </option>
-                      <option  value="1">PO Material</option>
-                      <option  value="2">PO Packaging</option>
-                      <option  value="3">PO Lain-lain</option>
+                  <select class="form-control" name="jenis_pemasukkan">
+                    <option  value="0">-- Pilih Pemasukkan -- </option>
+                    <option  value="1">Invoice</option>
+                    <option  value="2">Penjualan</option>
                   </select>
                 </div>
               </div>
               <div class="modal-footer">
-                  <button type="button" data-dismiss="modal" class="btn btn-danger">Cancel</button>
+                  <button type="reset" data-dismiss="modal" class="btn btn-danger">Cancel</button>
                   <button type="submit" class="btn btn-primary"><i class="fa fa-floppy-o"></i> filter</button>
                   <a class="btn btn-warning pull-right"  data-toggle="modal" href="#"><i class="fa fa-print">Print</i></a>
               </div>
@@ -94,7 +93,7 @@
   <div class="col-md-12 col-sm-12 ">
     <div class="x_panel">
       <div class="x_title">
-        <h2>Laporan Pengeluaran</h2>
+        <h2>Laporan Pemasukkan</h2>
         <ul class="nav navbar-right panel_toolbox">
           <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
           <li><a class="close-link"><i class="fa fa-close"></i></a></li>
@@ -109,9 +108,10 @@
                 <thead>
                   <tr>
                     <th>No</th>
-                    <th>PO Number</th>
+                    <th>Invoice Number</th>
                     <th>Date</th>
-                    <th>Supplier Name</th>
+                    <th>Customer Name</th>
+                    <th>PO Number</th>
                     <th>Quantity</th>
                     <th>Price</th>
                     <th>Total</th>
@@ -122,27 +122,22 @@
                   @foreach($tampMaterial as $data1)
                   <tr>
                     <td>{{$no++}}</td>
+                    <td>{{$data1->invoice_num}}</td>
+                    <td>{{$data1->date}}</td>
+                    <td>{{$data1->customer_name}}</td>
                     <td>{{$data1->po_num}}</td>
-                    <td>{{$data1->po_date}}</td>
-                    <td>{{$data1->supplier_name}}</td>
                     <td>{{$data1->quantity}}</td>
-                    @if($data1->kurs == NULL)
-                      <td>Rp {{number_format($data1->price)}}</td>
-                      <td>Rp {{number_format($data1->quantity * $data1->price,2)}}</td>
-                      @php $total+=($data1->quantity * $data1->price); @endphp
-                    @else
-                      <td>Rp {{number_format($data1->kurs * $data1->price)}}</td>
-                      <td>Rp {{number_format($data1->quantity * ($data1->kurs * $data1->price),2)}}</td>
-                      @php $total+=($data1->quantity * ($data1->kurs * $data1->price)); @endphp
-                    @endif
+                    <td>Rp {{number_format($data1->price,2)}}</td>
+                    <td>Rp {{number_format($data1->quantity * $data1->price,2)}}</td>
+                    @php $total+=($data1->quantity * $data1->price); @endphp  
                   </tr>
                   @endforeach
                 </tbody>
                 <tbody>
-                    <tr>
-                        <th colspan="6"><strong>Total</strong></th>
-                        <td><strong> Rp {{number_format($total,2)}} </strong></td>
-                    </tr>
+                  <tr>
+                    <th colspan="7"><strong>Total</strong></th>
+                    <td><strong> Rp {{number_format($total,2)}} </strong></td>
+                  </tr>
                 </tbody>
               </table>
             </div>
@@ -152,12 +147,12 @@
     </div>
   </div>
 </div>
-@elseif($tamp==2 || $tamp==3)       
+@elseif($tamp==2)       
 <div class="row">
   <div class="col-md-12 col-sm-12 ">
     <div class="x_panel">
       <div class="x_title">
-        <h2>Laporan Pengeluaran</h2>
+        <h2>Laporan Pemasukkan</h2>
         <ul class="nav navbar-right panel_toolbox">
           <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
           <li><a class="close-link"><i class="fa fa-close"></i></a></li>
@@ -172,33 +167,32 @@
                 <thead>
                   <tr>
                     <th>No</th>
-                    <th>PO Number</th>
                     <th>Date</th>
-                    <th>Supplier Name</th>
-                    <th>Quantity</th>
-                    <th>Price</th>
-                    <th>Total</th>
+                    <th>Description</th>
+                    <th>Month</th>
+                    <th>Year</th>
+                    <th>Sale</th>
                   </tr>
                 </thead>
                 <tbody>
-                  @php $no=1; $total=0; @endphp
-                  @foreach($tampMaterial as $data1)
-                  <tr>
-                      <td>{{$no++}}</td>
-                      <td>{{$data1->po_num}}</td>
-                      <td>{{$data1->po_date}}</td>
-                      <td>{{$data1->supplier_name}}</td>
-                      <td>{{$data1->quantity}}</td>
-                      <td>Rp {{number_format($data1->price)}}</td>
-                      <td>Rp {{number_format($data1->quantity * $data1->price,2)}}</td>
-                      @php $total+=($data1->quantity * $data1->price); @endphp
-                  </tr>
-                  @endforeach
+                @php $no=1; $total=0; @endphp
+                @foreach($tampMaterial as $data1)
+                <tr>
+                    <td>{{$no++}}</td>
+                    <td>{{$data1->date}}</td>
+                    <td>{{$data1->keterangan}}</td>
+                    <td>{{$data1->bulan}}</td>
+                    <td>{{$data1->tahun}}</td>
+                    <td>Rp {{number_format($data1->penjualan,2)}}</td>
+                    @php $total+=$data1->penjualan; @endphp
+                    
+                </tr>
+                @endforeach
                 </tbody>
                 <tbody>
                   <tr>
-                      <th colspan="6"><strong>Total</strong></th>
-                      <td><strong> Rp {{number_format($total,2)}} </strong></td>
+                    <th colspan="5"><strong>Total</strong></th>
+                    <td><strong> Rp {{number_format($total,2)}} </strong></td>
                   </tr>
                 </tbody>
               </table>

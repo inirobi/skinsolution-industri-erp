@@ -183,9 +183,9 @@
                 <ul class="nav side-menu">
                   <li><a><i class="fa fa-file-text"></i> Laporan <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="e_commerce.html">Laporan Pemasukan</a></li>
+                      <li><a href="{{route('laporan.pemasukkan')}}">Laporan Pemasukan</a></li>
                       <li><a href="{{route('laporan.pengeluaran')}}">Laporan Pengeluaran</a></li>
-                      <li><a href="e_commerce.html">Laporan Laba</a></li>
+                      <li><a href="{{route('laba.index')}}">Laporan Laba</a></li>
                       <li><a href="e_commerce.html">Laporan Hutang</a></li>
                       <li><a href="e_commerce.html">Laporan Piutang</a></li>
                       <li><a href="e_commerce.html">Laporan Bonus</a></li>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Petty;
+use Carbon\Carbon;
 
 class PettyCashController extends Controller
 {
@@ -150,5 +151,22 @@ class PettyCashController extends Controller
         
             $no = 1;
         return view('accounting.notif_bayar_po.index', compact('mat','lain','pack','no'));
+    }
+
+    public function laba(Request $request)
+    {
+        if(empty($request->date)){
+            return view('laporan.laba.index');
+        }else{
+            $awal = new Carbon($request->date);
+            $aw= $awal->format('m/d/Y');
+            $akhir=  new Carbon($request->date2);
+            $akh= $akhir->format('m/d/Y');
+            $akhir->addDays(1);
+             $ak= $akhir->format('m/d/Y');
+             $masuk =Petty::whereBetween('date', [$aw, $ak])->where('status','1')->get();
+            $kel =Petty::whereBetween('date', [$aw, $ak])->where('status','0')->get();
+            return view('laporan.laba.index',compact('kel','masuk','aw','akh'));
+        }
     }
 }
