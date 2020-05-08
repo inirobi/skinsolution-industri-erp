@@ -48,14 +48,14 @@ class SuppliersController extends Controller
         $this->validate($request,[
             'supplier_code' => 'required',
             'supplier_name' => 'required',
-            'supplier_mobile' => 'required',
-            'supplier_email' => 'required',
-            'supplier_address' => 'required',
-            'contact_person' => 'required',
         ]);
 
         try {
             $req = $request->all();
+            $con_p = $req['contact_person']; 
+            if(!isset($req['contact_person'])){
+                $con_p= '';
+            }
             Suppliers::create([
                 'id' => null,
                 'supplier_code' => $req['supplier_code'],
@@ -63,7 +63,7 @@ class SuppliersController extends Controller
                 'supplier_mobile' => $req['supplier_mobile'],
                 'supplier_email' => $req['supplier_email'],
                 'supplier_address' => $req['supplier_address'],
-                'contact_person' => $req['contact_person'],
+                'contact_person' => $con_p,
               ]);
           return redirect()
               ->route('suppliers.index')
@@ -118,10 +118,6 @@ class SuppliersController extends Controller
         $this->validate($request,[
             'supplier_code' => 'required',
             'supplier_name' => 'required',
-            'supplier_mobile' => 'required',
-            'supplier_email' => 'required',
-            'supplier_address' => 'required',
-            'contact_person' => 'required',
         ]);
 
         try {

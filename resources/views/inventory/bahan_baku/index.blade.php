@@ -65,7 +65,7 @@
                 <td>{{ $data -> inci_name }}</td>
                 <td>{{ $data -> stock_minimum }}</td>
                 <td>{{ $data -> category }}</td>
-                <td>${{ $data -> price }}</td>
+                <td>Rp {{number_format($data -> price,2)}}</td>
                 <td class="text-center"><a href="{{ route('material.kontradiksi.show', $data) }}"><i class="fa fa-pencil"></i> List</a></td>
                 <td class="text-center">
                   <!-- <a class="btn btn-info" href="{{ route('material.print', $data->id) }}" target="_blank" title="Detail" class="btn btn-small text-primary">

@@ -58,13 +58,10 @@ class PackagingReceiptController extends Controller
                 ->route('packaging_receipt.index')
                 ->with('error','Code Already Exists!!');
         }
-        $date = explode('/',$request->date);
-        $date = $date[2]."-".$date[0]."-".$date[1];
         $packaging = PackagingReceipt::create([
-            'tanggal_recep' => $date,
+            'tanggal_recep' => $request->date,
             'packaging_type' => $request->packaging_type,
             'receipt_code' => $request->receipt_code,
-            'customer_id' => 0,
         ]);
 
         return redirect()

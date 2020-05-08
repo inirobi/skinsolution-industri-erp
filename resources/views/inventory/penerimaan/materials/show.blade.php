@@ -90,11 +90,11 @@
               @foreach($purchase_view as $data)
               <tr>
                 <td>{{$no++}}</td>
-                <td>{{$data->material_name}}</td>
-                <td>{{$data->batch_num}}</td>
-                <td>{{$data->analis_num}}</td>
-                <td>{{$data->quantity}}</td>
-                <td>{{$data->expired_date}}</td>
+                <td> {{$data->material->material_name}} </td>
+                <td> {{$data->batch_num}}</td>
+                <td> {{$data->analis_num}}</td>
+                <td> {{$data->quantity}}</td>
+                <td> {{$data->expired_date}}</td>
               </tr>
               @endforeach
             </tbody>

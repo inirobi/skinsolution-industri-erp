@@ -64,9 +64,9 @@
             @enderror
           </div>
           <div class="field item form-group">
-            <label class="col-form-label col-md-3 col-sm-3  label-align">Customer Mobile<code>*</code></label>
+            <label class="col-form-label col-md-3 col-sm-3  label-align">Customer Mobil</label>
             <div class="col-md-6 col-sm-6">
-              <input class="form-control tel @error('customer_mobile') is-invalid @enderror" value="{{ old('customer_mobile', $customers->customer_mobile ?? '') }}" name="customer_mobile"required="required" type="tel" data-validate-length-range="8,20"/>
+              <input class="form-control tel @error('customer_mobile') is-invalid @enderror" value="{{ old('customer_mobile', $customers->customer_mobile ?? '') }}" name="customer_mobile" type="tel"/>
             </div>
             @error('customer_mobile')
                 <span class="invalid-feedback" role="alert">
@@ -75,9 +75,9 @@
             @enderror
           </div>
           <div class="field item form-group">
-            <label class="col-form-label col-md-3 col-sm-3  label-align">Customer Address<code>*</code></label>
+            <label class="col-form-label col-md-3 col-sm-3  label-align">Customer Addres</label>
             <div class="col-md-6 col-sm-6">
-              <textarea required="required" name='customer_address' rows="3" class="form-control  @error('customer_address') is-invalid @enderror" name="customer_address" required autocomplete="customer_address">{{ old('customer_address', $customers->customer_address ?? '') }}</textarea>
+              <textarea name='customer_address' rows="3" class="form-control  @error('customer_address') is-invalid @enderror" name="customer_address" autocomplete="customer_address">{{ old('customer_address', $customers->customer_address ?? '') }}</textarea>
             </div>
             @error('customer_address')
                 <span class="invalid-feedback" role="alert">
@@ -86,9 +86,9 @@
             @enderror
           </div>
           <div class="field item form-group">
-            <label class="col-form-label col-md-3 col-sm-3  label-align">Customer Email<code>*</code></label>
+            <label class="col-form-label col-md-3 col-sm-3  label-align">Customer Emai</label>
             <div class="col-md-6 col-sm-6">
-              <input class="form-control email @error('customer_email') is-invalid @enderror" value="{{ old('customer_email', $customers->customer_email ?? '') }}" type="email" name="customer_email" required='required'>
+              <input class="form-control email @error('customer_email') is-invalid @enderror" value="{{ old('customer_email', $customers->customer_email ?? '') }}" type="email" name="customer_email">
             </div>
             @error('customer_email')
                 <span class="invalid-feedback" role="alert">
