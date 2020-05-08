@@ -10,6 +10,7 @@ use App\Suppliers;
 use App\MaterialKontradiksi;
 use App\PoMaterial;
 use App\PoMaterialDetail;
+use App\Material;
 
 use PDF; 
 
@@ -168,9 +169,71 @@ class MaterialsController extends Controller
 
     public function Print($id)
     {
-        $purchase = PoMaterial::where('id',$id)->get();
-        $purchase_view = PoMaterialDetail::where('po_material_id', $id)->get();
-        $pdf = PDF::loadView('inventory.bahan_baku.print',compact('purchase','purchase_view'));
+        // $material =  Material::find($id);
+    
+        //MASUK
+        
+        //   $purchase =DB::table('purchases as a')
+        //   ->join('purchase_details as b','a.id','=','b.purchase_id')
+        //   ->where('b.material_id',$id)
+        //   ->orderby('b.created_at','asc')
+        //   ->get();
+           
+        //   $sum=DB::table('purchases as a')
+        //   ->join('purchase_details as b','a.id','=','b.purchase_id')
+        //   ->where('b.material_id',$id)
+        //   ->orderby('b.created_at')
+        //   ->sum('quantity');
+    
+        // //KELUAR
+        
+        // $formula = DB::table('formulas')
+        // ->join('formula_details','formula_details.formula_id','=','formulas.id')
+        // ->join('pengeluaran_material','pengeluaran_material.material_id','=','formula_details.material_id')
+        // ->join('product_activity_details','product_activity_details.material_id','=','formula_details.material_id')
+        // ->join('product_activities','product_activities.id','=','product_activity_details.product_activity_id')
+        // ->where('formula_details.material_id',$id)
+        // ->orderby('formula_details.created_at','asc')
+        // ->groupBy('formula_details.id')
+        // ->get();
+        
+        // $pro_act = DB::table('product_activities')
+        // ->join('product_activity_details','product_activities.id','=','product_activity_details.product_activity_id')
+        // ->where('product_activity_details.material_id',$id)
+        // ->orderby('product_activity_details.created_at','asc')
+        // ->groupBy('product_activity_details.id')
+        // ->get();
+        
+        // $pro_mat = DB::table('pengeluaran_material')
+        // ->where('material_id',$id)
+        // ->orderby('pengeluaran_material.created_at','asc')
+        // ->groupBy('pengeluaran_material.id')
+        // ->get();
+        
+        
+        
+        
+        // $sum2 = DB::table('formulas')
+        // ->join('formula_details','formula_details.formula_id','=','formulas.id')
+        // ->where('formula_details.material_id',$id)
+        // ->sum('weighing');
+        
+        // $sum3 = DB::table('product_activities')
+        // ->join('product_activity_details','product_activities.id','=','product_activity_details.product_activity_id')
+        // ->where('product_activity_details.material_id',$id)
+        // ->sum('weighing');
+        
+        // $sum4 = DB::table('pengeluaran_material')
+        // ->where('material_id',$id)
+        // ->sum('quantity');
+        
+        // $sisa = $sum - ($sum2 + $sum3 + $sum4);
+        
+        // return view('inventory.bahan_baku.print',compact('purchase','formula','pro_act','pro_mat','sisa','material'));
+
+        $title ="mecoba sesuatuhal baru";
+        $pdf = PDF::loadView('inventory.bahan_baku.print',compact('title'));
+        $pdf->setPaper('A4', 'landscape');
         return $pdf->stream();
     }
 
@@ -207,6 +270,27 @@ class MaterialsController extends Controller
     }
 
     // suppliers
+
+    public function SupplierStore(Request $request)
+    {
+        
+        $x = DB::table('material_suppliers')
+        ->where([
+            ['supplier_id',$request->supplier_id],
+            ['material_id',$request->material_id]
+        ])->count();
+        if($x>0){
+            return redirect()->back()->withErrors('Supplier Already Exist');
+        }
+        else{
+            $sup = MaterialSupplier::create([
+                'material_id' => $request->material_id,
+                'supplier_id' => $request->supplier_id,
+            ]);
+        }
+
+        return redirect()->back()->with('success','Successfully Created');
+    }
 
     public function kontradiksiStore(Request $request)
     {

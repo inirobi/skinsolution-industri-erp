@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Response;
 use App\Purchases;
 use App\Purchase;
 use App\PurchaseDetail;
 use App\PoMaterial;
+use App\Stock;
 
 class PurchasesManagementController extends Controller
 {
@@ -48,7 +50,7 @@ class PurchasesManagementController extends Controller
         ->count();
         
         if($cek > 0){
-            return redirect('admin/purchase')->withErrors('Code Already Exists!!');
+            return redirect()->route('purchases_material.index')->with('error','Code Already Exists!!');
         }
         
         $purchase = Purchase::create([
@@ -57,7 +59,6 @@ class PurchasesManagementController extends Controller
             'delivery_orders_num' => $request->delivery_orders_num,
             'po_material_id' => $request->po_material_id,
         ]);
-
         $data=DB::table('po_material_details')
                 ->select('materials.id','materials.material_code','materials.material_name',
                     'po_material_details.quantity')
@@ -78,11 +79,9 @@ class PurchasesManagementController extends Controller
      */
     public function show($id)
     {
-        $purchase = Purchases::findOrFail($id);
-        $purchase_view= DB::table('purchase_details')
-        ->select('materials.material_name','purchase_details.*')
-        ->leftJoin('materials','materials.id','=','purchase_details.material_id')
-        ->where('purchase_details.purchase_id',$id)->get();
+        $purchase = Purchase::findOrFail($id);
+        $purchase_view = PurchaseDetail::where('purchase_id', $id)->get();
+        
         return view('inventory.penerimaan.materials.show',['purchases' => $purchase, 'purchase_view' => $purchase_view, 'no' => 1]);
     }
     /**
@@ -139,5 +138,31 @@ class PurchasesManagementController extends Controller
             return redirect('purchases_penerimaan')
                 ->with('error', 'Data is not found.');
           }
+    }
+
+    public function purchaseStoreAjax(Request $request)
+    {
+        $purchase = Purchase::create([
+            'date' => $request->date,
+            'purchase_num' => $request->purchase_num,
+            'delivery_orders_num' => $request->delivery_orders_num,
+            'po_material_id' => $request->po_material_id,
+        ]);
+ 
+        return Response::json($purchase->id);
+    }
+
+    public function purchaseViewStorAjax(Request $request)
+    {
+        PurchaseDetail::create($request->all());
+        $stock = Stock::where('material_id', $request->material_id)->first();        
+            if (!empty($stock)) {
+                Stock::where('material_id', $request->material_id)
+                ->update([
+                    'quantity' => $stock->quantity + $request->quantity,
+                ]);
+            }     
+
+        return Response::json("Successfully Add");
     }
 }

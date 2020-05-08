@@ -48,9 +48,6 @@ class CustomersController extends Controller
         $this->validate($request,[
             'customer_code' => 'required',
             'customer_name' => 'required',
-            'customer_mobile' => 'required',
-            'customer_email' => 'required',
-            'customer_address' => 'required',
         ]);
 
         try {
@@ -116,9 +113,6 @@ class CustomersController extends Controller
         $this->validate($request,[
             'customer_code' => 'required',
             'customer_name' => 'required',
-            'customer_mobile' => 'required',
-            'customer_email' => 'required',
-            'customer_address' => 'required',
         ]);
 
         try {

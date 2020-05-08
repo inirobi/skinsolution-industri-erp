@@ -3,6 +3,7 @@ use App\PoMaterialDetail;
 use Carbon\Carbon;
 // use Illuminate\Support\Facades\Input;
 use App\PoProduct;
+use Illuminate\Support\Facades\Response;
 
 /*
 |--------------------------------------------------------------------------
@@ -78,18 +79,17 @@ Route::get('/packaging_receipt/view/add/ajax-state/{id}',function($id)
     });
 
 //purchases
+Route::post('/purchase/store/ajax-state','PurchasesManagementController@purchaseStoreAjax');
+Route::post('/purchase/view/store/ajax-state','PurchasesManagementController@purchaseViewStorAjax');
 Route::resource('/purchases_material', 'PurchasesManagementController');
 Route::get('/purchase/add/ajax-state/{id}',function($id)
 {
-    // $po_material_id = Input::get("po_material_id");
     $data=DB::table('po_material_details')
             ->select('materials.id','materials.material_code','materials.material_name',
                 'po_material_details.quantity')
             ->join('materials','po_material_details.material_id','=','materials.id')
             ->where('po_material_details.po_material_id',$id)->get();
-    //$subcategories= Supplier::where('id',$categories->supplier_id)->get();
-    return $data;
-
+    return Response::json($data);
 });
 
 //po material

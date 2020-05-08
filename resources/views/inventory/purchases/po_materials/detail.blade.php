@@ -41,7 +41,7 @@
           <div class="field item form-group">
             <label class="col-form-label col-md-3 col-sm-3  label-align">Date<code>*</code></label>
             <div class="col-md-6 col-sm-6">
-                <input type="text" class="form-control has-feedback-left" id="single_cal1" aria-describedby="inputSuccess2Status" value="{{$purchase->po_date}}" disabled>
+                <input type="text" class="form-control has-feedback-left" aria-describedby="inputSuccess2Status" value="{{$purchase->po_date}}" disabled>
                 <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
                 <span id="inputSuccess2Status" class="sr-only">(success)</span>
             </div>
@@ -87,9 +87,9 @@
               <tr>
                 <th>No</th>
                 <th>Material</th>
-                <th>Quantity (KG)</th>
-                <th>Price ({{$purchase->currency}})</th>
-                <th>Total Price ({{$purchase->currency}})</th>
+                <th>Quantity (KG)</th> 
+                <th>Price (IDR)</th>
+                <th>Total Price (IDR)</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -103,8 +103,18 @@
                 <td>{{$no++}}</td>
                 <td> {{$data->material->material_name}} - {{$data->material->material_code}} </td>
                 <td> {{$data->quantity}}</td>
-                <td> {{number_format($data->price,2)}}</td>
+                @if($purchase->currency=="USD")
+                  <td>{{number_format($purchase->kurs * $data->price,2)}}</td>
+                @else
+                  <td>{{number_format($data->price,2)}}</td>
+                @endif
+
+                @if($purchase->currency=="USD")
+                  <td> {{number_format($purchase->kurs*$total_price,2)}}</td>
+                @else
                 <td> {{number_format($total_price,2)}}</td>
+                @endif
+                
                 <td class="text-center">
                 <a href="{{ route('po_material.destroyView', $data->id) }}" class="btn btn-danger" onclick="event.preventDefault();destroy('{{ route('po_material.destroyView', $data->id) }}')" title="Hapus"><i class="fa fa-trash"></i></a>
                 </td>

@@ -71,9 +71,9 @@
             @enderror
           </div>
           <div class="field item form-group">
-            <label class="col-form-label col-md-3 col-sm-3  label-align">Supplier Mobile<code>*</code></label>
+            <label class="col-form-label col-md-3 col-sm-3  label-align">Supplier Mobile</label>
             <div class="col-md-6 col-sm-6">
-              <input class="form-control tel @error('supplier_mobile') is-invalid @enderror" value="{{ old('supplier_mobile', $suppliers->supplier_mobile ?? '') }}" name="supplier_mobile"required="required" type="tel" data-validate-length-range="8,20"/>
+              <input class="form-control tel @error('supplier_mobile') is-invalid @enderror" value="{{ old('supplier_mobile', $suppliers->supplier_mobile ?? '') }}" name="supplier_mobile"/>
             </div>
             @error('supplier_mobile')
                 <span class="invalid-feedback" role="alert">
@@ -82,9 +82,9 @@
             @enderror
           </div>
           <div class="field item form-group">
-            <label class="col-form-label col-md-3 col-sm-3  label-align">Supplier Address<code>*</code></label>
+            <label class="col-form-label col-md-3 col-sm-3  label-align">Supplier Address</label>
             <div class="col-md-6 col-sm-6">
-              <textarea required="required" name='supplier_address' rows="3" class="form-control  @error('supplier_address') is-invalid @enderror" name="supplier_address" required autocomplete="supplier_address">{{ old('supplier_address', $suppliers->supplier_address ?? '') }}</textarea>
+              <textarea name='supplier_address' rows="3" class="form-control  @error('supplier_address') is-invalid @enderror" name="supplier_address" autocomplete="supplier_address">{{ old('supplier_address', $suppliers->supplier_address ?? '') }}</textarea>
             </div>
             @error('supplier_address')
                 <span class="invalid-feedback" role="alert">
@@ -93,9 +93,9 @@
             @enderror
           </div>
           <div class="field item form-group">
-            <label class="col-form-label col-md-3 col-sm-3  label-align">Supplier Email<code>*</code></label>
+            <label class="col-form-label col-md-3 col-sm-3  label-align">Supplier Email</label>
             <div class="col-md-6 col-sm-6">
-              <input class="form-control email @error('supplier_email') is-invalid @enderror" value="{{ old('supplier_email', $suppliers->supplier_email ?? '') }}" type="email" name="supplier_email" required='required'>
+              <input class="form-control email @error('supplier_email') is-invalid @enderror" value="{{ old('supplier_email', $suppliers->supplier_email ?? '') }}" type="email" name="supplier_email">
             </div>
             @error('supplier_email')
                 <span class="invalid-feedback" role="alert">
@@ -104,9 +104,9 @@
             @enderror
           </div>
           <div class="field item form-group">
-            <label class="col-form-label col-md-3 col-sm-3  label-align">Contact Person<code>*</code></label>
+            <label class="col-form-label col-md-3 col-sm-3  label-align">Contact Person</label>
             <div class="col-md-6 col-sm-6">
-              <input class="form-control  @error('contact_person') is-invalid @enderror" value="{{ old('contact_person', $suppliers->contact_person ?? '') }}" type="text" name="contact_person" required='required'>
+              <input class="form-control  @error('contact_person') is-invalid @enderror" value="{{ old('contact_person', $suppliers->contact_person ?? '') }}" type="text" name="contact_person">
             </div>
             @error('contact_person')
                 <span class="invalid-feedback" role="alert">
