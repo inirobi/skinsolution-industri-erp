@@ -11,7 +11,7 @@
 <!-- page content -->
 <div class="page-title">
   <div class="title_left">
-    <h3>Sale Lists</h3>
+    <h3>Penjualan Lists</h3>
   </div>
 
   <div class="title_right">
@@ -20,7 +20,7 @@
         <div class="input-group">
           <ul class="breadcrumb">
             <li><a href="{{url('/home')}}">Home</a></li>
-            <li><a>Sales</a></li>
+            <li><a>Penjualan</a></li>
           </ul>
         </div>
       </div>
@@ -33,7 +33,7 @@
     <div class="col-md-12 col-sm-12 ">
       <div class="x_panel">
         <div class="x_title">
-          <a data-toggle="modal" href="#modalAdd" class="btn btn-success" ><i class="fa fa-plus"></i> Add New Sale </a>
+          <a data-toggle="modal" href="#modalAdd" class="btn btn-success" ><i class="fa fa-plus"></i> Add New Penjualan </a>
           <ul class="nav navbar-right panel_toolbox">
             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
             </li>
@@ -97,7 +97,7 @@
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="modalUpdateLabel">Update Sale</h5>
+        <h5 class="modal-title" id="modalUpdateLabel">Update Penjualan</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -174,7 +174,7 @@
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="modalAddLabel">Add New Salary</h5>
+        <h5 class="modal-title" id="modalAddLabel">Add New Penjualan</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>

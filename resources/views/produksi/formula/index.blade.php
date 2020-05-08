@@ -15,12 +15,14 @@
   </div>
 
   <div class="title_right">
-    <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
-      <div class="input-group">
-        <input type="text" class="form-control" placeholder="Search for...">
-        <span class="input-group-btn">
-          <button class="btn btn-secondary" type="button">Go!</button>
-        </span>
+    <div class="col-md-12 col-sm-5 col-xs-12 form-group pull-right top_search">
+      <div style='float:right'>
+        <div class="input-group">
+          <ul class="breadcrumb">
+            <li><a href="{{url('/home')}}">Home</a></li>
+            <li><a>Formula List</a></li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
@@ -32,7 +34,7 @@
     <div class="col-md-12 col-sm-12 ">
       <div class="x_panel">
         <div class="x_title">
-          <a href="#" class="btn btn-success" ><i class="fa fa-plus"></i>Add New Formula </a>
+          <a data-toggle="modal" href="#modalAdd" class="btn btn-success" ><i class="fa fa-plus"></i>Add New Formula </a>
           <ul class="nav navbar-right panel_toolbox">
             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
             </li>
@@ -63,8 +65,9 @@
                 <td> {{$data->revision->revision_num}}</td>
                 <td> {{$data->created_at}}</td>
                 <td class="text-center">
-                  <a href="#" class="btn btn-warning" title="Edit"><i class="fa fa-edit"></i></a>
-                  <a href="#" class="btn btn-danger" onclick="event.preventDefault();destroy('#');" title="Hapus"><i class="fa fa-trash"></i></a>
+                  <a href="{{route('formula.show',$data->id)}}" class="btn btn-info" title="View"><i class="fa fa-eye"></i></a>
+                  <a onclick="editConfirm({{$data}})" class="btn btn-warning" title="Edit"><i class="fa fa-edit"></i></a>
+                  <a href="{{route('formula.destroy',$data->id)}}" class="btn btn-danger" onclick="event.preventDefault();destroy('{{route('formula.destroy',$data->id)}}');" title="Hapus"><i class="fa fa-trash"></i></a>
                 </td>
               </tr>
               @endforeach
@@ -79,16 +82,99 @@
 </div>
         <!-- /page content -->
 
+<!-- modal add -->
+<div class="modal fade bd-example-modal-lg" id="modalAdd" tabindex="-1" role="dialog" aria-labelledby="modalAddLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalAddLabel">Add New Formula</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="{{ route('formula.store') }}" role="form" method="post">
+          {{csrf_field()}}
+          
+          <div class="form-group">
+            <label class="control-label">Formula Number</label>
+            <input name='formula_num' type='text' class='form-control' required>
+          </div>
+
+          <div class="form-group">
+            <label class="control-label">Po Customer Number</label>
+            <select class="form-control" name="trial_revision_data_id">
+                @foreach($revision as $d)
+                    <option value="{{$d->id}}" >{{$d->revision_num}}</option>
+                @endforeach
+            </select>
+          </div>
+            <div class="modal-footer">
+              <button type='submit' class="btn btn-primary"><i class="fa fa-floppy-o"></i> Save</button>
+              <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 <!-- hapus -->
 <form id="destroy-form" method="POST">
     @method('DELETE')
     @csrf
 </form>
+ 
+<!-- modal edit -->
+<div class="modal fade bd-example-modal-lg" id="modalEdit" tabindex="-1" role="dialog" aria-labelledby="modalEditLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalEditLabel">Edit Trial Data</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form role="form" id='editFormula' method="post">
+          @method('PUT')
+          @csrf
+          
+          <div class="form-group">
+            <label class="control-label">Formula Number</label>
+            <input name='formula_num' id='formula_num' type='text' class='form-control' required>
+          </div>
 
+          <div class="form-group">
+            <label class="control-label">Po Customer Number</label>
+            <select class="form-control" name="trial_revision_data_id" id="trial_revision_data_id">
+                @foreach($revision as $d)
+                    <option value="{{$d->id}}" >{{$d->revision_num}}</option>
+                @endforeach
+            </select>
+          </div>
 
+          <div class="modal-footer">
+            <button type='submit' class="btn btn-primary"><i class="fa fa-floppy-o"></i> Save</button>
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 
 @push('scripts')
 <script>
+
+function editConfirm(data)
+{
+  console.log(data);
+    $('#formula_num').attr('value',data.formula_num);
+    $('#trial_revision_data_id').val(data.trial_revision_data_id);
+    
+    $('#editFormula').attr('action',"{{ url('formula') }}/"+data.id)
+    $('#modalEdit').modal();
+}
 
 function destroy(action){
     swal({
