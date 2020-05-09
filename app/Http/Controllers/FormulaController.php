@@ -11,6 +11,7 @@ use App\SampleMaterial;
 use App\FormulaDetail;
 use App\Stock;
 use App\SampleStock;
+use App\Product;
 
 class FormulaController extends Controller
 {
@@ -25,6 +26,14 @@ class FormulaController extends Controller
         $no = 1;
         $revision = TrialRevisionData::all();
         return view('produksi.formula.index', compact('formula','no','revision'));
+    }
+
+    public function hpp($id)
+    {
+        $product = Product::where('formula_id', $id)->first();
+
+        $formula = FormulaDetail::where('formula_id', $id)->get();
+        return view('produksi.formula.hpp', compact('formula','product'));
     }
 
     /**

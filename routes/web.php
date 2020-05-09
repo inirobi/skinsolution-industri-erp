@@ -175,6 +175,8 @@ Route::resource('/petty', 'PettyCashController');
 //labelling
 Route::resource('/labelling', 'LabellingController');
 Route::resource('/produksi', 'ProductController');
+Route::get('/produksi/print/{id}', 'ProductController@print')->name('produksi.print');
+Route::get('/produksi/print/formula/{id}', 'ProductController@formulaPrint')->name('produksi.print.formula');
 Route::get('/stok_produksi', 'ProductController@indexStock')->name('produksi.stoct');
 
 Route::get('/labelling/add/ajax-state/{id}',function($id)
@@ -327,6 +329,7 @@ Route::get('/retur/add/ajax-state/{id}',function($id)
 
 //formula
 Route::resource('/formula', 'FormulaController');
+Route::get('/formula/hpp/{id}', 'FormulaController@hpp')->name('formula.hpp');
 Route::post('/formula/view', 'FormulaController@storeView')->name('formula.store.view');
 Route::delete('/formula/view/{id}', 'FormulaController@destroyView')->name('formula.destroy.view');
 Route::get('/formula/view/add/ajax-state/{id}',function($id)

@@ -1,5 +1,7 @@
 @extends('layouts.master')
-
+@section('site-title')
+  Formula
+@endsection
 @push('styles')
     <!-- bootstrap-daterangepicker -->
     <link href="{{ asset('assets/vendors/bootstrap-daterangepicker/daterangepicker.css')}}" rel="stylesheet">
@@ -47,13 +49,14 @@
             <div class="row">
                 <div class="col-sm-12">
                   <div class="card-box table-responsive">
-          <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
+          <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
             <thead>
               <tr>
                 <th>No</th>
                 <th>Formula Number</th>
                 <th>Revision Number</th>
                 <th>Created At</th>
+                <th>HPP</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -64,6 +67,7 @@
                 <td> {{$data->formula_num}} </td>
                 <td> {{$data->revision->revision_num}}</td>
                 <td> {{$data->created_at}}</td>
+                <td class="text-center"><a target="_blank" href="{{route('formula.hpp',$data->id)}}"><i class="fa fa-pencil"></i> List</a></td>
                 <td class="text-center">
                   <a href="{{route('formula.show',$data->id)}}" class="btn btn-info" title="View"><i class="fa fa-eye"></i></a>
                   <a onclick="editConfirm({{$data}})" class="btn btn-warning" title="Edit"><i class="fa fa-edit"></i></a>
