@@ -65,7 +65,7 @@ class HistoryController extends Controller
         $inv = DB::table('delivery_orders')->select('delivery_orders.*','delivery_order_details.*')->join('delivery_order_details','delivery_orders.id','=','delivery_order_details.delivery_order_id')->where('delivery_orders.po_product_id',$po_id)->where('delivery_order_details.product_id',$id)->get();
         $pro = Product::findOrFail($id);
         $no = 1;
-        return view('pemesanan.history.detail',  compact('inv','pro','no' ));
+        return view('pemesanan.history.detail',  compact('inv','pro','no','id' ));
     }
     /**
      * Show the form for editing the specified resource.

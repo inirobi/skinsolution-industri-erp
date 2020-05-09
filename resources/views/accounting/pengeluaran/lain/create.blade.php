@@ -1,4 +1,7 @@
 @extends('layouts.master')
+@section('site-title')
+  Purchase Order Other
+@endsection
 @push('styles')
     <!-- bootstrap-daterangepicker -->
     <link href="{{ asset('assets/vendors/bootstrap-daterangepicker/daterangepicker.css')}}" rel="stylesheet">
@@ -11,6 +14,23 @@
 <div class="page-title">
     <div class="title_left">
         <h3>Purchase Order Other List</h3>
+    </div>
+    <div class="title_right">
+        <div class="col-md-12 col-sm-5 col-xs-12 form-group pull-right top_search">
+            <div style='float:right'>
+                <div class="input-group">
+                    <ul class="breadcrumb">
+                        <li><a href="{{url('/home')}}">Home</a></li>
+                        <li><a href="{{route('pengeluaran_lain.index')}}"> Purchase Order Other</a></li>
+                        @if(isset($lain))
+                            <li><a>Update Purchase Order Other</a></li>
+                        @else
+                            <li><a>Add Purchase Order Other</a></li>
+                        @endif
+                    </ul>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 <div class="clearfix"></div>
