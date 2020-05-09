@@ -1,23 +1,25 @@
 @extends('layouts.master')
 @section('site-title')
-	Material Print
+    Packaging Print
 @endsection
 @section('content')
+
+<!-- page content -->
 <div class="page-title">
   <div class="title_left">
-    <h3 style="font-size:14pt">KARTU PERSEDIAAN BAHAN BAKU</h3><br><br><br>
+    <h3 style="font-size:14pt">KARTU PERSEDIAAN BAHAN KEMAS</h3><br><br><br>
 	<table class="table table-striped">
 			<thead>
 				<tr>
-					<th>Code Material</th>
-					<th>Material</th>
-					<th>Unit</th>
+					<td>Code Packaging</td>
+					<td>Packaging</td>
+					<td>Unit</td>
 				</tr>
 			</thead>
 			<tbody>
 				<tr>
-					<td>{{$material->material_code}}</td>
-					<td>{{$material->material_name}}</td>
+					<td>{{$packaging->packaging_code}}</td>
+					<td>{{$packaging->packaging_name}}</td>
 					<td></td>
 				</tr>
 			</tbody>
@@ -53,22 +55,28 @@
 					</tr>
 					<tr >
 						<th style="text-align:center">TGL</th>
-						<th style="text-align:center">No. Batch</th>
 						<th style="text-align:center">KET</th>														
 						<th style="text-align:center">QTY</th>
 					</tr>
 				</thead>
 				<tbody>
-					@foreach($purchase as $data)
-						<tr id="row1">
-							<td>{{substr($data->date,0,10)}}</td>
-							<td>{{$data->batch_num}}</td>
-							<td>{{$data->purchase_num}}</td>
-							<td>{{$data->quantity}}</td>
-						</tr>
+					@foreach($recept as $data)
+					<tr id="row1">
+						<td>{{substr($data->created_at,0,10)}}</td>
+						<td>{{$data->receipt_code}}</td>
+						<td>{{$data->quantity}}</td> 
+					</tr>
+					@endforeach
+					
+					@foreach($retur as $datax)
+					<tr id="row1">
+						<td>{{substr($datax->tanggal_retur,0,10)}}</td>
+						<td>{{$datax->packaging_code}}</td>
+						<td>{{$datax->quantity_retur}}</td>
+					</tr>
 					@endforeach
 					<tr>
-						<th style="text-align:right" colspan="2">Total</th>
+						<th style="text-align:right">Total</th>
 						<th style="text-align:center">:</th>
 						<th>{{$masuk}}</th>
 					</tr>
@@ -91,25 +99,18 @@
 				</tr>
 			</thead>
 			<tbody>
-				@foreach($pro_act as $data1)
+				@foreach($activity as $datay)
 				<tr id="row1">
-					<td>{{substr($data1->date_start,0,10)}}</td>
-					<td>{{$data1->activity_code}}</td>
-					<td>{{$data1->weighing}}</td>
+					<td>{{substr($datay->date,0,10)}}</td>
+					<td>{{$datay->activity_code}}</td>
+					<td>{{$datay->used_quantity}}</td>
 				</tr>
 				@endforeach
-				@foreach($pro_mat as $data2)
+				@foreach($pack as $dataz)
 				<tr id="row1">
-					<td>{{substr($data2->date,0,10)}}</td>
-					<td>{{$data2->code}}</td>
-					<td>{{$data2->quantity}}</td>
-				</tr>
-				@endforeach
-				@foreach($formula as $data3)
-				<tr id="row1">
-					<td>{{substr($data3->created_at,0,10)}}</td>
-					<td>{{$data3->formula_num}}</td>
-					<td>{{$data3->weighing}}</td>
+					<td>{{substr($dataz->date,0,10)}}</td>
+					<td>{{$dataz->code}}</td>
+					<td>{{$dataz->quantity}}</td>
 				</tr>
 				@endforeach
 				<tr>
@@ -117,6 +118,7 @@
 					<th style="text-align:center">:</th>
 					<th>{{$keluar}}</th>
 				</tr>
+			</tbody>
 		</table>
 	</div>
 </div>
@@ -151,19 +153,19 @@
 @push('print')
 <div class="page-title">
   <div class="title_left">
-    <h3 style="font-size:14pt">KARTU PERSEDIAAN BAHAN BAKU</h3><br><br><br>
+    <h3 style="font-size:14pt">KARTU PERSEDIAAN BAHAN KEMAS</h3><br><br><br>
 	<table class="table table-striped">
 			<thead>
 				<tr>
-					<th>Code Material</th>
-					<th>Material</th>
-					<th>Unit</th>
+					<td>Code Packaging</td>
+					<td>Packaging</td>
+					<td>Unit</td>
 				</tr>
 			</thead>
 			<tbody>
 				<tr>
-					<td>{{$material->material_code}}</td>
-					<td>{{$material->material_name}}</td>
+					<td>{{$packaging->packaging_code}}</td>
+					<td>{{$packaging->packaging_name}}</td>
 					<td></td>
 				</tr>
 			</tbody>
@@ -199,22 +201,28 @@
 					</tr>
 					<tr >
 						<th style="text-align:center">TGL</th>
-						<th style="text-align:center">No. Batch</th>
 						<th style="text-align:center">KET</th>														
 						<th style="text-align:center">QTY</th>
 					</tr>
 				</thead>
 				<tbody>
-					@foreach($purchase as $data)
-						<tr id="row1">
-							<td>{{substr($data->date,0,10)}}</td>
-							<td>{{$data->batch_num}}</td>
-							<td>{{$data->purchase_num}}</td>
-							<td>{{$data->quantity}}</td>
-						</tr>
+					@foreach($recept as $data)
+					<tr id="row1">
+						<td>{{substr($data->created_at,0,10)}}</td>
+						<td>{{$data->receipt_code}}</td>
+						<td>{{$data->quantity}}</td> 
+					</tr>
+					@endforeach
+					
+					@foreach($retur as $datax)
+					<tr id="row1">
+						<td>{{substr($datax->tanggal_retur,0,10)}}</td>
+						<td>{{$datax->packaging_code}}</td>
+						<td>{{$datax->quantity_retur}}</td>
+					</tr>
 					@endforeach
 					<tr>
-						<th style="text-align:right" colspan="2">Total</th>
+						<th style="text-align:right">Total</th>
 						<th style="text-align:center">:</th>
 						<th>{{$masuk}}</th>
 					</tr>
@@ -237,25 +245,18 @@
 				</tr>
 			</thead>
 			<tbody>
-				@foreach($pro_act as $data1)
+				@foreach($activity as $datay)
 				<tr id="row1">
-					<td>{{substr($data1->date_start,0,10)}}</td>
-					<td>{{$data1->activity_code}}</td>
-					<td>{{$data1->weighing}}</td>
+					<td>{{substr($datay->date,0,10)}}</td>
+					<td>{{$datay->activity_code}}</td>
+					<td>{{$datay->used_quantity}}</td>
 				</tr>
 				@endforeach
-				@foreach($pro_mat as $data2)
+				@foreach($pack as $dataz)
 				<tr id="row1">
-					<td>{{substr($data2->date,0,10)}}</td>
-					<td>{{$data2->code}}</td>
-					<td>{{$data2->quantity}}</td>
-				</tr>
-				@endforeach
-				@foreach($formula as $data3)
-				<tr id="row1">
-					<td>{{substr($data3->created_at,0,10)}}</td>
-					<td>{{$data3->formula_num}}</td>
-					<td>{{$data3->weighing}}</td>
+					<td>{{substr($dataz->date,0,10)}}</td>
+					<td>{{$dataz->code}}</td>
+					<td>{{$dataz->quantity}}</td>
 				</tr>
 				@endforeach
 				<tr>
@@ -263,13 +264,14 @@
 					<th style="text-align:center">:</th>
 					<th>{{$keluar}}</th>
 				</tr>
+			</tbody>
 		</table>
 	</div>
 </div>
 </div>
 <div class="col-md-12 col-sm-12" style="margin-top:-200px">
-	<hr>
+		<hr>
 		<p style="text-align:right;font-size:14pt;color:#000;padding-right:100px"><strong>Sisa = {{$sisa}}</strong> </p>
-	<hr>
+		<hr>
 </div>
 @endpush

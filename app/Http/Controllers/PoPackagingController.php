@@ -22,7 +22,15 @@ class PoPackagingController extends Controller
     {
         $purchase = PoPackaging::orderBy('id', 'desc')->get();
         $no = 1;
-        return view('inventory.purchases.po_packaging.index', compact('purchase','no'));
+        $packagingPrint = DB::table('packagings')->get();
+        return view('inventory.purchases.po_packaging.index', compact('purchase','no','packagingPrint'));
+    }
+
+    public function print($id)
+    {
+        $purchase = PoPackaging::findOrFail($id);
+        $purchase_view = PoPackagingDetail::where('po_packaging_id', $id)->get();
+        return view('inventory.purchases.po_packaging.print', compact('purchase','purchase_view'));
     }
 
     /**

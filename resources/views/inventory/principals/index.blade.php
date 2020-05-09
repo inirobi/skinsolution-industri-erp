@@ -1,5 +1,7 @@
 @extends('layouts.master')
-
+@section('site-title')
+  Principal
+@endsection
 @section('content')
 <!-- page content -->
 <div class="page-title">
@@ -28,10 +30,7 @@
     <div class="x_panel">
       <div class="x_title">
         <a href="{{ route('principals.create') }}" class="btn btn-success"><i class="fa fa-plus"></i> Add New Principal </a>
-        <ul class="nav navbar-right panel_toolbox">
-          <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-          <li><a class="close-link"><i class="fa fa-close"></i></a></li>
-        </ul>
+        <button class="pull-right btn btn-primary" onclick="javascript:window.print()"><i class="fa fa-print"></i> Print</button>
         <div class="clearfix"></div>
       </div>
       <div class="x_content">
@@ -39,7 +38,7 @@
           <div class="col-sm-12">
             <div class="card-box table-responsive">
               
-              <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
+              <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
                 <thead>
                   <tr>
                     <th>No</th>
@@ -53,7 +52,7 @@
                 <tbody>
                   @foreach($principals as $data)
                   <tr>
-                    <td>{{ $no++ }}</td>
+                    <td>{{ $nomor++ }}</td>
                     <td>{{ $data -> principal_code }}</td>
                     <td>{{ $data -> name }}</td>
                     <td>{{ $data -> address }}</td>
@@ -101,6 +100,79 @@ function destroy(action){
   }
 
 </script>
-
-
 @endsection
+
+@push('print')
+<div class="page-title">
+  <div class="title_left">
+    <h3>Principal Lists</h3>
+  </div>
+  <div class="title_right">
+    <div class="col-md-12 col-sm-5 col-xs-12 form-group pull-right top_search">
+		<div style='float:right;text-align:right'>
+			<img src="{{asset('assets/src/img/logo-skin-care.png')}}" />
+			<br><br>
+			<h2 style="font-size:14pt">CV SKIN SOLUTION BEAUTY CARE INDONESIA <br>
+				<small>
+					Jalan Waruga Jaya No. 47, Ciwaruga <br>
+					Parongpong, 40559 <br>
+					West Java, Indonesia <br>
+					Phone:(022) 820-270-55 <br>
+				</small>
+			</h2>
+		</div>
+    </div>
+  </div>
+</div>
+
+<div class="clearfix"></div>
+
+	<div class="row" style="display: block;">
+		<div class="col-md-12  ">
+			<div class="x_content">
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th>NO</th>
+							<th>KODE PRINCIPAL</th>
+							<th>PRINCIPAL</th>
+							<th>SUPPLIER</th>
+						</tr>
+					</thead>
+					<tbody>
+            @php $no=1; @endphp
+            @foreach($pcl as $data)
+              @php $rw=1; @endphp
+              @foreach($sup as $data1)
+                @if($data1->principal_id == $data->id)
+                  <tr id="row1">
+                    @if($rw=='1')
+                      <td align='center' rowspan="{{$data->count}}">{{$no}}</td>
+                      <td rowspan="{{$data->count}}">{{$data->principal_code}}</td>
+                      <td rowspan="{{$data->count}}" style="width: 50%;">{{$data->name}}</td>
+                    @endif
+                    <td style="width: 100%;">{{$data1->supplier_name}}</td>
+                  </tr>
+                  @php $rw++; @endphp
+                @endif
+              @endforeach	
+              @php $no++; @endphp
+            @endforeach
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+@endpush
+@push('styles')
+<style>
+#printable { display: none; }
+
+@media print
+{
+    #non-printable { display: none; }
+    #printable { display: block; }
+}
+</style>
+@endpush

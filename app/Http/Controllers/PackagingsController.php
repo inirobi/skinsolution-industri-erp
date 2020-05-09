@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Packagings;
 use App\Customers;
 use App\Suppliers;
+use App\Packaging;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -27,7 +28,8 @@ class PackagingsController extends Controller
     public function index(Request $request)
     {
         $packagings = Packagings::orderBy('id', 'desc')->get();
-        return view('inventory.packagings.index', ['datas'=> $packagings, 'no'=>1]);
+        $pck = DB::table('packagings')->get();
+        return view('inventory.packagings.index', ['datas'=> $packagings, 'no'=>1,'pck'=> $pck]);
     }
     /**
      * Show the form for creating a new resource.
@@ -177,6 +179,64 @@ class PackagingsController extends Controller
               ->route('packagings.index')
               ->with('error', 'Data tidak ditemukan.');
         }
+    }
+
+    public function print($id)
+    {
+        //MASUK
+        
+        $packaging = Packaging::findOrFail($id);
+        $recept =DB::table('packaging_receipts as a')
+        ->select('a.receipt_code','b.*')
+        ->join('packaging_receipt_details as b','a.id','=','b.packaging_receipt_id')
+        ->where('b.packaging_id',$id)->get();
+        
+        $retur = DB::table('products')
+        ->select('retur.tanggal_retur','retur.quantity_retur','packagings.packaging_code')
+        ->join('retur','products.id','retur.fk_kode_produk')
+        ->join('packagings','products.id_packaging','packagings.id')
+        ->where('products.id_packaging',$id)
+        ->get();
+        
+        $sum1 = DB::table('products')
+        ->select('retur.tanggal_retur','retur.quantity_retur','packagings.packaging_code')
+        ->join('retur','products.id','retur.fk_kode_produk')
+        ->join('packagings','products.id_packaging','packagings.id')
+        ->where('products.id_packaging',$id)
+        ->sum('quantity_pack');
+    
+        $sum2=DB::table('packaging_receipts as a')
+        ->select('a.receipt_code','b.*')
+        ->join('packaging_receipt_details as b','a.id','=','b.packaging_receipt_id')
+        ->where('b.packaging_id',$id)->sum('quantity');
+        
+        //KELUAR
+        
+        $activity = DB::table('products')
+        ->join('packaging_activities','products.id','packaging_activities.product_id')
+        ->join('packagings','products.id_packaging','packagings.id')
+        ->where([
+            ['packaging_activities.status','=','Release'],
+            ['packagings.id',$id]
+        ])->get();
+        
+        $pack = DB::table('pengeluaran_packaging')->where('packaging_id',$id)->get();
+        
+        $sum3 = DB::table('products')
+        ->join('packaging_activities','products.id','packaging_activities.product_id')
+        ->join('packagings','products.id_packaging','packagings.id')
+        ->where([
+            ['packaging_activities.status','=','Release'],
+            ['packagings.id',$id]
+        ])->sum('used_quantity');
+        
+        $sum4 = DB::table('pengeluaran_packaging')->where('packaging_id',$id)->sum('quantity');
+        
+        $sisa = ($sum1 + $sum2) - ($sum3 + $sum4);
+        $masuk = $sum1 + $sum2;
+        $keluar = $sum3 + $sum4;
+        
+     return view('inventory.packagings.print',compact('packaging','recept','retur','activity','pack','sisa','masuk','keluar'));
     }
 
     /**

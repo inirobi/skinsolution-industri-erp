@@ -26,8 +26,13 @@ class PrincipalsController extends Controller
      */
     public function index()
     {
-        $tamp = Principals::orderBy('updated_at', 'desc')->get();
-        return view('inventory.principals.index',['principals'=> $tamp, 'no'=>1]);
+        $sup = DB::table('principal_suppliers')
+        ->join('suppliers','principal_suppliers.supplier_id','suppliers.id')
+        ->get();
+        $nomor=1;
+        $pcl =DB::table('principals as a')->selectRaw('a.*, count(b.supplier_id) as count')->Leftjoin('principal_suppliers as b','a.id','=','b.principal_id')->groupBy('b.principal_id')->get();
+        $principals = Principals::orderBy('updated_at', 'desc')->get();
+        return view('inventory.principals.index',compact('principals', 'nomor', 'pcl', 'sup'));
     }
 
     /**

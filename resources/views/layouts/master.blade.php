@@ -11,7 +11,9 @@
   <meta content="" name="author" />
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Gentelella Alela! | </title>
+    <title>@yield('site-title')</title>
+
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
 
     <link href="{{ asset('css/breadcrumb.css')}}" rel="stylesheet">
     <!-- Bootstrap -->
@@ -36,7 +38,7 @@
   </head>
 
   <body class="nav-md">
-    <div class="container body">
+    <div class="container body" id="non-printable">
       <div class="main_container">
         <div class="col-md-3 left_col">
           <div class="left_col scroll-view">
@@ -334,7 +336,13 @@
         <!-- /footer content -->
       </div>
     </div>
-
+    <div class="container body" id="printable">
+      <div class="main_container">
+        <div class="right_col" role="main">
+          @stack('print')
+        </div>
+      </div>
+    </div>
     <!-- jQuery -->
     <script src="{{ asset('assets/vendors/jquery/dist/jquery.min.js')}}"></script>
     <!-- Bootstrap -->

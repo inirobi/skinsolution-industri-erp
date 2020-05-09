@@ -43,6 +43,7 @@ Route::resource('/suppliers', 'SuppliersController');
 //SOF Rout Packagings
 //packaging
 Route::resource('/packagings', 'PackagingsController');
+Route::get('/packagings/print/{id}', 'PackagingsController@print');
 Route::get('/packagings_stocks', 'PackagingsController@dataStock');
 Route::get('/packagings/customer/ajax', 'PackagingsController@customerState');
 Route::get('/packagings/supplier/ajax', 'PackagingsController@supplierState');
@@ -94,10 +95,12 @@ Route::get('/purchase/add/ajax-state/{id}',function($id)
 
 //po material
 Route::resource('/po_material', 'PoMaterialController'); 
+Route::get('/po_material/print/{id}', 'PoMaterialController@print')->name('po_material.print'); 
 Route::post('/po_material/view/store/', 'PoMaterialController@ViewStore')->name('po_material.viewStore');
 Route::delete('/po_material/view/destroy/{id}', 'PoMaterialController@destroyView')->name('po_material.destroyView');
 //po packaging
 Route::resource('/po_packaging', 'PoPackagingController'); 
+Route::get('/po_packaging/print/{id}', 'PoPackagingController@print')->name('po_packaging.print'); 
 Route::post('/po_packaging/view/store/', 'PoPackagingController@ViewStore')->name('po_packaging.viewStore');
 Route::delete('/po_packaging/view/destroy/{id}', 'PoPackagingController@destroyView')->name('po_packaging.destroyView');
 

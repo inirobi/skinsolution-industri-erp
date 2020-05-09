@@ -1,4 +1,6 @@
-@extends('layouts.master')
+@extend@section('site-title')
+	Material
+@endsections('layouts.master')
 
 @section('content')
 <!-- page content -->

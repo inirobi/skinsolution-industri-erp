@@ -275,6 +275,13 @@ class PoMaterialController extends Controller
                 ->with('error', 'Data is not found.');
         }
     }
+
+    public function print($id) 
+    {
+        $purchase = PoMaterial::findOrFail($id);
+        $purchase_view = PoMaterialDetail::where('po_material_id', $id)->get();
+        return view('inventory.purchases.po_materials.print', compact('purchase','purchase_view'));
+    }
     
     public function destroyView($id)
     {
