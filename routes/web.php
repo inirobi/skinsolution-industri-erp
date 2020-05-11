@@ -124,7 +124,8 @@ Route::resource('/customers', 'CustomersController');
 
 //Delivery Order
 Route::resource('/delivery_order', 'DeliveryOrderController');
-
+Route::post('/delivery_order/view/store', 'DeliveryOrderController@viewStore')->name('delivery_order.view.store');
+Route::get('/delivery_order/print/{id}', 'DeliveryOrderController@print')->name('delivery_order.print');
 //left_overs
 Route::resource('/left_overs', 'LeftOversController');
 
@@ -164,7 +165,7 @@ Route::resource('/penjualan', 'PenjualanController');
 
 //invoice
 Route::resource('/invoice', 'InvoiceController');
-Route::get('/invoice/xx', 'InvoiceController@xx')->name('invoice.xx');
+Route::post('/invoice/xx', 'InvoiceController@xx')->name('invoice.xx');
 Route::get('/invoice/state', 'InvoiceController@state')->name('invoice.state');
 
 //notifikasi pembayaran invoice
@@ -177,6 +178,7 @@ Route::resource('/labelling', 'LabellingController');
 Route::resource('/produksi', 'ProductController');
 Route::get('/produksi/print/{id}', 'ProductController@print')->name('produksi.print');
 Route::get('/produksi/print/formula/{id}', 'ProductController@formulaPrint')->name('produksi.print.formula');
+Route::get('/produksi/print/revisi/{id}', 'ProductController@revisiPrint')->name('produksi.print.revisi');
 Route::get('/stok_produksi', 'ProductController@indexStock')->name('produksi.stoct');
 
 Route::get('/labelling/add/ajax-state/{id}',function($id)

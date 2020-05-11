@@ -1,12 +1,12 @@
 @extends('layouts.master')
 @section('site-title')
-  Pengeluaran Packaging
+  Pengeluaran Hasil Packaging
 @endsection
 @section('content')
 <!-- page content -->
 <div class="page-title">
   <div class="title_left">
-    <h3>Add New Pengeluaran Packaging</h3>
+    <h3>Add New Pengeluaran Hasil Packaging</h3>
   </div>
 
   <div class="title_right">
@@ -15,7 +15,7 @@
       <div class="input-group">
         <ul class="breadcrumb">
           <li><a href="{{url('/home')}}">Home</a></li>
-          <li><a href="{{route('pengeluaran_packaging.index')}}">Pengeluaran Packaging</a></li>
+          <li><a href="{{route('pengeluaran_packaging2.index2')}}">Pengeluaran Packaging</a></li>
           @if(isset($packout))
             <li>Update Pengeluaran Packaging</li>
           @else
@@ -33,22 +33,26 @@
   <div class="col-md-12 col-sm-12">
     <div class="x_panel">
       <div class="x_content">
-        @if(isset($packout))
-          <form action="{{ route('pengeluaran_packaging.update', $packout->id) }}" novalidate method="POST" enctype="multipart/form-data">
-          @method('PUT')
-        @else
-            <form action="{{ route('pengeluaran_packaging.store') }}" method="POST" enctype="multipart/form-data">          
-        @endif
-        @csrf
+          @if(isset($packout))
+            <form action="{{ route('pengeluaran_packaging2.update2', $packout->id) }}" novalidate method="POST" enctype="multipart/form-data">
+            @method('PUT')
+          @else
+            <form action="{{ route('pengeluaran_packaging2.store2') }}" method="POST" enctype="multipart/form-data">
+          @endif
+          
+          @csrf
           <p>Wajib disi <code>*</code>
           </p>
           <span class="section">
             @if(isset($packout))
-              {{ __('Update Pengeluaran Packaging') }}
+              {{ __('Update Pengeluaran Hasil Packaging') }}
             @else
-              {{ __('Add Pengeluaran Packaging') }}
+                {{ __('Form Pengeluaran Hasil Packaging') }}
             @endif
           </span>
+          @if(isset($packout))
+            <input type="hidden" name='id' value='{{$packout->id}}'>
+          @endif
           <div class="field item form-group">
             <label class="col-form-label col-md-3 col-sm-3  label-align">Code<code>*</code></label>
             <div class="col-md-6 col-sm-6">
@@ -69,7 +73,6 @@
                           <input autocomplete='off' type="text" class="form-control has-feedback-left" id="single_cal3" placeholder="Date" aria-describedby="date" value="{{ old('date', $packout->date ?? '') }}" name="date">
                           <span class="fa fa-calendar-o form-control-feedback left @error('date') is-invalid @enderror" aria-hidden="true"></span>
                       </div>
-                      
                       @error('date')
                       <span class="invalid-feedback" role="alert">
                           <strong>{{ $message }}</strong>
@@ -80,25 +83,21 @@
               </fieldset>
           </div>
           <div class="field item form-group">
-              <label class="col-form-label col-md-3 col-sm-3  label-align">Packaging <code>*</code></label>
+              <label class="col-form-label col-md-3 col-sm-3  label-align">Product <code>*</code></label>
               <div class="col-md-6 col-sm-6">
-                  <select class="form-control @error('packaging_id') is-invalid @enderror" name="packaging_id">
+                  <select class="form-control @error('product_id') is-invalid @enderror" name="product_id">
                   @if(isset($packout))
-                    @foreach($packaging as $bv)
-                      @if($bv->category!="sticker" && $bv->category!="Stiker" && $bv->category!="Sticker" && $bv->category!="box" && $bv->category!="Box")
-                        <option @if($bv->id == $packout->packaging_id) selected @endif value="{{$bv->id}}" >{{$bv->category}} - {{$bv->packaging_name}}</option>
-                      @endif
+                    @foreach($product as $d)
+                      <option @if($d->id == $packout->product_id) selected @endif value="{{$d->id}}" >{{$d->product_name}}</option>
                     @endforeach
                   @else
-                    @foreach($packaging as $bv)
-                      @if($bv->category!="sticker" && $bv->category!="Stiker" && $bv->category!="Sticker" && $bv->category!="box" && $bv->category!="Box")
-                        <option value="{{$bv->id}}" >{{$bv->category}} - {{$bv->packaging_name}}</option>
-                      @endif
+                    @foreach($product as $d)
+                      <option value="{{$d->id}}" >{{$d->product_name}}</option>
                     @endforeach
                   @endif
                   </select>
               </div>
-              @error('packaging_id')
+              @error('product_id')
               <span class="invalid-feedback" role="alert">
                   <strong>{{ $message }}</strong>
               </span>
@@ -118,9 +117,9 @@
           </div>
           
           <div class="field item form-group">
-            <label class="col-form-label col-md-3 col-sm-3  label-align">Keterangan</label>
+            <label class="col-form-label col-md-3 col-sm-3  label-align">Keterangan </label>
             <div class="col-md-6 col-sm-6">
-              <textarea name='keterangan' rows="3" class="form-control  " name="keterangan" autocomplete="keterangan">{{ old('keterangan', $packout->keterangan ?? '') }}</textarea>
+              <textarea name='keterangan' rows="3" class="form-control " name="keterangan" autocomplete="keterangan">{{ old('keterangan', $packout->keterangan ?? '') }}</textarea>
             </div>
           </div>
           <div class="ln_solid">
@@ -128,7 +127,7 @@
               <div class="col-md-6 offset-md-3">
           <button type='submit' class="btn btn-primary">Submit</button>
           @if(isset($packout))
-              <a href="{{ route('pengeluaran_packaging.index') }}" class="btn btn-danger">Cancel</a>
+              <a href="{{ route('pengeluaran_packaging2.index2') }}" class="btn btn-danger">Cancel</a>
             @else
               <button type="reset" class="btn btn-success">Reset</button>
             @endif

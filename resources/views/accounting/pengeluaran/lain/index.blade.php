@@ -70,7 +70,7 @@
                       <td>{{$no++}}</td>
                       <td> {{$data->po_num}} </td>
                       <td> {{$data->supplier->supplier_name}}</td>
-                      <td> {{$data->date}}</td>
+                      <td> {{$data->po_date}}</td>
                       <td> 
                           @if($data->ppn==0) 0 @endif
                           @if($data->ppn==1) 10% @endif

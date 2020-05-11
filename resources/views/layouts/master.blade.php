@@ -33,7 +33,15 @@
    
     <!-- Custom styling plus plugins -->
     <link href="{{ asset('assets/build/css/custom.min.css')}}" rel="stylesheet">
+    <style>
+      #printable { display: none; }
 
+      @media print
+      {
+          #non-printable { display: none; }
+          #printable { display: block; }
+      }
+    </style>
     @stack('styles')
   </head>
 
@@ -166,7 +174,7 @@
                             <li><a href="{{url('accounting_POpackaging')}}">PO Packaging</a></li>
                             <li><a href="{{route('pengeluaran_lain.index')}}">PO Lain-Lain</a></li>
                             <li><a href="{{route('pengeluaran_gaji.index')}}">Gaji</a></li>
-                          </ul>
+                          </ul> 
                       </li>
                       <li><a>Pemasukan<span class="fa fa-chevron-down"></span></a>
                           <ul class="nav child_menu">

@@ -35,6 +35,7 @@ class InvoiceController extends Controller
             ->join('po_product_details','po_products.id','po_product_details.po_product_id')
             ->where('jenis_po','=','produksi')
             ->groupBy('invoices.id')
+            ->orderBy('invoices.updated_at','desc')
             ->get();
         $inv2 = DB::table('invoices')
             ->select('invoices.id as xx','customers.customer_name','po_customers.po_num','invoices.*')
@@ -43,6 +44,7 @@ class InvoiceController extends Controller
             ->join('po_customer_details','po_customers.id','po_customer_details.po_customer_id')
             ->where('jenis_po','=','trial')
             ->groupBy('invoices.id')
+            ->orderBy('invoices.updated_at','desc')
             ->get();
             
         $customer = Customer::all();
@@ -71,7 +73,49 @@ class InvoiceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $cek = DB::table('invoices')
+        ->where('invoice_num',$request->invoice_num)
+        ->count();
+        
+        if($cek > 0){
+            return redirect()
+                ->route('invoice.index')
+                ->with('success','Code Already Exists!!');
+        }
+        
+        $saldo=0;
+        $sald =Petty::orderBy('id','DESC')->limit(1)->get();
+        foreach($sald as $data){
+          $data->saldo;
+        }
+         if($request->status=='1'){
+          $saldo= $data->saldo-$request->money;
+         }else{
+          $saldo= $data->saldo+$request->money;
+         }
+        if($request->terms=='Cash'){
+            $status='Paid';
+        }else{
+            $status='Unpaid';
+        } 
+        
+        $invoice=new Invoice();
+        $invoice->invoice_num=$request->invoice_num;
+        $invoice->jenis_invoice=$request->jenis_invoice;
+        $invoice->jenis_po=$request->jenis_po;
+        $invoice->dp=$request->dp;
+        $invoice->customer_id=$request->customer_id;
+        $invoice->po_product_id=$request->po_product_id;
+        $invoice->shipped=$request->shipped;
+        $invoice->fob=$request->fob;
+        $invoice->terms=$request->terms;
+        $invoice->status=$status;
+        $invoice->date=$request->date;
+        $invoice->save();
+        
+        return redirect()
+            ->route('invoice.index')
+            ->with('success','Successfully Invoice Created');
     }
 
     /**
@@ -93,7 +137,7 @@ class InvoiceController extends Controller
      */
     public function edit($id)
     {
-        //
+        return view('accounting.pemasukan.invoice.view');
     }
 
     /**
@@ -121,17 +165,13 @@ class InvoiceController extends Controller
 
     public function xx(Request $request)
     {
-        $req = $request->all();
-        // echo '<pre>';
-        // var_dump($req);die;
         if($request->jenis_po=="trial"){
             $data=DB::table('po_customers')
                     ->select('po_customers.id as xxx','po_num')
                     ->where('customer_id',$request->customer_id)->get();
-                return ($data);
+             return ($data);
         }
-        // elseif($request->jenis_po=="produksi"){
-        else{
+        elseif($request->jenis_po=="produksi"){
             $data=DB::table('customers')
                     ->select('customers.*','po_products.*')
                     ->join('po_products','po_products.customer_id','=','customers.id')

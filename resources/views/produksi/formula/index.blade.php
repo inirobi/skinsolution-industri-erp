@@ -106,7 +106,7 @@
           </div>
 
           <div class="form-group">
-            <label class="control-label">Po Customer Number</label>
+            <label class="control-label">Revision Number</label>
             <select class="form-control" name="trial_revision_data_id">
                 @foreach($revision as $d)
                     <option value="{{$d->id}}" >{{$d->revision_num}}</option>

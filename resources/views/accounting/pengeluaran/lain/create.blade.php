@@ -112,7 +112,7 @@
                             <div class="control-group">
                                 <div class="controls">
                                     <div class="col-md-11 xdisplay_inputx form-group has-feedback">
-                                        <input type="text" class="form-control has-feedback-left" id="single_cal3" placeholder="Date" aria-describedby="date" value="{{ old('date', $lain->date ?? '') }}" name="date">
+                                        <input type="text" class="form-control has-feedback-left" id="single_cal3" placeholder="Date" aria-describedby="date" value="{{ old('date', $lain->po_date ?? '') }}" name="date">
                                         <span class="fa fa-calendar-o form-control-feedback left @error('date') is-invalid @enderror" aria-hidden="true"></span>
                                     </div>
                                     
@@ -165,7 +165,7 @@
                         </div>
                         @endif
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-default" onclick="javascript:history.back()">Cancel</button>
+                            <a href="{{route('pengeluaran_lain.index')}}" class="btn btn-danger">Cancel</a>
                             <button type="submit" class="btn btn-primary"><i class="fa fa-floppy-o"></i> Save</button>
                         </div>
                     </form>

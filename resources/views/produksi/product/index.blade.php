@@ -67,7 +67,7 @@
                 <td> {{$data->product_name}}</td>
                 <td> {{$data->customer_name}}</td>
                 <td><a target="_blank" href="{{route('produksi.print.formula',$data->formula_id)}}">{{$data->formula_num}}</a></td>
-                <td><a href="#">{{$data->revision_num}}</a></td>
+                <td><a target="_blank" href="{{route('produksi.print.revisi',$data->trial_revision_data_id)}}">{{$data->revision_num}}</a></td>
                 <td class="text-center"><a target="_blank" href="{{route('formula.hpp',$data->formula_id)}}"><i class="fa fa-pencil"></i> List</a></td>
                 <td class="text-center">
                   <a href="{{route('produksi.edit',$data->xx)}}" class="btn btn-warning" title="Edit"><i class="fa fa-edit"></i></a>

@@ -20,7 +20,7 @@ class PackagingActivityController extends Controller
      */
     public function index()
     {
-        $packagingactivity = PackagingActivity::all();
+        $packagingactivity = PackagingActivity::orderBy('created_at','desc')->get();
         $no = 1;
         return view('produksi.kegiatan.packaging.index', compact('no','packagingactivity') );
     }
@@ -51,14 +51,18 @@ class PackagingActivityController extends Controller
         ->count();
         
         if($cek > 0){
-            return redirect('admin/packaging_activity')->with('error','Code Already Exists!!');
+            return redirect()
+                ->route('activity_packaging/create')
+                ->with('error','Code Already Exists!!');
         }
 
         $stocks = DB::table('product_stocks')->where('product_id', $request->input('product_id'))->sum('production_quantity');
         
         if (!empty($stocks)) {
             if ($stocks == 0) {
-                return redirect()->back()->with('error','Production Quantity is '.$stocks.'. Not Enough To Create Data');
+                return redirect()
+                    ->route('activity_packaging/create')
+                    ->with('error','Production Quantity is '.$stocks.'. Not Enough To Create Data');
             }
             else if($request->ruahan <= $stocks && $request->ruahan <= $request->production_result){
                 

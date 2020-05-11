@@ -294,4 +294,10 @@ class ProductController extends Controller
         $formula_view = FormulaDetail::where('formula_id', $id)->get();
         return view('produksi.product.printFormula', compact('formula', 'material', 'formula_view','sampleMaterial', 'product'));
     }
+
+    public function revisiPrint($id)
+    {
+        $revision = TrialRevisionData::where('id', $id)->first();
+        return view('produksi.product.revisiPrint', compact('revision'));
+    }
 }

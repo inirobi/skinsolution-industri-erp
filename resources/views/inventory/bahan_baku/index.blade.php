@@ -20,7 +20,7 @@
       </div>
     </div>
     </div>
-  </div>
+  </div> 
 </div>
 
 <div class="clearfix"></div>
@@ -40,9 +40,9 @@
             <thead>
               <tr>
                 <th>No</th>
-                <th>Code</th>
-                <th>Cas Num</th>
-                <th>Name</th>
+                <th>Code Material</th>
+                <th>Name Material</th>
+                <th>Cas Number</th>
                 <th>Inci Name</th>
                 <th>Stock Minimum</th>
                 <th>Cantegory</th>
@@ -56,8 +56,8 @@
               <tr>
                 <td>{{ $no++ }}</td>
                 <td>{{ $data -> material_code }}</td>
-                <td>{{ $data -> cas_num }}</td>
                 <td>{{ $data -> material_name }}</td>
+                <td>{{ $data -> cas_num }}</td>
                 <td>{{ $data -> inci_name }}</td>
                 <td>{{ $data -> stock_minimum }}</td>
                 <td>{{ $data -> category }}</td>
@@ -205,18 +205,6 @@
 	</div>
 </div>
 @endpush
-@push('styles')
-<style>
-#printable { display: none; }
-
-@media print
-{
-    #non-printable { display: none; }
-    #printable { display: block; }
-}
-</style>
-@endpush
-
 <script>
 function detailConfirm(kode, nama, cas_num,ukuran,minimal, kategori, harga)
 {

@@ -58,8 +58,10 @@
                     <td> {{$data->customer->customer_name}}</td>
                     <td> {{$data->po_product->po_num}} </td>
                     <td class="text-center">
+                      <a href="{{route('delivery_order.print',$data->id)}}" target="_blank" class="btn btn-primary" title="Print"><i class="fa fa-print"></i></a>
                       <a href="{{route('delivery_order.edit',$data->id)}}" class="btn btn-warning" title="Edit"><i class="fa fa-edit"></i></a>
                       <a href="{{route('delivery_order.destroy',$data->id)}}" onclick="event.preventDefault();destroy('{{route('delivery_order.destroy',$data->id)}}')" class="btn btn-danger" title="Hapus"><i class="fa fa-trash"></i></a>
+                      <a href="{{route('delivery_order.show',$data->id)}}" class="btn btn-info" title="View"><i class="fa fa-eye"></i></a>
                     </td>
                   </tr>
                   @endforeach

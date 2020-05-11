@@ -1,5 +1,7 @@
 @extends('layouts.master')
-
+@section('site-title')
+  Laba
+@endsection
 @push('styles')
     <!-- bootstrap-daterangepicker -->
     <link href="{{ asset('assets/vendors/bootstrap-daterangepicker/daterangepicker.css')}}" rel="stylesheet">
@@ -145,7 +147,7 @@
           <div class="ln_solid">
             <div class="form-group">
             <br>
-                <button type='submit' class="btn btn-primary pull-right"><i class="fa fa-print"></i> Print</button>
+                <button onclick="javascript:window.print()" class="btn btn-primary pull-right"><i class="fa fa-print"></i> Print</button>
             </div>
           </div>
         </form>
@@ -162,3 +164,77 @@
     <script src="{{ asset('assets/vendors/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js')}}"></script>
 @endpush
 @endsection
+
+@push('print')
+@if(!empty($masuk))
+    @php $tot1=0; $tot2=0; @endphp
+      @foreach($masuk as $dd)
+          @php $tot1=$tot1 + $dd->money; @endphp
+      @endforeach
+    @foreach($kel as $ddd)
+      @php $tot2=$tot2 + $ddd->money; @endphp
+    @endforeach
+<div class="page-title">
+  <div class="title_left">
+    <h3 style="font-size:14pt">LABA</h3><br><br><br>
+	<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>Periode Awal</th>
+					<th>Periode Akhir</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>{{$aw}}</td>
+					<td>{{$akh}}</td>
+				</tr>
+			</tbody>
+		</table>
+  </div>
+  <div class="title_right">
+    <div class="col-md-12 col-sm-5 col-xs-12 form-group pull-right top_search">
+		<div style='float:right;text-align:right'>
+			<img src="{{asset('assets/src/img/logo-skin-care.png')}}" />
+			<br><br>
+			<h2>CV SKIN SOLUTION BEAUTY CARE INDONESIA <br>
+				<small>
+					Jalan Waruga Jaya No. 47, Ciwaruga <br>
+					Parongpong, 40559 <br>
+					West Java, Indonesia <br>
+					Phone:(022) 820-270-55 <br>
+				</small>
+			</h2>
+		</div>
+    </div>
+  </div>
+</div>
+
+<div class="clearfix"></div>
+
+<div class="row" style="display: block;">
+	<div class="col-md-12 ">
+		<div class="x_content">
+			<table class="table table-striped">
+				<thead>
+					<tr >
+						<th>Total Pemasukkan</th>
+						<th>Total Pengeluaran</th>
+					</tr>
+				</thead>
+				<tbody>
+						<tr>
+							<td>Rp {{number_format($tot1,2)}}</td>
+							<td>Rp {{number_format($tot2,2)}}</td>
+					<tr>
+						<th style="text-align:right">Laba : </th>
+						<th>Rp {{number_format($tot1-$tot2,2)}}</th>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+</div>
+@endif
+@endpush

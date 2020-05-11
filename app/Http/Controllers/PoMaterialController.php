@@ -61,7 +61,7 @@ class PoMaterialController extends Controller
             
             if($cek > 0){
                 return redirect()
-                    ->route('po_material.index')
+                    ->route('po_material.create')
                     ->with('error','Code Already Exists!!');
             }
             $date = explode('/',$request->date);

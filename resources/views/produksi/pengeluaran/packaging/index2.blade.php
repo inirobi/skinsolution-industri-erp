@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('site-title')
-  Pengeluaran Packaging
+  Pengeluaran Hasil Packaging
 @endsection
 @push('styles')
     <!-- bootstrap-daterangepicker -->
@@ -13,7 +13,7 @@
 <!-- page content -->
 <div class="page-title">
   <div class="title_left">
-    <h3>Pengeluaran Packaging</h3>
+    <h3>Pengeluaran Hasil Packaging</h3>
   </div>
 
   <div class="title_right">
@@ -22,7 +22,7 @@
       <div class="input-group">
         <ul class="breadcrumb">
           <li><a href="{{url('/home')}}">Home</a></li>
-          <li>Pengeluaran Packaging</li>
+          <li><a>Pengeluaran Hasil Packaging</a></li>
         </ul>
       </div>
     </div>
@@ -35,9 +35,8 @@
 <div class="row">
     <div class="col-md-12 col-sm-12 ">
       <div class="x_panel">
-        <div class="x_title">
-          <a href="{{route('pengeluaran_packaging.create')}}" class="btn btn-success" ><i class="fa fa-plus"></i>Add New Packaging</a>
-          <ul class="nav navbar-right panel_toolbox">
+        <div class="x_title"> 
+          <a href="{{route('pengeluaran_packaging2.create2')}}" class="btn btn-success" ><i class="fa fa-plus"></i>{{ __('Add New Hasil Packaging') }}</a>
           <div class="clearfix"></div>
         </div>
         <div class="x_content">
@@ -62,11 +61,11 @@
                 <td>{{ $no++ }}</td>
                 <td>{{$data->code}}</td>
                 <td>{{$data->date}}</td>
-                <td>{{$data->packaging_name}}</td>
+                <td>{{$data->product_name}}</td>
                 <td>{{$data->quantity}}</td>
                 <td>{{$data->keterangan}}</td>
                 <td class="text-center">
-                  <a href="{{route('pengeluaran_packaging.edit',$data->xx)}}" class="btn btn-warning" title="Edit"><i class="fa fa-edit"></i></a> 
+                  <a href="{{route('pengeluaran_packaging2.edit2',$data->xx)}}" class="btn btn-warning" title="Edit"><i class="fa fa-edit"></i></a>
                 </td>
               </tr>
               @endforeach

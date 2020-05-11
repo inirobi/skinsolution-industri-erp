@@ -103,7 +103,9 @@ class MaterialsController extends Controller
         ->join('suppliers','suppliers.id','=','material_suppliers.supplier_id')
         ->join('materials','materials.id','=','material_suppliers.material_id')
         ->selectRaw('material_suppliers.id as id_x')
-        ->where('material_suppliers.material_id',$id)->get();
+        ->where('material_suppliers.material_id',$id)
+        ->orderBy('material_suppliers.updated_at','desc')
+        ->get();
 
         $supplier= Suppliers::all();
         return view('inventory.bahan_baku.supplier',['sup' => $sup, 'id' => $id, 'supplier' => $supplier]);
@@ -279,7 +281,7 @@ class MaterialsController extends Controller
             ['material_id',$request->material_id]
         ])->count();
         if($x>0){
-            return redirect()->back()->withErrors('Supplier Already Exist');
+            return redirect()->back()->with('error','Supplier Already Exist');
         }
         else{
             $sup = MaterialSupplier::create([
@@ -289,6 +291,12 @@ class MaterialsController extends Controller
         }
 
         return redirect()->back()->with('success','Successfully Created');
+    }
+
+    public function SupplierDelete($id)
+    {
+        MaterialSupplier::whereId($id)->delete();
+        return redirect()->back()->with('success','Successfully Deleted');
     }
 
     public function kontradiksiStore(Request $request)

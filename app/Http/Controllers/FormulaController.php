@@ -54,6 +54,7 @@ class FormulaController extends Controller
      */
     public function store(Request $request)
     {
+        
         try {
             $cek = DB::table('formulas')
                 ->where('formula_num',$request->formula_num)
@@ -156,6 +157,11 @@ class FormulaController extends Controller
 
     public function storeView(Request $request)
     {
+        if($request->source_material == '' || $request->material_id == '' || $request->quantity=='' || $request->weighing == ''){
+            return redirect()
+                ->route('formula.show',$request->input('formula_id'))
+                ->with('error','invalid input!!');
+        }
         $formulaDetail = FormulaDetail::where('formula_id', $request->formula_id)->get();
         $totalQty = 0;
         foreach($formulaDetail as $fd){
