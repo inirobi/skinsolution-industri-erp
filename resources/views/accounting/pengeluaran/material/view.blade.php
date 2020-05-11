@@ -49,7 +49,7 @@
               <div class="control-group">
                 <div class="controls">
                   <div class="col-md-11 xdisplay_inputx form-group has-feedback">
-                    <input type="text" class="form-control has-feedback-left" id="single_cal3" placeholder="Date" aria-describedby="date" value="{{$purchase->po_date}}" disabled>
+                    <input type="text" class="form-control has-feedback-left" id="single_cal3" placeholder="Date" value="{{$purchase->po_date}}" disabled>
                     
                     <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
                   </div>

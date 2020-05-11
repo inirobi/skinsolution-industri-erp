@@ -81,7 +81,7 @@ class PoMaterialController extends Controller
             if($request->terms=='Cash'){
                 $status='Paid';
                 $petty=new Petty();
-                $petty->date= $date;
+                $petty->date= $request->date;
                 $petty->money='0';
                 $petty->status='0';
                 $petty->saldo='0';

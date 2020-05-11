@@ -1,5 +1,7 @@
 @extends('layouts.master')
-
+@section('site-title')
+  Product Activity
+@endsection
 @push('styles')
     <!-- bootstrap-daterangepicker -->
     <link href="{{ asset('assets/vendors/bootstrap-daterangepicker/daterangepicker.css')}}" rel="stylesheet">

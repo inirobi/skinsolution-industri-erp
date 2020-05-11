@@ -1,5 +1,7 @@
 @extends('layouts.master')
-
+@section('site-title')
+  Product Activity
+@endsection
 @section('content')
 <div class="page-title">
   <div class="title_left">
