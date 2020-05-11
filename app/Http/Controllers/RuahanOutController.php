@@ -19,7 +19,7 @@ class RuahanOutController extends Controller
         ->select('pengeluaran_ruahan.*','products.*')
         ->join('products','pengeluaran_ruahan.product_id','products.id')
         ->selectRaw('pengeluaran_ruahan.id as xx')
-        ->orderBy('pengeluaran_ruahan.id', 'desc')
+        ->orderBy('pengeluaran_ruahan.updated_at', 'desc')
         ->get();
         $no=1;
       
@@ -45,10 +45,10 @@ class RuahanOutController extends Controller
      */
     public function store(Request $request)
     {
-        $date = explode('/',$request->date);
-        $date = $date[2]."-".$date[0]."-".$date[1];
         try{
-
+            if (!isset($request->keterangan)) {
+                $request->keterangan = '';
+            }
             $stock= DB::table('product_stocks')
             ->select(DB::raw('sum(production_quantity) as qty_product'))
             ->where('product_stocks.product_id',$request->product_id)
@@ -60,7 +60,7 @@ class RuahanOutController extends Controller
             DB::table('pengeluaran_ruahan')
             ->insert([
                 'code' => $request->code,
-                'date' => $date,
+                'date' => $request->date,
                 'product_id' => $request->product_id,
                 'quantity' => $request->quantity,
                 'keterangan' => $request->keterangan,
@@ -102,10 +102,8 @@ class RuahanOutController extends Controller
     public function edit($id)
     {
         $matout = DB::table('pengeluaran_ruahan')->where('id',$id)->first();
-        $dateOut = explode('-',$matout->date);
-        $dateOut = $dateOut[1]."-".$dateOut[2]."-".$dateOut[0];
         $product = DB::table('products')->get();
-        return view('produksi.pengeluaran.ruahan.create', compact('matout','product','dateOut'));
+        return view('produksi.pengeluaran.ruahan.create', compact('matout','product'));
     }
 
     /**
@@ -148,13 +146,10 @@ class RuahanOutController extends Controller
                         'production_quantity' => $qty,
                     ]);
             }
-
-            $date = explode('/',$request->date);
-            $date = $date[2]."-".$date[0]."-".$date[1];
             DB::table('pengeluaran_ruahan')->where('id',$id)
             ->update([
                 'code' => $matout->code,
-                'date' => $date,
+                'date' => $request->date,
                 'product_id' => $request->product_id,
                 'quantity' => $request->quantity,
                 'keterangan' => $request->keterangan,

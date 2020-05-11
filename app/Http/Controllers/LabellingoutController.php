@@ -62,9 +62,11 @@ class LabellingOutController extends Controller
      */
     public function store(Request $request)
     {
-        $date = explode('/',$request->date);
-        $date = $date[2]."-".$date[0]."-".$date[1];
+        
         try {
+            if (!isset($request->keterangan)) {
+                $request->keterangan = '';
+            }
             $stock= DB::table('packaging_stocks')
                 ->where('packaging_stocks.packaging_id',$request->labelling_id)
                 ->selectRaw('sum(quantity) as qty')
@@ -76,7 +78,7 @@ class LabellingOutController extends Controller
             DB::table('pengeluaran_labelling')
                 ->insert([
                     'code' => $request->code,
-                    'date' => $date,
+                    'date' => $request->date,
                     'labelling_id' => $request->labelling_id,
                     'quantity' => $request->quantity,
                     'keterangan' => $request->keterangan,
@@ -98,9 +100,10 @@ class LabellingOutController extends Controller
     }
     public function store2(Request $request)
     {
-        $date = explode('/',$request->date);
-        $date = $date[2]."-".$date[0]."-".$date[1];
         try {
+            if (!isset($request->keterangan)) {
+                $request->keterangan = '';
+            }
             $stock= DB::table('product_stocks')
                 ->where('product_stocks.product_id',$request->labelling_id)
                 ->selectRaw('sum(labelling_quantity) as qty')
@@ -112,7 +115,7 @@ class LabellingOutController extends Controller
             DB::table('pengeluaran_labelling2')
                 ->insert([
                     'code' => $request->code,
-                    'date' => $date,
+                    'date' => $request->date,
                     'product_id' => $request->labelling_id,
                     'quantity' => $request->quantity,
                     'keterangan' => $request->keterangan,
@@ -154,9 +157,7 @@ class LabellingOutController extends Controller
     {
         $matout = DB::table('pengeluaran_labelling')->where('id',$id)->first();
         $packaging = DB::table('packagings')->get();
-        $dateOut = explode('-',$matout->date);
-        $dateOut = $dateOut[1]."-".$dateOut[2]."-".$dateOut[0];
-        return view('produksi.pengeluaran.labelling.create', compact('matout','packaging','dateOut'));
+        return view('produksi.pengeluaran.labelling.create', compact('matout','packaging'));
     }
 
     public function edit2($id)
@@ -164,9 +165,7 @@ class LabellingOutController extends Controller
         $matout = DB::table('pengeluaran_labelling2')->where('id',$id)->first();
         $sts='labelling status';
         $product = DB::table('products')->get();
-        $dateOut = explode('-',$matout->date);
-        $dateOut = $dateOut[1]."-".$dateOut[2]."-".$dateOut[0];
-        return view('produksi.pengeluaran.labelling.create', compact('matout','product','dateOut','sts'));
+        return view('produksi.pengeluaran.labelling.create', compact('matout','product','sts'));
     }
 
     /**
@@ -206,13 +205,10 @@ class LabellingOutController extends Controller
                         'quantity' => $qty,
                     ]);
             }
-
-            $date = explode('/',$request->date);
-            $date = $date[2]."-".$date[0]."-".$date[1];
             DB::table('pengeluaran_labelling')->where('id',$id)
             ->update([
                 'code' => $matout->code,
-                'date' => $date,
+                'date' => $request->date,
                 'labelling_id' => $request->labelling_id,
                 'quantity' => $request->quantity,
                 'keterangan' => $request->keterangan,
@@ -257,12 +253,10 @@ class LabellingOutController extends Controller
                     ]);
             }
 
-            $date = explode('/',$request->date);
-            $date = $date[2]."-".$date[0]."-".$date[1];
             DB::table('pengeluaran_labelling2')->where('id',$id)
             ->update([
                 'code' => $matout->code,
-                'date' => $date,
+                'date' => $request->date,
                 'product_id' => $request->labelling_id,
                 'quantity' => $request->quantity,
                 'keterangan' => $request->keterangan,
