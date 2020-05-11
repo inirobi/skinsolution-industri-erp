@@ -146,18 +146,39 @@ class ProductActivityController extends Controller
 
     public function ViewStoreAjax(Request $request)
     {   
-        ProductActivityDetail::create($request->all());
-        $stock = Stock::where('material_id', $request->material_id)->first();        
-            if (!empty($stock) && $stock->quantity >= $request->weighing) {
-                Stock::where('material_id', $request->material_id)
+        
+        $cek = sizeof($request->all());
+        if (!isset($request->result_target) || !isset($request->result_real) || $cek<=5) {
+            return redirect()
+                ->route('activity_product.view.add',$request->product_activity_id)
+                ->with('error', "Invalid input");
+        }
+        $panjang = count(collect($request->weighing));
+        for ($i=0; $i < $panjang; $i++) { 
+            $pad = new ProductActivityDetail;
+            $pad->product_activity_id = $request->product_activity_id;
+            $pad->product_id = $request->product_id;
+            $pad->result_target = $request->result_target;
+            $pad->result_real = $request->result_real;
+            $pad->material_id = $request->material_id[$i];
+            $pad->quantity = $request->quantity[$i];
+            $pad->weighing = $request->weighing[$i];
+            $stock = Stock::where('material_id', $request->material_id[$i])->first();        
+            if (!empty($stock) && $stock->quantity >= $request->weighing[$i]) {
+                Stock::where('material_id', $request->material_id[$i])
                 ->update([
-                    'quantity' => $stock->quantity - $request->weighing,
+                    'quantity' => $stock->quantity - $request->weighing[$i],
                 ]);
             }else{
-                return Response::json("failed add! Check stock material");
+                return redirect()
+                    ->route('activity_product.show',$request->product_activity_id)
+                    ->with('error',"failed add! Check stock material");
             }
-
-        return Response::json("Successfully Add");    
+            $pad->save();
+        }
+        return redirect()
+            ->route('activity_product.show',$request->product_activity_id)
+            ->with('success', "Success fully Added");    
     }
     public function ViewAdd($id)
     {
@@ -193,7 +214,9 @@ class ProductActivityController extends Controller
                 ->where('product_activity_details.product_activity_id',$id)
                 ->where('product_activity_details.product_id',$product_id)
                 ->where('formula_details.source_material',1)
-                ->groupBy('materials.id','materials.material_name', 'product_activity_details.weighing', 'product_activity_details.quantity','product_activity_details.created_at')->get();
+                ->groupBy('materials.id','materials.material_name', 'product_activity_details.weighing', 'product_activity_details.quantity','product_activity_details.created_at')
+                ->orderBy('product_activity_details.id', 'desc')
+                ->get();
 
         $b=DB::table('product_activity_details')
                 ->select('sample_materials.id','sample_materials.material_name',
@@ -205,7 +228,9 @@ class ProductActivityController extends Controller
                 ->where('product_activity_details.product_activity_id',$id)
                 ->where('product_activity_details.product_id',$product_id)
                 ->where('formula_details.source_material',0)
-                ->groupBy('sample_materials.id','sample_materials.material_name', 'product_activity_details.weighing', 'product_activity_details.quantity','product_activity_details.created_at')->get();
+                ->groupBy('sample_materials.id','sample_materials.material_name', 'product_activity_details.weighing', 'product_activity_details.quantity','product_activity_details.created_at')
+                ->orderBy('product_activity_details.id', 'desc')
+                ->get();
 
         //$subcategories= Supplier::where('id',$categories->supplier_id)->get();
         $activity_view = $a->merge($b);        

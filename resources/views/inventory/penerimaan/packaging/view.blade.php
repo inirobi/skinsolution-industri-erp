@@ -86,7 +86,7 @@
         <div class="row">
           <div class="col-sm-12">
             <div class="card-box table-responsive">
-            <table id="datatable" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
+            <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
                 <thead>
                   <tr>
                     <th>No</th>

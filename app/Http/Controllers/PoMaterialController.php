@@ -305,6 +305,12 @@ class PoMaterialController extends Controller
     public function pengeluaran_material_detail($id)
     {
         $purchase = PoMaterial::findOrFail($id);
+        $tamp = explode('-',$purchase->po_date);
+        if (sizeof($tamp) != 1) {
+            PoMaterial::where('id', $id)
+                ->update(['po_date' => $tamp[1].'/'.$tamp[2].'/'.$tamp[0]]);
+        }
+        $purchase = PoMaterial::findOrFail($id);
         $materialSupplier = MaterialSupplier::where('supplier_id', $purchase->supplier_id)->get();
         $matId = array();
         foreach($materialSupplier as $data){
