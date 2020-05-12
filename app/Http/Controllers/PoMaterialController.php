@@ -199,6 +199,11 @@ class PoMaterialController extends Controller
     public function edit($id)
     {
         $purchase = PoMaterial::findOrFail($id);
+        $tamp = explode('-',$purchase->po_date);
+        if (sizeof($tamp) != 1) {
+            PoMaterial::where('id', $id)
+                ->update(['po_date' => $tamp[1].'/'.$tamp[2].'/'.$tamp[0]]);
+        }
         $supplier = Suppliers::all();
         return view('inventory.purchases.po_materials.create', compact('purchase','supplier'));
     }
@@ -301,7 +306,7 @@ class PoMaterialController extends Controller
          // $notifmat=NotifMaterials::all();
         // return view('accounting.pengeluaran.material.index', compact('purchase','supplier'));
         return view('accounting.pengeluaran.material.index', compact('purchase'));
-    }
+    } 
     public function pengeluaran_material_detail($id)
     {
         $purchase = PoMaterial::findOrFail($id);
