@@ -56,12 +56,16 @@ class PrincipalsController extends Controller
         $this->validate($request,[
             'principal_code' => 'required',
             'name' => 'required',
-            'address' => 'required',
-            'country' => 'required',
         ]);
 
         try {
             $req = $request->all();
+            if (!isset($req['address'])) {
+                $req['address'] = '';
+            }
+            if (!isset($req['country'])) {
+                $req['country'] = '';
+            }
             Principals::create([
                 'id' => null,
                 'principal_code' => $req['principal_code'],
@@ -130,12 +134,16 @@ class PrincipalsController extends Controller
         $this->validate($request,[
             'principal_code' => 'required',
             'name' => 'required',
-            'address' => 'required',
-            'country' => 'required',
         ]);
 
         try {
           $req = $request->all();
+          if (!isset($req['address'])) {
+            $req['address'] = '';
+            }
+            if (!isset($req['country'])) {
+                $req['country'] = '';
+            }
           $principal = Principals::findOrFail($id);
           $principal->principal_code = $req['principal_code'];
           $principal->name = $req['name'];

@@ -229,7 +229,7 @@
                                     '\')" title="Hapus"><i class="fa fa-trash"></i></a>'+
                                     '<a href="{{ url("packagings/print") }}/' + data
                                     .idData +
-                                    '" class="btn btn-primary" title="Print"><i class="fa fa-print"></i></a>';
+                                    '" class="btn btn-primary" target="_blank" title="Print"><i class="fa fa-print"></i></a>';
                                 return buttons;
                             }
                         },

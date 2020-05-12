@@ -11,6 +11,7 @@ use App\MaterialKontradiksi;
 use App\PoMaterial;
 use App\PoMaterialDetail;
 use App\Material;
+use App\Product;
 
 use PDF; 
 
@@ -342,5 +343,12 @@ class MaterialsController extends Controller
 
         $material= Materials::whereNotIn('id',[$id])->get();
         return view('inventory.bahan_baku.kontradiksi',['datas' => $datas, 'id' => $id, 'material' => $material]);
+    }
+
+    public function estimasi()
+    {
+        $now = strtotime(now());
+        $today = date('m-Y', $now);
+        $newdate = date('m-Y', strtotime('-6 month', $now));
     }
 }

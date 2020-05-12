@@ -167,6 +167,9 @@ Route::resource('/penjualan', 'PenjualanController');
 Route::resource('/invoice', 'InvoiceController');
 Route::post('/invoice/xx', 'InvoiceController@xx')->name('invoice.xx');
 Route::get('/invoice/state', 'InvoiceController@state')->name('invoice.state');
+Route::post('/invoice/detail/store', 'InvoiceController@detailStore')->name('invoice.detailstore');
+Route::post('/invoice/view/update/{id}', 'InvoiceController@ViewUpdate')->name('invoice.viewupdate');
+Route::post('/invoice/detail/store2', 'InvoiceController@detailStore2')->name('invoice.detailstore2');
 
 //notifikasi pembayaran invoice
 Route::get('/bayar/notif', 'PettyCashController@bayar')->name('bayar.notif_po');
