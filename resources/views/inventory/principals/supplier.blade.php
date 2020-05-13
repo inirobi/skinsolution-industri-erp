@@ -27,6 +27,38 @@
 <div class="clearfix"></div>
 
 <div class="row">
+  <div class="col-md-12 col-sm-12">
+    <div class="x_panel">
+      <div class="x_title">
+        <h2>Principals Supplier</h2>
+        <ul class="nav navbar-right panel_toolbox">
+          <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+          <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+        </ul>
+        <div class="clearfix"></div>
+      </div>
+      <div class="x_content">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="field item form-group">
+              <label class="col-form-label col-md-3 col-sm-3  label-align">Principal Code : </label>
+              <div class="col-md-6 col-sm-6">
+                <input class="form-control" value="{{$sup[0]->principal_code}}" type="text" disabled />
+              </div>
+            </div>
+            <div class="field item form-group">
+              <label class="col-form-label col-md-3 col-sm-3  label-align">Principal Name : </label>
+              <div class="col-md-6 col-sm-6">
+                <input class="form-control" value="{{$sup[0]->name}}" type="text" disabled />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
   <div class="col-md-12 col-sm-12 ">
     <div class="x_panel">
       <div class="x_title">
