@@ -105,8 +105,8 @@
                       </li>
                       <li><a>Estimasi Pemesanan<span class="fa fa-chevron-down"></span></a>
                           <ul class="nav child_menu">
-                            <li class="sub_menu"><a href="level2.html">Materials</a></li>
-                            <li><a href="#level2_2">Packaging</a></li>
+                            <li class="sub_menu"><a href="{{route('estimasi_material.index')}}">Materials</a></li>
+                            <li><a href="{{route('estimasi_packaging.index')}}">Packaging</a></li>
                           </ul>
                       </li>                   
                     </ul>

@@ -106,7 +106,7 @@ class PackagingsController extends Controller
     public function show($id)
     {
         try {
-            $data = Packagings::findOrFail($id);
+            $data = Packaging::findOrFail($id);
             return view('inventory.packagings.detail', ['data' => $data]);
   
           } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){

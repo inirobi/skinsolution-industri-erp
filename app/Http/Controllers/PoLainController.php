@@ -23,7 +23,7 @@ class PoLainController extends Controller
         return view('accounting.pengeluaran.lain.index', compact('lain'));
     }
 
-    /**
+    /** 
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
@@ -122,6 +122,12 @@ class PoLainController extends Controller
         $lain = PoLain::findOrFail($id);
         $lain_view = PoLainDetail::where('polain_id', $id)->get();
         return view('accounting.pengeluaran.lain.view', compact('lain','lain_view'));
+    }
+    public function print($id)
+    {
+        $purchase = PoLain::findOrFail($id);
+        $purchase_view = PoLainDetail::where('polain_id', $id)->get();
+        return view('accounting.pengeluaran.lain.print', compact('purchase','purchase_view'));
     }
 
     /**

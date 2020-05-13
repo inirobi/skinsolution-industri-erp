@@ -133,7 +133,7 @@
                     <label class="control-label col-md-2">Packaging</label>
                     <select class="form-control" name="packaging_id">
                         @foreach($pck as $d)
-                            <option value="{{$d->id}}" >{{$d->packaging_name}}</option>
+                            <option value="{{$d->id}}" >{{$d->customer->packaging_name}}</option>
                         @endforeach
                     </select>
                 </div>

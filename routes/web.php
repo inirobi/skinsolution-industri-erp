@@ -104,6 +104,12 @@ Route::get('/po_packaging/print/{id}', 'PoPackagingController@print')->name('po_
 Route::post('/po_packaging/view/store/', 'PoPackagingController@ViewStore')->name('po_packaging.viewStore');
 Route::delete('/po_packaging/view/destroy/{id}', 'PoPackagingController@destroyView')->name('po_packaging.destroyView');
 
+
+//estimasi
+Route::resource('estimasi_material', 'EstimasiController'); 
+Route::get('estimasi_packaging', 'EstimasiController@index2')->name('estimasi_packaging.index'); 
+
+
 //===============end inventory===================
 
 
@@ -154,6 +160,7 @@ Route::get('/accounting_POpackaging/view/{id}', 'PoPackagingController@packaging
 
 //pengeluarn lain-lain
 Route::resource('/pengeluaran_lain', 'PoLainController');
+Route::get('/pengeluaran_lain/print/{id}', 'PoLainController@print')->name('pengeluaran_lain.print'); 
 Route::post('/pengeluaran_lainView','PoLainController@ViewStore');
 Route::delete('/pengeluaran_lainDestroy/{id}','PoLainController@ViewDestroy');
 

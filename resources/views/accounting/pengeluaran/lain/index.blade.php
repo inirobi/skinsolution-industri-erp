@@ -104,6 +104,7 @@
                               <i class="fa fa-edit"></i>
                             </a>
                             <a href="{{ route('pengeluaran_lain.destroy', $data->id) }}" class="btn btn-danger" onclick="event.preventDefault();destroy('{{ route('pengeluaran_lain.destroy', $data->id) }}')" title="Hapus"><i class="fa fa-trash"></i></a>
+                            <a class="btn btn-primary" target="_blank" href="{{route('pengeluaran_lain.print',$data->id)}}" title="Print"><i class="fa fa-print"></i></a>
                          </td>
                         </tr>
                        @endforeach

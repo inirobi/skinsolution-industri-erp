@@ -56,6 +56,7 @@
                 </div>
                 <div class="item form-group">
                     <label class="col-form-label col-md-3 col-sm-3 label-align">Packaging Type </label>
+                    <input type="hidden" id="cekType" value="{{$data->packaging_type}}">
                     <div class="col-md-6 col-sm-6 ">
                         <div id="packaging_type" class="btn-group" data-toggle="buttons">
                             <label class="btn btn-primary" data-toggle-class="btn-primary"
@@ -76,10 +77,11 @@
                 <div class="item form-group">
                     <label class="col-form-label col-md-3 col-sm-3 label-align">Vendor </label>
                     <div class="col-md-6 col-sm-6 ">
-                        <div id="cs">
-                            <select class="form-control" name="vendor" id="vendor">
-                            </select>
-                        </div>
+                        @if($data->packaging_type == "CS")
+                            <input class="form-control" value="{{ $data->customer->customer_name }}" disabled type="text"/>
+                        @elseif($data->packaging_type == "SS")
+                            <input class="form-control" value="{{ $data->supplier->supplier_name }}" disabled type="text"/>
+                        @endif
                     </div>
                 </div>
 
@@ -114,50 +116,19 @@
 
 @include('layouts.validasi_footer')
 
+
 @push('scripts')
 <script>
-    $.get('{{url("packagings/customer/ajax")}}', function (data) {
-        $('#vendor').empty();
-        $.each(data, function (index, subcatObj) {
-            $('#vendor').append('<option disabled value="' + subcatObj.id + '">' + subcatObj.customer_name +
-                '</option>')
-        });
-    });
+var source = $('#cekType').val();
 
-
-    $('input[type=radio][name=packaging_type]').change(function () {
-        var source = this.value;
-
-        if (source == "SS") {
-            $('#btn-customer').attr('class', 'btn btn-secondary');
-            $('#btn-supplier').attr('class', 'btn btn-primary');
-            $.get('{{url("packagings/supplier/ajax")}}', function (data) {
-                $('#vendor').empty();
-                $.each(data, function (index, subcatObj) {
-                    $('#vendor').append('<option value="' + subcatObj.id + '">' + subcatObj
-                        .supplier_name + '</option>')
-                });
-            });
-
-
-        }
-        if (source == "CS") {
-            $('#btn-customer').attr('class', 'btn btn-primary');
-            $('#btn-supplier').attr('class', 'btn btn-secondary');
-            $.get('{{url("packagings/customer/ajax")}}', function (data) {
-                $('#vendor').empty();
-                $.each(data, function (index, subcatObj) {
-                    $('#vendor').append('<option value="' + subcatObj.id + '">' + subcatObj
-                        .customer_name + '</option>')
-                });
-            });
-        }
-
-
-
-
-    });
-
+if (source == "SS") {
+    $('#btn-customer').attr('class', 'btn btn-secondary');
+    $('#btn-supplier').attr('class', 'btn btn-primary');
+}
+if (source == "CS") {
+    $('#btn-customer').attr('class', 'btn btn-primary');
+    $('#btn-supplier').attr('class', 'btn btn-secondary');
+}
 </script>
 @endpush
 @endsection

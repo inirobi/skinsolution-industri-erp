@@ -201,7 +201,7 @@ class MaterialsController extends Controller
         ->where('formula_details.material_id',$id)
         ->orderby('formula_details.created_at','asc')
         ->groupBy('formula_details.id')
-        ->get();
+        ->get(); 
         
         $pro_act = DB::table('product_activities')
         ->join('product_activity_details','product_activities.id','=','product_activity_details.product_activity_id')
@@ -345,10 +345,4 @@ class MaterialsController extends Controller
         return view('inventory.bahan_baku.kontradiksi',['datas' => $datas, 'id' => $id, 'material' => $material]);
     }
 
-    public function estimasi()
-    {
-        $now = strtotime(now());
-        $today = date('m-Y', $now);
-        $newdate = date('m-Y', strtotime('-6 month', $now));
-    }
 }

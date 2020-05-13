@@ -20,7 +20,7 @@ class PackagingReceiptController extends Controller
      */
     public function index()
     {
-        $packaging = PackagingReceipt::orderBy('id', 'desc')->get();
+        $packaging = PackagingReceipt::orderBy('updated_at', 'desc')->get();
         $no = 1;
         return view('inventory.penerimaan.packaging.index', compact('packaging','no'));
     }
@@ -81,7 +81,11 @@ class PackagingReceiptController extends Controller
         $packaging_view = PackagingReceiptDetail::where('packaging_receipt_id', $id)
                             ->orderBy('updated_at','desc')
                             ->get();
-        $pck = Packaging::all();
+        $pck = Packaging::groupBy('customer_id')
+                ->where('packaging_type','CS')
+                ->get();
+        // echo '<pre>';
+        // var_dump($pck);die;
         return view('inventory.penerimaan.packaging.view', compact('packaging', 'packaging_view','pck'));
     }
 

@@ -79,7 +79,7 @@
             </li>
           </ul>
           <div class="clearfix"></div>
-        </div>
+        </div> 
         <div class="x_content">
             <div class="row">
                 <div class="col-sm-12">
@@ -89,9 +89,9 @@
               <tr>
                 <th>No</th>
                 <th>Packaging</th>
-                <th>Quantity)</th>
-                <th>Price ({{$purchase->currency}})</th>
-                <th>Total Price ({{$purchase->currency}})</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Total Price</th>
                 <th>Action</th>
               </tr>
             </thead>
