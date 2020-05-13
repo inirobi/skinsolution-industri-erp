@@ -1,5 +1,7 @@
 @extends('layouts.master')
-
+@section('site-title')
+	Material
+@endsection
 @section('content')
 <!-- page content -->
 <div class="page-title">
@@ -29,10 +31,6 @@
     <div class="x_panel">
       <div class="x_title">
         <a data-toggle="modal" href="#modalAdd" class="btn btn-success"><i class="fa fa-plus"></i> Add New Supplier </a>
-        <ul class="nav navbar-right panel_toolbox">
-          <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-          <li><a class="close-link"><i class="fa fa-close"></i></a></li>
-        </ul>
         <div class="clearfix"></div>
       </div>
       <div class="x_content">
@@ -40,7 +38,7 @@
           <div class="col-sm-12">
             <div class="card-box table-responsive">
               
-              <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
+              <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
                 <thead>
                   <tr>
                     <th>No</th>

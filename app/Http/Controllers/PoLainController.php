@@ -19,11 +19,11 @@ class PoLainController extends Controller
      */
     public function index()
     {
-        $lain = PoLain::orderBy('id', 'desc')->get();
+        $lain = PoLain::orderBy('updated_at', 'desc')->get();
         return view('accounting.pengeluaran.lain.index', compact('lain'));
     }
 
-    /**
+    /** 
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
@@ -54,7 +54,6 @@ class PoLainController extends Controller
         ]);
 
         try {
-            
             $cek = DB::table('po_lain')
             ->where('po_num',$request->po_num)
             ->count();
@@ -95,7 +94,7 @@ class PoLainController extends Controller
             $Polain=new PoLain();
             $Polain->po_num=$request->po_num;
             $Polain->supplier_id=$request->supplier_id;
-            $Polain->date=$request->date;
+            $Polain->po_date=$request->date;
             $Polain->tempo=$tempo;
             $Polain->ppn=$request->ppn;
             $Polain->terms=$request->terms;
@@ -123,6 +122,12 @@ class PoLainController extends Controller
         $lain = PoLain::findOrFail($id);
         $lain_view = PoLainDetail::where('polain_id', $id)->get();
         return view('accounting.pengeluaran.lain.view', compact('lain','lain_view'));
+    }
+    public function print($id)
+    {
+        $purchase = PoLain::findOrFail($id);
+        $purchase_view = PoLainDetail::where('polain_id', $id)->get();
+        return view('accounting.pengeluaran.lain.print', compact('purchase','purchase_view'));
     }
 
     /**

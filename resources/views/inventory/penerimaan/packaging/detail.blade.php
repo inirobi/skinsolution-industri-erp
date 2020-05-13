@@ -1,5 +1,7 @@
 @extends('layouts.master')
-
+@section('site-title')
+  Packaging Material
+@endsection
 @push('styles')
     <!-- bootstrap-daterangepicker -->
     <link href="{{ asset('assets/vendors/bootstrap-daterangepicker/daterangepicker.css')}}" rel="stylesheet">
@@ -29,7 +31,7 @@
     </div>
   </div>
 </div>
-<form id="addPackaging Receipt View" action='#' novalidate method="POST" enctype="multipart/form-data">
+<form id="addPackaging Receipt View" action="{{route('packaging_receipt.view.store.ss')}}" novalidate method="POST" enctype="multipart/form-data">
 {{csrf_field()}}
 <div class="row">
   <div class="col-md-12 col-sm-12">
@@ -46,7 +48,7 @@
         <div class="row">
           <div class="col-sm-12">
             <div class="field item form-group">
-            <input type="hidden" id="packaging_receipt_id" name="packaging_receipt_id" value="{{$id}}">
+            <input type="hidden" name="packaging_receipt_id" value="{{$id}}">
             <label class="col-form-label col-md-3 col-sm-3  label-align">PO Number : </label>
             <div class="col-md-6 col-sm-6">
                 <select id="po_packaging_id" class="form-control" name="po_packaging_id">
@@ -68,7 +70,7 @@
   <div class="col-md-12 col-sm-12 ">
     <div class="x_panel">
       <div class="x_title">
-      <button type="submit" id="SubmitPackagingReceiptDetail" class="btn btn-primary"><i class="fa fa-check"></i>Add Packaging Receipt View</button>
+      <button type='submit' class="btn btn-primary"><i class="fa fa-check"></i>Add Packaging Receipt View</button>
         <ul class="nav navbar-right panel_toolbox">
           <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
           <li><a class="close-link"><i class="fa fa-close"></i></a></li>
@@ -110,8 +112,8 @@
             $.each(data, function(index, subcatObj){
             $('#packaging_detail')
             .append('<tr><td><input value="'
-            +subcatObj.packaging_code+'" class="form-control text-capitalize" type="text" disabled></td><td><input value="'
-            +subcatObj.packaging_name+'" class="form-control  text-capitalize" type="text" disabled></td><td><input value="'
+            +subcatObj.packaging_code+'" class="form-control text-capitalize" type="text" readonly></td><td><input value="'
+            +subcatObj.packaging_name+'" class="form-control  text-capitalize" type="text" readonly></td><td><input value="'
             +subcatObj.quantity+'" id="quantity'+idx+'" class="form-control text-capitalize" placeholder="Quantity" type="number" name="quantity[]"></td><td>'
             +'<input id="packaging_id'+idx+'" type="hidden" name="packaging_id[]" value="'+subcatObj.id+'"></td><td>');
             idx++;
@@ -127,7 +129,7 @@
                 $.each(dataDetail, function(index, subcatObj){                                    
                     var packaging_id = $("#packaging_id"+idx).val();
                     var quantity = $("#quantity"+idx).val();
-                    
+                     
                     $.ajax({
                         url: '{{ url('') }}/packaging_receipt/view/storess',
                         type: 'POST',

@@ -20,7 +20,7 @@ class PackagingReceiptController extends Controller
      */
     public function index()
     {
-        $packaging = PackagingReceipt::orderBy('id', 'desc')->get();
+        $packaging = PackagingReceipt::orderBy('updated_at', 'desc')->get();
         $no = 1;
         return view('inventory.penerimaan.packaging.index', compact('packaging','no'));
     }
@@ -78,8 +78,14 @@ class PackagingReceiptController extends Controller
     public function show($id)
     {
         $packaging = PackagingReceipt::findOrFail($id);
-        $packaging_view = PackagingReceiptDetail::where('packaging_receipt_id', $id)->get();
-        $pck = Packaging::all();
+        $packaging_view = PackagingReceiptDetail::where('packaging_receipt_id', $id)
+                            ->orderBy('updated_at','desc')
+                            ->get();
+        $pck = Packaging::groupBy('customer_id')
+                ->where('packaging_type','CS')
+                ->get();
+        // echo '<pre>';
+        // var_dump($pck);die;
         return view('inventory.penerimaan.packaging.view', compact('packaging', 'packaging_view','pck'));
     }
 
@@ -107,16 +113,33 @@ class PackagingReceiptController extends Controller
 
     public function ViewStorAjax(Request $request)
     {
-        PackagingReceiptDetail::create($request->all());
-        $stock = PackagingStock::where('packaging_id', $request->input('packaging_id'))->first();        
+        if (!isset($request->quantity)) {
+            return redirect()
+                ->route('packaging_receipt.showSS',$request->packaging_receipt_id)
+                ->with('error', "Invalid input!");
+        }
+        $panjang = count(collect($request->packaging_id));
+        for ($i=0; $i <$panjang ; $i++) { 
+            $prd = new PackagingReceiptDetail;
+            $prd->packaging_receipt_id = $request->packaging_receipt_id;
+            $prd->quantity = $request->quantity[$i];
+            $prd->packaging_id = $request->packaging_id[$i];
+            $stock = PackagingStock::where('packaging_id', $request->packaging_id[$i])->first();        
             if (!empty($stock)) {
-                PackagingStock::where('packaging_id', $request->input('packaging_id'))
+                PackagingStock::where('packaging_id', $request->packaging_id[$i])
                 ->update([
-                    'quantity' => $stock->quantity + $request->input('quantity'),
+                    'quantity' => $stock->quantity + $request->quantity[$i],
                 ]);
+            }else{
+                return redirect()
+                    ->route('packaging_receipt.showSS',$request->packaging_receipt_id)
+                    ->with('error', "failed add! Check stock packaging");
             }
-
-        return Response::json("Successfully Add");
+            $prd->save();
+        }
+        return redirect()
+            ->route('packaging_receipt.show',$request->packaging_receipt_id)
+            ->with('success', "Success Added!");
     }
 
 

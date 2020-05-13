@@ -1,4 +1,7 @@
 @extends('layouts.master')
+@section('site-title')
+	Material
+@endsection
 
 @section('content')
 <!-- page content -->

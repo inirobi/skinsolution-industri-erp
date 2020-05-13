@@ -1,5 +1,7 @@
 @extends('layouts.master')
-
+@section('site-title')
+  Supplier
+@endsection
 @section('content')
 <!-- page content -->
 <div class="page-title">
@@ -95,7 +97,7 @@
           <div class="field item form-group">
             <label class="col-form-label col-md-3 col-sm-3  label-align">Supplier Email</label>
             <div class="col-md-6 col-sm-6">
-              <input class="form-control email @error('supplier_email') is-invalid @enderror" value="{{ old('supplier_email', $suppliers->supplier_email ?? '') }}" type="email" name="supplier_email">
+              <input class="form-control email @error('supplier_email') is-invalid @enderror" value="{{ old('supplier_email', $suppliers->supplier_email ?? '') }}" type="text" name="supplier_email">
             </div>
             @error('supplier_email')
                 <span class="invalid-feedback" role="alert">

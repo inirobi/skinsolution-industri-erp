@@ -43,6 +43,7 @@ Route::resource('/suppliers', 'SuppliersController');
 //SOF Rout Packagings
 //packaging
 Route::resource('/packagings', 'PackagingsController');
+Route::get('/packagings/print/{id}', 'PackagingsController@print');
 Route::get('/packagings_stocks', 'PackagingsController@dataStock');
 Route::get('/packagings/customer/ajax', 'PackagingsController@customerState');
 Route::get('/packagings/supplier/ajax', 'PackagingsController@supplierState');
@@ -94,12 +95,20 @@ Route::get('/purchase/add/ajax-state/{id}',function($id)
 
 //po material
 Route::resource('/po_material', 'PoMaterialController'); 
+Route::get('/po_material/print/{id}', 'PoMaterialController@print')->name('po_material.print'); 
 Route::post('/po_material/view/store/', 'PoMaterialController@ViewStore')->name('po_material.viewStore');
 Route::delete('/po_material/view/destroy/{id}', 'PoMaterialController@destroyView')->name('po_material.destroyView');
 //po packaging
 Route::resource('/po_packaging', 'PoPackagingController'); 
+Route::get('/po_packaging/print/{id}', 'PoPackagingController@print')->name('po_packaging.print'); 
 Route::post('/po_packaging/view/store/', 'PoPackagingController@ViewStore')->name('po_packaging.viewStore');
 Route::delete('/po_packaging/view/destroy/{id}', 'PoPackagingController@destroyView')->name('po_packaging.destroyView');
+
+
+//estimasi
+Route::resource('estimasi_material', 'EstimasiController'); 
+Route::get('estimasi_packaging', 'EstimasiController@index2')->name('estimasi_packaging.index'); 
+
 
 //===============end inventory===================
 
@@ -121,7 +130,8 @@ Route::resource('/customers', 'CustomersController');
 
 //Delivery Order
 Route::resource('/delivery_order', 'DeliveryOrderController');
-
+Route::post('/delivery_order/view/store', 'DeliveryOrderController@viewStore')->name('delivery_order.view.store');
+Route::get('/delivery_order/print/{id}', 'DeliveryOrderController@print')->name('delivery_order.print');
 //left_overs
 Route::resource('/left_overs', 'LeftOversController');
 
@@ -150,6 +160,7 @@ Route::get('/accounting_POpackaging/view/{id}', 'PoPackagingController@packaging
 
 //pengeluarn lain-lain
 Route::resource('/pengeluaran_lain', 'PoLainController');
+Route::get('/pengeluaran_lain/print/{id}', 'PoLainController@print')->name('pengeluaran_lain.print'); 
 Route::post('/pengeluaran_lainView','PoLainController@ViewStore');
 Route::delete('/pengeluaran_lainDestroy/{id}','PoLainController@ViewDestroy');
 
@@ -161,8 +172,11 @@ Route::resource('/penjualan', 'PenjualanController');
 
 //invoice
 Route::resource('/invoice', 'InvoiceController');
-Route::get('/invoice/xx', 'InvoiceController@xx')->name('invoice.xx');
+Route::post('/invoice/xx', 'InvoiceController@xx')->name('invoice.xx');
 Route::get('/invoice/state', 'InvoiceController@state')->name('invoice.state');
+Route::post('/invoice/detail/store', 'InvoiceController@detailStore')->name('invoice.detailstore');
+Route::post('/invoice/view/update/{id}', 'InvoiceController@ViewUpdate')->name('invoice.viewupdate');
+Route::post('/invoice/detail/store2', 'InvoiceController@detailStore2')->name('invoice.detailstore2');
 
 //notifikasi pembayaran invoice
 Route::get('/bayar/notif', 'PettyCashController@bayar')->name('bayar.notif_po');
@@ -172,6 +186,9 @@ Route::resource('/petty', 'PettyCashController');
 //labelling
 Route::resource('/labelling', 'LabellingController');
 Route::resource('/produksi', 'ProductController');
+Route::get('/produksi/print/{id}', 'ProductController@print')->name('produksi.print');
+Route::get('/produksi/print/formula/{id}', 'ProductController@formulaPrint')->name('produksi.print.formula');
+Route::get('/produksi/print/revisi/{id}', 'ProductController@revisiPrint')->name('produksi.print.revisi');
 Route::get('/stok_produksi', 'ProductController@indexStock')->name('produksi.stoct');
 
 Route::get('/labelling/add/ajax-state/{id}',function($id)
@@ -324,6 +341,7 @@ Route::get('/retur/add/ajax-state/{id}',function($id)
 
 //formula
 Route::resource('/formula', 'FormulaController');
+Route::get('/formula/hpp/{id}', 'FormulaController@hpp')->name('formula.hpp');
 Route::post('/formula/view', 'FormulaController@storeView')->name('formula.store.view');
 Route::delete('/formula/view/{id}', 'FormulaController@destroyView')->name('formula.destroy.view');
 Route::get('/formula/view/add/ajax-state/{id}',function($id)

@@ -1,5 +1,7 @@
 @extends('layouts.master')
-
+@section('site-title')
+  Principal
+@endsection
 @section('content')
 <!-- page content -->
 <div class="page-title">
@@ -71,26 +73,16 @@
             @enderror
           </div>
           <div class="field item form-group">
-            <label class="col-form-label col-md-3 col-sm-3  label-align">Address<code>*</code></label>
+            <label class="col-form-label col-md-3 col-sm-3  label-align">Address</label>
             <div class="col-md-6 col-sm-6">
-              <textarea required="required" name='address' rows="3" class="form-control  @error('address') is-invalid @enderror" name="address" required autocomplete="address">{{ old('address', $principals->address ?? '') }}</textarea>
+              <textarea name='address' rows="3" class="form-control" name="address" autocomplete="address">{{ old('address', $principals->address ?? '') }}</textarea>
             </div>
-            @error('address')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-            @enderror
           </div>
           <div class="field item form-group">
-            <label class="col-form-label col-md-3 col-sm-3  label-align">Country<code>*</code></label>
+            <label class="col-form-label col-md-3 col-sm-3  label-align">Country</label>
             <div class="col-md-6 col-sm-6">
-              <input class="form-control  @error('country') is-invalid @enderror" value="{{ old('country', $principals->country ?? '') }}" type="text" name="country" required='required'>
+              <input class="form-control" value="{{ old('country', $principals->country ?? '') }}" type="text" name="country">
             </div>
-            @error('country')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-            @enderror
           </div>
           <div class="ln_solid">
             <div class="form-group">

@@ -1,5 +1,7 @@
 @extends('layouts.master')
-
+@section('site-title')
+  Packaging Material
+@endsection
 @push('styles')
     <!-- bootstrap-daterangepicker -->
     <link href="{{ asset('assets/vendors/bootstrap-daterangepicker/daterangepicker.css')}}" rel="stylesheet">
@@ -84,7 +86,7 @@
         <div class="row">
           <div class="col-sm-12">
             <div class="card-box table-responsive">
-            <table id="datatable" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
+            <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
                 <thead>
                   <tr>
                     <th>No</th>
@@ -131,7 +133,7 @@
                     <label class="control-label col-md-2">Packaging</label>
                     <select class="form-control" name="packaging_id">
                         @foreach($pck as $d)
-                            <option value="{{$d->id}}" >{{$d->packaging_name}}</option>
+                            <option value="{{$d->id}}" >{{$d->customer->packaging_name}}</option>
                         @endforeach
                     </select>
                 </div>

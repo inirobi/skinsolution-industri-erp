@@ -1,5 +1,7 @@
 @extends('layouts.master')
-
+@section('site-title')
+  Receipment Material
+@endsection
 @section('content')
 <!-- page content -->
 <div class="page-title">

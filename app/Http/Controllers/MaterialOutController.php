@@ -23,7 +23,7 @@ class MaterialOutController extends Controller
     public function index()
     {
         $no = 1;
-        $matout = MaterialOut::orderBy('id', 'desc')->get();
+        $matout = MaterialOut::orderBy('updated_at', 'desc')->get();
         return view('produksi.pengeluaran.material.index', compact('matout','no'));
     }
 
@@ -46,9 +46,10 @@ class MaterialOutController extends Controller
      */
     public function store(Request $request)
     {
-        $date = explode('/',$request->date);
-        $date = $date[2]."-".$date[0]."-".$date[1];
         try {
+            if (!isset($request->keterangan)) {
+                $request->keterangan = '';
+            }
             $stock= DB::table('stocks')
             ->select(DB::raw('sum(quantity) as qty'))
             ->where('stocks.material_id',$request->material_id)
@@ -60,7 +61,7 @@ class MaterialOutController extends Controller
             DB::table('pengeluaran_material')
             ->insert([ 
                 'code' => $request->code,
-                'date' => $date,
+                'date' => $request->date,
                 'material_id' => $request->material_id,
                 'quantity' => $request->quantity,
                 'keterangan' => $request->keterangan,
@@ -102,9 +103,7 @@ class MaterialOutController extends Controller
     {
         $matout = MaterialOut::findOrFail($id);
         $material = Material::all();
-        $dateOut = explode('-',$matout->date);
-        $dateOut = $dateOut[1]."-".$dateOut[2]."-".$dateOut[0];
-        return view('produksi.pengeluaran.material.create', compact('matout','material','dateOut'));
+        return view('produksi.pengeluaran.material.create', compact('matout','material'));
     }
 
     /**
@@ -146,12 +145,10 @@ class MaterialOutController extends Controller
                     ]);
             }
 
-            $date = explode('/',$request->date);
-            $date = $date[2]."-".$date[0]."-".$date[1];
             DB::table('pengeluaran_material')->where('id',$id)
             ->update([
                 'code' => $matout->code,
-                'date' => $date,
+                'date' => $request->date,
                 'material_id' => $request->material_id,
                 'quantity' => $request->quantity,
                 'keterangan' => $request->keterangan,

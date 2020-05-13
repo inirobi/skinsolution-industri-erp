@@ -77,7 +77,59 @@ class DeliveryOrderController extends Controller
      */
     public function show($id)
     {
-        //
+        $inv = DeliveryOrder::findOrFail($id);
+        $product = Product::where('customer_id', $inv->customer_id)->get();
+        $delivery_order_view = DeliveryOrderDetail::where('delivery_order_id', $id)->get();
+        return view('pemesanan.delivery_order.view', compact('inv', 'delivery_order_view', 'product'));
+    }
+
+    public function viewStore(Request $request)
+    {
+        $leftover =DB::table('products')
+            ->select('leftover.quantity')
+            ->join('leftover','products.id','=','leftover.pro_id')
+            ->join('delivery_orders','delivery_orders.po_product_id','=','leftover.po_id')
+            ->where([
+                ['leftover.pro_id',$request->product_id],
+                ['delivery_orders.id',$request->delivery_order_id],
+            ])->sum('quantity');
+        $stocks = ProductStock::where('product_id', $request->input('product_id'))->first();
+        if (!empty($stocks)) {
+            if($request->quantity > $leftover){
+                return redirect()
+                    ->route('delivery_order.show',$request->delivery_order_id)
+                    ->with('error','Quantity Melebihi Leftover');
+            }
+            else if($request->quantity <= $stocks->labelling_quantity){
+                DB::table('products')
+                ->select('leftover.quantity')
+                ->join('leftover','products.id','=','leftover.pro_id')
+                ->join('delivery_orders','delivery_orders.po_product_id','=','leftover.po_id')
+                ->where([
+                    ['leftover.pro_id',$request->product_id],
+                    ['delivery_orders.id',$request->delivery_order_id],
+                ])->update([
+                        'quantity' => $leftover - $request->quantity,
+                    ]);
+                DeliveryOrderDetail::create($request->all());
+                ProductStock::where('product_id', $request->input('product_id'))
+                ->update([
+                    'labelling_quantity' => $stocks->labelling_quantity - $request->input('quantity'),
+                ]);
+                return redirect()
+                    ->route('delivery_order.show',$request->delivery_order_id)
+                    ->with('success','Successfully DeliveryOrder Created');
+            }else{
+                 return redirect()
+                    ->route('delivery_order.show',$request->delivery_order_id)
+                    ->with('error','Quantity Melebihi Labelling Quantity');
+            }
+        }
+        else{
+            return redirect()
+                ->route('delivery_order.show',$request->delivery_order_id)
+                ->with('error','Produk Tidak Tersedia');
+        }
     }
 
     /**
@@ -142,5 +194,21 @@ class DeliveryOrderController extends Controller
               ->route('delivery_order.index')
               ->with('error', 'Data is not found.');
         }
+    }
+
+    public function Print($id)
+    {
+        $inv = DeliveryOrder::findOrFail($id);
+        $delivery_order_view = DeliveryOrderDetail::where('delivery_order_id', $id)->get();
+        $po=DB::table('delivery_order_details')
+                ->select('delivery_orders.id','delivery_order_details.delivery_order_id','delivery_order_details.product_id','products.product_name',
+                    'delivery_order_details.quantity', 'delivery_order_details.created_at', 'delivery_orders.created_at')
+                ->join('delivery_orders','delivery_order_details.delivery_order_id','=','delivery_orders.id')
+                ->join('products','delivery_order_details.product_id','=','products.id')
+                ->where('delivery_orders.po_product_id', '=', $inv->po_product_id)
+                ->where('delivery_orders.created_at', '<', $inv->created_at)->get();
+
+        $poProduct = PoProductDetail::where('po_product_id', $inv->po_product_id)->get();
+        return view('pemesanan.delivery_order.print', compact('inv', 'delivery_order_view','po','id','poProduct'));
     }
 }

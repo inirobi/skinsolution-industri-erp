@@ -1,5 +1,11 @@
 @extends('layouts.master')
-
+@section('site-title')
+  @if(isset($sts))
+      {{ __('Pengeluaran Hasil Labelling') }}
+  @else
+      {{ __('Pengeluaran Labelling') }}
+  @endif
+@endsection
 @section('content')
 <!-- page content -->
 <div class="page-title">
@@ -14,15 +20,36 @@
   </div>
 
   <div class="title_right">
-    <div class="col-md-5 col-sm-5 form-group pull-right top_search">
+    <div class="col-md-12 col-sm-5 col-xs-12 form-group pull-right top_search">
+    <div style='float:right'>
       <div class="input-group">
-        <input type="text" class="form-control" placeholder="Search for...">
-        <span class="input-group-btn">
-          <button class="btn btn-default" type="button">Go!</button>
-        </span>
+        <ul class="breadcrumb">
+            <li><a href="{{url('/home')}}">Home</a></li>
+            @if(isset($sts))
+              <li><a href="{{route('pengeluaran_labelling2.index2')}}">Pengeluaran Hasil Labelling Lists</a></li>
+            @else
+              <li><a href="{{route('pengeluaran_labelling.index')}}">Pengeluaran Labelling Lists</a></li>
+            @endif
+            <li>
+              @if(isset($matout))
+                @if(isset($sts))
+                  {{ __('Update Pengeluaran Hasil Labelling') }}
+                @else
+                  {{ __('Update Pengeluaran Labelling') }}
+                @endif
+              @else
+                @if(isset($sts))
+                  {{ __('Form Pengeluaran Hasil Labelling') }}
+                @else
+                  {{ __('Form Pengeluaran Labelling') }}
+                @endif
+              @endif
+            </li>
+        </ul>
       </div>
     </div>
-  </div>
+    </div>
+  </div> 
 </div>
 <div class="clearfix"></div>
 
@@ -80,7 +107,7 @@
               <div class="control-group">
                   <div class="controls">
                       <div class="col-md-11 xdisplay_inputx form-group has-feedback">
-                          <input type="text" class="form-control has-feedback-left" id="single_cal3" placeholder="Date" aria-describedby="date" value="{{ old('date', $dateOut ?? '') }}" name="date">
+                          <input type="text" class="form-control has-feedback-left" id="single_cal3" placeholder="Date" aria-describedby="date" value="{{ old('date', $matout->date ?? '') }}" name="date">
                           <span class="fa fa-calendar-o form-control-feedback left @error('date') is-invalid @enderror" aria-hidden="true"></span>
                       </div>
                       
@@ -95,16 +122,16 @@
           </div>
           @if(isset($sts))
             <div class="field item form-group">
-                <label class="col-form-label col-md-3 col-sm-3  label-align">Packaging <code>*</code></label>
+                <label class="col-form-label col-md-3 col-sm-3  label-align">Product <code>*</code></label>
                 <div class="col-md-6 col-sm-6">
                     <select class="form-control @error('labelling_id') is-invalid @enderror" name="labelling_id">
                     @if(isset($matout))
                         @foreach($product as $d)
-                            <option @if($d->id == $matout->product_id) selected @endif value="{{$d->id}}" >{{$d->product_name}} - {{$d->id}}</option>
+                            <option @if($d->id == $matout->product_id) selected @endif value="{{$d->id}}" >{{$d->product_name}}</option>
                         @endforeach
                     @else
                         @foreach($product as $d)
-                            <option value="{{$d->id}}" >{{$d->product_name}} - {{$d->id}}</option>
+                            <option value="{{$d->id}}" >{{$d->product_name}}</option>
                         @endforeach
                     @endif
                     </select>
@@ -122,11 +149,11 @@
                     <select class="form-control @error('labelling_id') is-invalid @enderror" name="labelling_id">
                     @if(isset($matout))
                         @foreach($packaging as $d)
-                            <option @if($d->id == $matout->labelling_id) selected @endif value="{{$d->id}}" >{{$d->packaging_name}} - {{$d->id}}</option>
+                            <option @if($d->id == $matout->labelling_id) selected @endif value="{{$d->id}}" >{{$d->packaging_name}}</option>
                         @endforeach
                     @else
                         @foreach($packaging as $d)
-                            <option value="{{$d->id}}" >{{$d->packaging_name}} - {{$d->id}}</option>
+                            <option value="{{$d->id}}" >{{$d->packaging_name}}</option>
                         @endforeach
                     @endif
                     </select>
@@ -152,15 +179,10 @@
           </div>
           
           <div class="field item form-group">
-            <label class="col-form-label col-md-3 col-sm-3  label-align">Keterangan <code>*</code></label>
+            <label class="col-form-label col-md-3 col-sm-3  label-align">Keterangan</label>
             <div class="col-md-6 col-sm-6">
-              <textarea required="required" name='keterangan' rows="3" class="form-control  @error('keterangan') is-invalid @enderror" name="keterangan" required autocomplete="keterangan">{{ old('keterangan', $matout->keterangan ?? '') }}</textarea>
+              <textarea name='keterangan' rows="3" class="form-control" name="keterangan"autocomplete="keterangan">{{ old('keterangan', $matout->keterangan ?? '') }}</textarea>
             </div>
-            @error('keterangan')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-            @enderror
           </div>
           <div class="ln_solid">
             <div class="form-group">

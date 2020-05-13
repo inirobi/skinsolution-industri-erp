@@ -1,5 +1,7 @@
 @extends('layouts.master')
-
+@section('site-title')
+ Pengeluaran Ruahan
+@endsection
 @section('content')
 <!-- page content -->
 <div class="page-title">
@@ -8,15 +10,24 @@
   </div>
 
   <div class="title_right">
-    <div class="col-md-5 col-sm-5 form-group pull-right top_search">
+    <div class="col-md-12 col-sm-5 col-xs-12 form-group pull-right top_search">
+    <div style='float:right'>
       <div class="input-group">
-        <input type="text" class="form-control" placeholder="Search for...">
-        <span class="input-group-btn">
-          <button class="btn btn-default" type="button">Go!</button>
-        </span>
+        <ul class="breadcrumb">
+          <li><a href="{{url('/home')}}">Home</a></li>
+          <li><a href="{{route('pengeluaran_ruahan.index')}}">Pengeluaran Ruahan</a></li>
+          <li>
+            @if(isset($matout))
+                {{ __('Update Pengeluaran Hasil Ruahan') }}
+            @else
+                {{ __('Form Pengeluaran Hasil Ruahan') }}
+            @endif
+          </li>
+        </ul>
       </div>
     </div>
-  </div>
+    </div>
+  </div> 
 </div>
 <div class="clearfix"></div>
 
@@ -106,15 +117,10 @@
           </div>
           
           <div class="field item form-group">
-            <label class="col-form-label col-md-3 col-sm-3  label-align">Keterangan <code>*</code></label>
+            <label class="col-form-label col-md-3 col-sm-3  label-align">Keterangan</label>
             <div class="col-md-6 col-sm-6">
-              <textarea required="required" name='keterangan' rows="3" class="form-control  @error('keterangan') is-invalid @enderror" name="keterangan" required autocomplete="keterangan">{{ old('keterangan', $matout->keterangan ?? '') }}</textarea>
+              <textarea name='keterangan' rows="3" class="form-control" name="keterangan" autocomplete="keterangan">{{ old('keterangan', $matout->keterangan ?? '') }}</textarea>
             </div>
-            @error('keterangan')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-            @enderror
           </div>
           <div class="ln_solid">
             <div class="form-group">

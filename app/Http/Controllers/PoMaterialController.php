@@ -25,7 +25,7 @@ class PoMaterialController extends Controller
         $purchase= DB::table('po_materials')
         ->select('po_materials.*','suppliers.supplier_name')
         ->join('suppliers','suppliers.id','=','po_materials.supplier_id')
-        ->orderBy('po_materials.id', 'desc')->get();
+        ->orderBy('po_materials.updated_at', 'desc')->get();
         return view('inventory.purchases.po_materials.index', ['purchase' =>$purchase, 'no'=>1]);
     }
 
@@ -61,21 +61,18 @@ class PoMaterialController extends Controller
             
             if($cek > 0){
                 return redirect()
-                    ->route('po_material.index')
+                    ->route('po_material.create')
                     ->with('error','Code Already Exists!!');
             }
-            $date = explode('/',$request->date);
-            $date = $date[2]."-".$date[0]."-".$date[1];
-
             date_default_timezone_set('Asia/Jakarta');   
             if($request->terms == "7 Days"){
-                $tempo = date('m/d/Y ', strtotime('+1 friday', strtotime($date)));    
+                $tempo = date('m/d/Y ', strtotime('+1 friday', strtotime($request->date)));    
             }
             else if($request->terms == "14 Days"){
-                $tempo = date('m/d/Y', strtotime('+2 friday', strtotime($date)));    
+                $tempo = date('m/d/Y', strtotime('+2 friday', strtotime($request->date)));    
             }
             else if($request->terms == "30 Days"){
-                $tempo = date('m/d/Y', strtotime('+4 friday', strtotime($date)));die;
+                $tempo = date('m/d/Y', strtotime('+4 friday', strtotime($request->date)));
             }
             else if($request->terms == "Cash"){
                 $tempo = "00-00-0000";
@@ -84,7 +81,7 @@ class PoMaterialController extends Controller
             if($request->terms=='Cash'){
                 $status='Paid';
                 $petty=new Petty();
-                $petty->date= $date;
+                $petty->date= $request->date;
                 $petty->money='0';
                 $petty->status='0';
                 $petty->saldo='0';
@@ -97,7 +94,7 @@ class PoMaterialController extends Controller
             $PoMaterial->po_num=$request->po_num;
             $PoMaterial->supplier_id=$request->supplier_id;
             $PoMaterial->currency=$request->currency;
-            $PoMaterial->po_date=$date;
+            $PoMaterial->po_date=$request->date;
             $PoMaterial->tempo=$tempo;
             $PoMaterial->ppn=$request->ppn;
             $PoMaterial->kurs=$request->kurs;
@@ -202,10 +199,13 @@ class PoMaterialController extends Controller
     public function edit($id)
     {
         $purchase = PoMaterial::findOrFail($id);
-        $dateOut = explode('-',$purchase->po_date);
-        $dateOut = $dateOut[1]."-".$dateOut[2]."-".$dateOut[0];
+        $tamp = explode('-',$purchase->po_date);
+        if (sizeof($tamp) != 1) {
+            PoMaterial::where('id', $id)
+                ->update(['po_date' => $tamp[1].'/'.$tamp[2].'/'.$tamp[0]]);
+        }
         $supplier = Suppliers::all();
-        return view('inventory.purchases.po_materials.create', compact('purchase','supplier','dateOut'));
+        return view('inventory.purchases.po_materials.create', compact('purchase','supplier'));
     }
 
     /**
@@ -226,14 +226,10 @@ class PoMaterialController extends Controller
             if ($request->currency == 'IDR') {
                 $kurs = '';
             }
-
-            $date = explode('/',$request->date);
-            $date = $date[2]."-".$date[0]."-".$date[1];
-
             PoMaterial::whereId($id)
                 ->update([
                     'po_num' => $request->po_num,
-                    'po_date' => $date,
+                    'po_date' => $request->date,
                     'currency' => $request->currency,
                     'supplier_id' => $request->supplier_id,
                     'kurs' => $kurs,
@@ -275,6 +271,13 @@ class PoMaterialController extends Controller
                 ->with('error', 'Data is not found.');
         }
     }
+
+    public function print($id) 
+    {
+        $purchase = PoMaterial::findOrFail($id);
+        $purchase_view = PoMaterialDetail::where('po_material_id', $id)->get();
+        return view('inventory.purchases.po_materials.print', compact('purchase','purchase_view'));
+    }
     
     public function destroyView($id)
     {
@@ -303,9 +306,15 @@ class PoMaterialController extends Controller
          // $notifmat=NotifMaterials::all();
         // return view('accounting.pengeluaran.material.index', compact('purchase','supplier'));
         return view('accounting.pengeluaran.material.index', compact('purchase'));
-    }
+    } 
     public function pengeluaran_material_detail($id)
     {
+        $purchase = PoMaterial::findOrFail($id);
+        $tamp = explode('-',$purchase->po_date);
+        if (sizeof($tamp) != 1) {
+            PoMaterial::where('id', $id)
+                ->update(['po_date' => $tamp[1].'/'.$tamp[2].'/'.$tamp[0]]);
+        }
         $purchase = PoMaterial::findOrFail($id);
         $materialSupplier = MaterialSupplier::where('supplier_id', $purchase->supplier_id)->get();
         $matId = array();

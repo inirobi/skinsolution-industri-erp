@@ -10,6 +10,9 @@ use App\TrialRevisionData;
 use App\Packaging;
 use App\Product;
 use App\Labelling;
+use App\Material;
+use App\SampleMaterial;
+use App\FormulaDetail;
 use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
@@ -32,7 +35,68 @@ class ProductController extends Controller
         $no = 1;
         return view('produksi.product.index', compact('product','no'));
     }
+    public function print($id)
+    {
+        #MASUK
+        $product =  Product::find($id);
+       $purchasedet=DB::table('products')
+       ->join('packaging_activities','packaging_activities.product_id','=','products.id')
+       ->join('labellings','labellings.packaging_activity_id','=','packaging_activities.id')
+       ->where('products.id',$id)
+       ->orderby('labellings.date')
+       ->get();
+       
+       $sum2=DB::table('products')
+       ->join('packaging_activities','packaging_activities.product_id','=','products.id')
+       ->join('labellings','labellings.packaging_activity_id','=','packaging_activities.id')
+       ->where('products.id',$id)
+       ->orderby('labellings.date')
+       ->sum('result');
 
+       $retur=DB::table('retur')
+       ->where('fk_kode_produk',$id)
+       ->orderby('retur.tanggal_retur')
+       ->get();
+       $sum1=DB::table('retur')
+       ->where('fk_kode_produk',$id)
+       ->orderby('retur.tanggal_retur')
+       ->sum('quantity_retur');
+       
+       //KELUAR
+
+       $purchasedet2=DB::table('delivery_orders')
+       ->join('delivery_order_details','delivery_orders.id','=','delivery_order_details.delivery_order_id')
+       ->where('delivery_order_details.product_id',$id)
+       ->orderby('delivery_orders.date')
+       ->get();
+       
+       $sum3=DB::table('delivery_orders')
+       ->join('delivery_order_details','delivery_orders.id','=','delivery_order_details.delivery_order_id')
+       ->where('delivery_order_details.product_id',$id)
+       ->orderby('delivery_orders.date')
+       ->sum('quantity');
+
+       $labelling=DB::table('pengeluaran_labelling2')
+       ->join('packaging_activities','packaging_activities.product_id','=','pengeluaran_labelling2.product_id')
+       ->join('labellings','labellings.packaging_activity_id','=','packaging_activities.id')
+       ->where('pengeluaran_labelling2.product_id',$id)
+       ->orderby('labellings.date')
+       ->get();
+       
+       $sum4=DB::table('pengeluaran_labelling2')
+       ->join('packaging_activities','packaging_activities.product_id','=','pengeluaran_labelling2.product_id')
+       ->join('labellings','labellings.packaging_activity_id','=','packaging_activities.id')
+       ->where('pengeluaran_labelling2.product_id',$id)
+       ->orderby('labellings.date')
+
+       ->sum('quantity');
+       
+       $masuk = $sum1 + $sum2;
+       $keluar = $sum3 + $sum4;
+       $sisa = $masuk - $keluar;
+       
+        return view('produksi.product.print',compact('product','purchasedet','purchasedet2','retur','labelling','masuk','keluar', 'sisa'));
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -219,5 +283,21 @@ class ProductController extends Controller
         $stocks = ProductStock::all();
         $no = 1;
         return view('produksi.product.stock', compact('stocks', 'no'));
+    }
+
+    public function formulaPrint($id)
+    {
+        $formula = Formula::findOrFail($id);
+        $material = Material::all();
+        $sampleMaterial = SampleMaterial::all();
+        $product = Product::where('formula_id', $id)->first();
+        $formula_view = FormulaDetail::where('formula_id', $id)->get();
+        return view('produksi.product.printFormula', compact('formula', 'material', 'formula_view','sampleMaterial', 'product'));
+    }
+
+    public function revisiPrint($id)
+    {
+        $revision = TrialRevisionData::where('id', $id)->first();
+        return view('produksi.product.revisiPrint', compact('revision'));
     }
 }

@@ -11,7 +11,9 @@
   <meta content="" name="author" />
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Gentelella Alela! | </title>
+    <title>@yield('site-title')</title>
+
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
 
     <link href="{{ asset('css/breadcrumb.css')}}" rel="stylesheet">
     <!-- Bootstrap -->
@@ -31,19 +33,23 @@
    
     <!-- Custom styling plus plugins -->
     <link href="{{ asset('assets/build/css/custom.min.css')}}" rel="stylesheet">
+    <style>
+      #printable { display: none; }
 
+      @media print
+      {
+          #non-printable { display: none; }
+          #printable { display: block; }
+      }
+    </style>
     @stack('styles')
   </head>
 
   <body class="nav-md">
-    <div class="container body">
+    <div class="container body" id="non-printable">
       <div class="main_container">
         <div class="col-md-3 left_col">
           <div class="left_col scroll-view">
-
-            <div class="navbar nav_title" style="border: 0;">
-              <a href="index.html" class="site_title"><i class="fa fa-paw"></i> <span>Gentelella Alela!</span></a>
-            </div>
             <div class="clearfix"></div>
 
             <!-- menu profile quick info -->
@@ -99,8 +105,8 @@
                       </li>
                       <li><a>Estimasi Pemesanan<span class="fa fa-chevron-down"></span></a>
                           <ul class="nav child_menu">
-                            <li class="sub_menu"><a href="level2.html">Materials</a></li>
-                            <li><a href="#level2_2">Packaging</a></li>
+                            <li class="sub_menu"><a href="{{route('estimasi_material.index')}}">Materials</a></li>
+                            <li><a href="{{route('estimasi_packaging.index')}}">Packaging</a></li>
                           </ul>
                       </li>                   
                     </ul>
@@ -164,7 +170,7 @@
                             <li><a href="{{url('accounting_POpackaging')}}">PO Packaging</a></li>
                             <li><a href="{{route('pengeluaran_lain.index')}}">PO Lain-Lain</a></li>
                             <li><a href="{{route('pengeluaran_gaji.index')}}">Gaji</a></li>
-                          </ul>
+                          </ul> 
                       </li>
                       <li><a>Pemasukan<span class="fa fa-chevron-down"></span></a>
                           <ul class="nav child_menu">
@@ -334,7 +340,13 @@
         <!-- /footer content -->
       </div>
     </div>
-
+    <div class="container body" id="printable">
+      <div class="main_container">
+        <div class="right_col" role="main">
+          @stack('print')
+        </div>
+      </div>
+    </div>
     <!-- jQuery -->
     <script src="{{ asset('assets/vendors/jquery/dist/jquery.min.js')}}"></script>
     <!-- Bootstrap -->

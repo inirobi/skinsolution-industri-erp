@@ -11,6 +11,8 @@ use App\SampleMaterial;
 use App\FormulaDetail;
 use App\Stock;
 use App\SampleStock;
+use App\Product;
+use App\MaterialKontradiksi;
 
 class FormulaController extends Controller
 {
@@ -25,6 +27,14 @@ class FormulaController extends Controller
         $no = 1;
         $revision = TrialRevisionData::all();
         return view('produksi.formula.index', compact('formula','no','revision'));
+    }
+
+    public function hpp($id)
+    {
+        $product = Product::where('formula_id', $id)->first();
+
+        $formula = FormulaDetail::where('formula_id', $id)->get();
+        return view('produksi.formula.hpp', compact('formula','product'));
     }
 
     /**
@@ -45,6 +55,7 @@ class FormulaController extends Controller
      */
     public function store(Request $request)
     {
+        
         try {
             $cek = DB::table('formulas')
                 ->where('formula_num',$request->formula_num)
@@ -147,7 +158,26 @@ class FormulaController extends Controller
 
     public function storeView(Request $request)
     {
+        if($request->source_material == '' || $request->material_id == '' || $request->quantity=='' || $request->weighing == ''){
+            return redirect()
+                ->route('formula.show',$request->input('formula_id'))
+                ->with('error','invalid input!!');
+        }
         $formulaDetail = FormulaDetail::where('formula_id', $request->formula_id)->get();
+        if ($request->source_material == 1) {
+            $mtr = Material::findOrFail($request->material_id);
+            foreach ($formulaDetail as $cek) {
+                $kontadiksi = MaterialKontradiksi::where('material_id', $cek->material_id)->get();
+                foreach ($kontadiksi as $cek2) {    
+                    if ($cek2->material_kontradiksi_id == $request->material_id) {
+                        return redirect()
+                        ->route('formula.show',$request->input('formula_id'))
+                        ->with('error',$mtr->material_name.' kontradiksi dengan '.$cek2->material->material_name);
+                    }
+                }
+            }
+        }
+
         $totalQty = 0;
         foreach($formulaDetail as $fd){
             $totalQty = $totalQty + $fd->quantity;

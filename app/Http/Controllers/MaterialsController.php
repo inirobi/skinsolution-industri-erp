@@ -11,6 +11,7 @@ use App\MaterialKontradiksi;
 use App\PoMaterial;
 use App\PoMaterialDetail;
 use App\Material;
+use App\Product;
 
 use PDF; 
 
@@ -32,8 +33,11 @@ class MaterialsController extends Controller
      */
     public function index()
     {
-        $tamp = Materials::orderBy('updated_at', 'desc')->get();
-        return view('inventory.bahan_baku.index',['materials'=> $tamp, 'no'=>1]);
+        $sup = DB::table('material_suppliers as a')->select('a.*','b.*')->join('suppliers as b','a.supplier_id','=','b.id')->get();
+        $mat =DB::table('materials as a')->selectRaw('a.*, count(b.supplier_id) as count')->Leftjoin('material_suppliers as b','a.id','=','b.material_id')->groupBy('b.material_id')->get();
+        $materials = Materials::orderBy('updated_at', 'desc')->get();
+        $no = 1;
+        return view('inventory.bahan_baku.index',compact('materials', 'no', 'mat', 'sup'));
     }
 
     /**
@@ -100,7 +104,9 @@ class MaterialsController extends Controller
         ->join('suppliers','suppliers.id','=','material_suppliers.supplier_id')
         ->join('materials','materials.id','=','material_suppliers.material_id')
         ->selectRaw('material_suppliers.id as id_x')
-        ->where('material_suppliers.material_id',$id)->get();
+        ->where('material_suppliers.material_id',$id)
+        ->orderBy('material_suppliers.updated_at','desc')
+        ->get();
 
         $supplier= Suppliers::all();
         return view('inventory.bahan_baku.supplier',['sup' => $sup, 'id' => $id, 'supplier' => $supplier]);
@@ -169,72 +175,68 @@ class MaterialsController extends Controller
 
     public function Print($id)
     {
-        // $material =  Material::find($id);
+        $material =  Material::find($id);
     
         //MASUK
         
-        //   $purchase =DB::table('purchases as a')
-        //   ->join('purchase_details as b','a.id','=','b.purchase_id')
-        //   ->where('b.material_id',$id)
-        //   ->orderby('b.created_at','asc')
-        //   ->get();
+          $purchase =DB::table('purchases as a')
+          ->join('purchase_details as b','a.id','=','b.purchase_id')
+          ->where('b.material_id',$id)
+          ->orderby('b.created_at','asc')
+          ->get();
            
-        //   $sum=DB::table('purchases as a')
-        //   ->join('purchase_details as b','a.id','=','b.purchase_id')
-        //   ->where('b.material_id',$id)
-        //   ->orderby('b.created_at')
-        //   ->sum('quantity');
+          $sum=DB::table('purchases as a')
+          ->join('purchase_details as b','a.id','=','b.purchase_id')
+          ->where('b.material_id',$id)
+          ->orderby('b.created_at')
+          ->sum('quantity');
     
-        // //KELUAR
+        //KELUAR
         
-        // $formula = DB::table('formulas')
-        // ->join('formula_details','formula_details.formula_id','=','formulas.id')
-        // ->join('pengeluaran_material','pengeluaran_material.material_id','=','formula_details.material_id')
-        // ->join('product_activity_details','product_activity_details.material_id','=','formula_details.material_id')
-        // ->join('product_activities','product_activities.id','=','product_activity_details.product_activity_id')
-        // ->where('formula_details.material_id',$id)
-        // ->orderby('formula_details.created_at','asc')
-        // ->groupBy('formula_details.id')
-        // ->get();
+        $formula = DB::table('formulas')
+        ->join('formula_details','formula_details.formula_id','=','formulas.id')
+        ->join('pengeluaran_material','pengeluaran_material.material_id','=','formula_details.material_id')
+        ->join('product_activity_details','product_activity_details.material_id','=','formula_details.material_id')
+        ->join('product_activities','product_activities.id','=','product_activity_details.product_activity_id')
+        ->where('formula_details.material_id',$id)
+        ->orderby('formula_details.created_at','asc')
+        ->groupBy('formula_details.id')
+        ->get(); 
         
-        // $pro_act = DB::table('product_activities')
-        // ->join('product_activity_details','product_activities.id','=','product_activity_details.product_activity_id')
-        // ->where('product_activity_details.material_id',$id)
-        // ->orderby('product_activity_details.created_at','asc')
-        // ->groupBy('product_activity_details.id')
-        // ->get();
+        $pro_act = DB::table('product_activities')
+        ->join('product_activity_details','product_activities.id','=','product_activity_details.product_activity_id')
+        ->where('product_activity_details.material_id',$id)
+        ->orderby('product_activity_details.created_at','asc')
+        ->groupBy('product_activity_details.id')
+        ->get();
         
-        // $pro_mat = DB::table('pengeluaran_material')
-        // ->where('material_id',$id)
-        // ->orderby('pengeluaran_material.created_at','asc')
-        // ->groupBy('pengeluaran_material.id')
-        // ->get();
-        
-        
+        $pro_mat = DB::table('pengeluaran_material')
+        ->where('material_id',$id)
+        ->orderby('pengeluaran_material.created_at','asc')
+        ->groupBy('pengeluaran_material.id')
+        ->get();
         
         
-        // $sum2 = DB::table('formulas')
-        // ->join('formula_details','formula_details.formula_id','=','formulas.id')
-        // ->where('formula_details.material_id',$id)
-        // ->sum('weighing');
         
-        // $sum3 = DB::table('product_activities')
-        // ->join('product_activity_details','product_activities.id','=','product_activity_details.product_activity_id')
-        // ->where('product_activity_details.material_id',$id)
-        // ->sum('weighing');
         
-        // $sum4 = DB::table('pengeluaran_material')
-        // ->where('material_id',$id)
-        // ->sum('quantity');
+        $sum2 = DB::table('formulas')
+        ->join('formula_details','formula_details.formula_id','=','formulas.id')
+        ->where('formula_details.material_id',$id)
+        ->sum('weighing');
         
-        // $sisa = $sum - ($sum2 + $sum3 + $sum4);
+        $sum3 = DB::table('product_activities')
+        ->join('product_activity_details','product_activities.id','=','product_activity_details.product_activity_id')
+        ->where('product_activity_details.material_id',$id)
+        ->sum('weighing');
         
-        // return view('inventory.bahan_baku.print',compact('purchase','formula','pro_act','pro_mat','sisa','material'));
-
-        $title ="mecoba sesuatuhal baru";
-        $pdf = PDF::loadView('inventory.bahan_baku.print',compact('title'));
-        $pdf->setPaper('A4', 'landscape');
-        return $pdf->stream();
+        $sum4 = DB::table('pengeluaran_material')
+        ->where('material_id',$id)
+        ->sum('quantity');
+        
+        $sisa = $sum - ($sum2 + $sum3 + $sum4);
+        $masuk = $sum;
+        $keluar = $sum2 + $sum3 + $sum4;
+        return view('inventory.bahan_baku.print',compact('masuk','keluar','purchase','formula','pro_act','pro_mat','sisa','material'));
     }
 
     /**
@@ -280,7 +282,7 @@ class MaterialsController extends Controller
             ['material_id',$request->material_id]
         ])->count();
         if($x>0){
-            return redirect()->back()->withErrors('Supplier Already Exist');
+            return redirect()->back()->with('error','Supplier Already Exist');
         }
         else{
             $sup = MaterialSupplier::create([
@@ -290,6 +292,12 @@ class MaterialsController extends Controller
         }
 
         return redirect()->back()->with('success','Successfully Created');
+    }
+
+    public function SupplierDelete($id)
+    {
+        MaterialSupplier::whereId($id)->delete();
+        return redirect()->back()->with('success','Successfully Deleted');
     }
 
     public function kontradiksiStore(Request $request)
@@ -336,4 +344,5 @@ class MaterialsController extends Controller
         $material= Materials::whereNotIn('id',[$id])->get();
         return view('inventory.bahan_baku.kontradiksi',['datas' => $datas, 'id' => $id, 'material' => $material]);
     }
+
 }

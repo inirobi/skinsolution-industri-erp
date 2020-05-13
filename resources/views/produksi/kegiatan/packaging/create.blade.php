@@ -1,5 +1,7 @@
 @extends('layouts.master')
-
+@section('site-title')
+  Packaging Activity
+@endsection
 @section('content')
 <!-- page content -->
 <div class="page-title">
@@ -62,7 +64,7 @@
               </fieldset>
           </div>
           <div class="field item form-group">
-              <label class="col-form-label col-md-3 col-sm-3  label-align">Product Code <code>*</code></label>
+              <label class="col-form-label col-md-3 col-sm-3  label-align">Production Code <code>*</code></label>
               <div class="col-md-6 col-sm-6">
                   <select class="form-control @error('product_activity_id') is-invalid @enderror" name="product_activity_id" id="product_activity_id">
                       @foreach($poprd as $d)

@@ -1,5 +1,7 @@
 @extends('layouts.master')
-
+@section('site-title')
+  Purchase Order Other
+@endsection
 @section('content')
 <!-- page content -->
 <div class="page-title">
@@ -8,13 +10,15 @@
   </div>
 
   <div class="title_right">
-    <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+    <div class="col-md-12 col-sm-5 col-xs-12 form-group pull-right top_search">
+    <div style='float:right'>
       <div class="input-group">
-        <input type="text" class="form-control" placeholder="Search for...">
-        <span class="input-group-btn">
-          <button class="btn btn-secondary" type="button">Go!</button>
-        </span>
+        <ul class="breadcrumb">
+          <li><a href="{{url('/home')}}">Home</a></li>
+          <li>Purchase Order Other</li>
+        </ul>
       </div>
+    </div>
     </div>
   </div>
 </div>
@@ -25,11 +29,8 @@
   <div class="col-md-12 col-sm-12 ">
     <div class="x_panel">
       <div class="x_title">
-      <a href="{{ route('pengeluaran_lain.create') }}" class="btn btn-success"><i class="fa fa-plus"></i> Add New PO Others </a>
-        <ul class="nav navbar-right panel_toolbox">
-          <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-          <li><a class="close-link"><i class="fa fa-close"></i></a></li>
-        </ul>
+        <a href="{{ route('pengeluaran_lain.create') }}" class="btn btn-success"><i class="fa fa-plus"></i> Add New PO Others </a>
+        <button class="pull-right btn btn-primary" onclick="javascript:window.print()"><i class="fa fa-print"></i> Print</button>
         <div class="clearfix"></div>
       </div>
       <div class="x_content">
@@ -37,7 +38,7 @@
           <div class="col-sm-12">
             <div class="card-box table-responsive">
               
-              <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
+              <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
                 <thead>
                   <tr>
                     <th>No</th>
@@ -70,7 +71,7 @@
                       <td>{{$no++}}</td>
                       <td> {{$data->po_num}} </td>
                       <td> {{$data->supplier->supplier_name}}</td>
-                      <td> {{$data->date}}</td>
+                      <td> {{$data->po_date}}</td>
                       <td> 
                           @if($data->ppn==0) 0 @endif
                           @if($data->ppn==1) 10% @endif
@@ -103,6 +104,7 @@
                               <i class="fa fa-edit"></i>
                             </a>
                             <a href="{{ route('pengeluaran_lain.destroy', $data->id) }}" class="btn btn-danger" onclick="event.preventDefault();destroy('{{ route('pengeluaran_lain.destroy', $data->id) }}')" title="Hapus"><i class="fa fa-trash"></i></a>
+                            <a class="btn btn-primary" target="_blank" href="{{route('pengeluaran_lain.print',$data->id)}}" title="Print"><i class="fa fa-print"></i></a>
                          </td>
                         </tr>
                        @endforeach
@@ -141,3 +143,90 @@ function destroy(action){
 </script>
 @endpush
 @endsection
+
+@push('print')
+<div class="page-title">
+  <div class="title_left">
+    <h3>Purchase Order Other Lists</h3>
+  </div>
+  <div class="title_right">
+    <div class="col-md-12 col-sm-5 col-xs-12 form-group pull-right top_search">
+		<div style='float:right;text-align:right'>
+			<img src="{{asset('assets/src/img/logo-skin-care.png')}}" />
+			<br><br>
+			<h2 style="font-size:14pt">CV SKIN SOLUTION BEAUTY CARE INDONESIA <br>
+				<small>
+					Jalan Waruga Jaya No. 47, Ciwaruga <br>
+					Parongpong, 40559 <br>
+					West Java, Indonesia <br>
+					Phone:(022) 820-270-55 <br>
+				</small>
+			</h2>
+		</div>
+    </div>
+  </div>
+</div>
+
+<div class="clearfix"></div>
+
+	<div class="row" style="display: block;">
+		<div class="col-md-12  ">
+			<div class="x_content">
+				<table class="table table-striped">
+					<thead>
+						<tr>
+              <th>No</th>
+              <th>PO Number</th>
+              <th>Supplier Name</th>
+              <th>Date</th>
+              <th>PPN</th>
+              <th>Total</th>
+              <th>Total Pay</th>
+              <th>Status</th>
+						</tr>
+					</thead>
+					<tbody>
+            @php $no=1 @endphp
+            @foreach($lain as $data)
+            @php
+              $poPackagingdetail =  App\PoLainDetail::where('polain_id', $data->id)->get(); 
+              $total = 0;
+              $PPN = 0;
+              foreach ($poPackagingdetail as $dataDetail) {
+                  $total = $total + ($dataDetail->quantity * $dataDetail->harga);
+              }
+
+              $PPN = 0.10 * $total;
+              $totalWithPPN = $total + $PPN;
+            @endphp
+
+              <tr>
+                <td>{{$no++}}</td>
+                <td> {{$data->po_num}} </td>
+                <td> {{$data->supplier->supplier_name}}</td>
+                <td> {{$data->po_date}}</td>
+                <td> 
+                    @if($data->ppn==0) 0 @endif
+                    @if($data->ppn==1) 10% @endif
+                </td>
+                <td> {{number_format($total,2)}}</td>
+                <td> 
+                    @if($data->ppn==0) {{number_format($total,2)}} @endif
+                    @if($data->ppn==1) {{number_format($totalWithPPN,2)}} @endif
+                </td>
+                @if(isset($notif->id_lain))
+                @foreach($notif as $dt)
+                  <td> {{$data->status}}</td>
+                @endforeach
+                @else
+                <td> {{$data->status}}</td>
+                @endif
+                  </tr>
+                  @endforeach
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+@endpush

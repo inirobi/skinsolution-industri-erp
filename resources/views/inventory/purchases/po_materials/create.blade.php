@@ -1,5 +1,7 @@
 @extends('layouts.master')
-
+@section('site-title')
+    PO Material
+@endsection
 @section('content')
 <!-- page content -->
 <div class="page-title">
@@ -179,7 +181,7 @@
             </div>
           </div>
           <div class="field item form-group">
-            <label class="col-form-label col-md-3 col-sm-3  label-align">Description<code>*</code></label>
+            <label class="col-form-label col-md-3 col-sm-3  label-align">Description</label>
             <div class="col-md-6 col-sm-6">
               <textarea rows="3" class="form-control" name="description">{{ old('description', $purchase->description ?? '') }}</textarea>
             </div>

@@ -1,5 +1,7 @@
 @extends('layouts.master')
-
+@section('site-title')
+  Invoice
+@endsection
 @push('styles')
     <!-- bootstrap-daterangepicker -->
     <link href="{{ asset('assets/vendors/bootstrap-daterangepicker/daterangepicker.css')}}" rel="stylesheet">
@@ -46,7 +48,7 @@
             <div class="row">
                 <div class="col-sm-12">
                   <div class="card-box table-responsive">
-          <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
+          <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
             <thead>
               <tr>
                 <th>No</th>
@@ -59,6 +61,7 @@
               </tr>
             </thead>
             <tbody>
+            @if(!empty($inv))
               @foreach($inv as $data)
               <tr>
                 <td>{{ $no++ }}</td>
@@ -82,10 +85,39 @@
                   <td>{{$data->status}}</td>
                 @endif
                 <td class="text-center">
-                  <a href="#" class="btn btn-info" title="View"><i class="fa fa-eye"></i></a>
+                  <a href="{{route('invoice.edit',$data->xx)}}" class="btn btn-info" title="View"><i class="fa fa-eye"></i></a>
                 </td>
               </tr>
               @endforeach
+              @foreach($inv2 as $data2)
+                <tr>
+                  <td>{{$no++}}</td>
+                  <td> {{$data2->invoice_num}} </td>
+                  <td> {{$data2->date}}</td>
+                  <td> {{$data2->customer_name}}</td>
+                  <td> {{$data2->po_num}} </td>
+                  @if(!empty($not->first()))
+                      @php $no=0; @endphp
+                    @foreach($not as $dd) 
+                      @if($data2->id==$dd->id_invo)
+                      
+                        @php $no++; @endphp
+                        @endif
+                    @endforeach 
+                    @if($no=='1')
+                    <td><span class="badge badge-danger">{{$data2->status}}</span></td>
+                    @else 
+                    <td>{{$data2->status}}</td>
+                    @endif
+                    @else 
+                    <td>{{$data2->status}}</td>
+                    @endif
+                    <td class="text-center">
+                      <a href="{{route('invoice.edit',$data2->xx)}}" class="btn btn-info" title="View"><i class="fa fa-eye"></i></a>
+                    </td>
+                  </tr>
+                @endforeach
+              @endif
             </tbody>
           </table>
         </div>
@@ -189,33 +221,26 @@
 
 @push('scripts')
 <script>
-$('input[type=radio][name=jenis_po]').change(function() {
-    var jenis_po = this.value; 
-    $('#customer_id').on('change', function(e){
-        var customer_id = e.target.value;
-        $.ajax({
-          url: 'invoice/xx/',
-          type: "get",
-          data: {jenis_po: jenis_po, customer_id: customer_id},
-            success: function(data){
-                
-                $('#po_num').empty();
-                $.each(data, function(index, subcatObj){
-                $('#po_num').append('<option value="'+subcatObj.xxx+'">'+subcatObj.po_num+'</option>')
+ $(document).ready(function() {
+     $("input:radio[name=jenis_invoice]").selected(function() {
+     var selected_choice=$(this).val();
+     alert(selected_choice);
     
-                  });
+     if(selected_choice=='dp'){
+     $("#dp").attr("disabled",false); // Two  options enabled
+     }
+    
+     if(selected_choice=='nondp'){
+     $("#dp").attr("disabled",true); // Two  options disabled
+      // Two  options enabled
+    }
+    
+    })
 
-                
-            }
-        });
-        
-    });
-    
-});
-
+})
 $('input[type=radio][name=jenis_po]').change(function () {
     var source = this.value;
-
+    console.log(source);
     if (source == "produksi") {
         $('#btn-yes').attr('class', 'btn btn-secondary');
         $('#btn-no').attr('class', 'btn btn-primary');
@@ -224,6 +249,26 @@ $('input[type=radio][name=jenis_po]').change(function () {
         $('#btn-yes').attr('class', 'btn btn-primary');
         $('#btn-no').attr('class', 'btn btn-secondary');
     }
+    console.log('sebelum');
+    $('#customer_id').on('change', function(e){  
+      console.log(typeof(source));
+      console.log(source);
+      var customer_id = e.target.value;
+      $.ajax({
+        url: '{{url('')}}/invoice/xx',
+        type: "post",
+        data: {jenis_po: source, customer_id: customer_id },
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function(data){
+        $('#po_num').empty();
+          $.each(data, function(index, subcatObj){
+            $('#po_num').append('<option value="'+subcatObj.xxx+'">'+subcatObj.po_num+'</option>')
+          });     
+        }
+      });
+    });
 });
 </script>
 <!-- bootstrap-daterangepicker -->
