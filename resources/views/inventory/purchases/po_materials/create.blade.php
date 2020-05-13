@@ -145,12 +145,22 @@
               <div id="currency" class="btn-group" data-toggle="buttons">
                 <label class="btn btn-primary" data-toggle-class="btn-primary"
                     data-toggle-passive-class="btn-default" id="btn-idr">
-                    <input type="radio" value="IDR" id="currency" name="currency" class="join-btn" checked="checked">
+                    <input type="radio" value="IDR" id="currency" name="currency" class="join-btn" 
+                      @if(isset($purchase))
+                        @if($purchase->currency == "IDR") checked="checked" @endif
+                      @else
+                        checked="checked"
+                      @endif
+                    >
                     &nbsp; IDR (Rp)
                 </label>
                 <label class="btn btn-secondary" data-toggle-class="btn-primary"
                     data-toggle-passive-class="btn-default" id="btn-usd">
-                    <input type="radio" value="USD" id="currency" name="currency" class="join-btn" >
+                    <input type="radio" value="USD" id="currency" name="currency" class="join-btn" 
+                      @if(isset($purchase))
+                        @if($purchase->currency == "USD") checked="checked" @endif
+                      @endif
+                    >
                     &nbsp; USD ($)
                 </label>
               </div>
@@ -165,16 +175,29 @@
           <div class="field item form-group">
             <label class="col-form-label col-md-3 col-sm-3  label-align">PPN<code>*</code></label>
             <div class="col-md-12 ">
+              @if(isset($purchase))
+                <input type="hidden" id="cekCurrency" value="{{$purchase->currency}}">
+                <input type="hidden" id="cekppn" value="{{$purchase->ppn}}">
+              @endif
               <div id="ppn" class="btn-group" data-toggle="buttons">
                 <label class="btn btn-primary" data-toggle-class="btn-primary"
                     data-toggle-passive-class="btn-default" id="btn-yes">
-                    <input type="radio" value="1" id="ppn" name="ppn" class="join-btn" checked="checked">
+                    <input type="radio" value="1" id="ppn" name="ppn" class="join-btn" 
+                      @if(isset($purchase))
+                        @if($purchase->ppn == 1) checked="checked" @endif
+                      @else
+                        checked="checked"
+                      @endif
+                    >
                     &nbsp; Yes
                 </label>
                 <label class="btn btn-secondary" data-toggle-class="btn-primary"
                     data-toggle-passive-class="btn-default" id="btn-no">
-                    <input type="radio" value="0" id="ppn" name="ppn"
-                        class="join-btn">
+                    <input type="radio" value="0" id="ppn" name="ppn" class="join-btn"
+                      @if(isset($purchase))
+                        @if($purchase->currency == 0) checked="checked" @endif
+                      @endif
+                    >
                     &nbsp; No
                 </label>
               </div>
@@ -190,7 +213,7 @@
             <div class="form-group">
               <div class="col-md-6 offset-md-3">
                 <button type='submit' class="btn btn-primary">Submit</button>
-                @if(isset($materials))
+                @if(isset($purchase))
                   <a href="{{ route('materials.index') }}" class="btn btn-danger">Cancel</a>
                 @else
                   <button type="reset" class="btn btn-success">Reset</button>
@@ -215,6 +238,26 @@
 
 @push('scripts')
 <script>
+
+let cekCurrency = $('#cekCurrency').val();
+let cekppn = $('#cekppn').val();
+if (cekppn == "0") {
+  $('#btn-yes').attr('class', 'btn btn-secondary');
+  $('#btn-no').attr('class', 'btn btn-primary');
+}
+if (cekppn == "1") {
+  $('#btn-yes').attr('class', 'btn btn-primary');
+  $('#btn-no').attr('class', 'btn btn-secondary');
+}
+
+if (cekCurrency == "USD") {
+  $('#btn-idr').attr('class', 'btn btn-secondary');
+  $('#btn-usd').attr('class', 'btn btn-primary');
+}
+if (cekCurrency == "IDR") {
+  $('#btn-idr').attr('class', 'btn btn-primary');
+  $('#btn-usd').attr('class', 'btn btn-secondary');
+}
   $("#kurs").hide();
   $('input[type=radio][name=currency]').change(function() {
       var source = this.value;
