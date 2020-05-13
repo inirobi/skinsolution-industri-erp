@@ -50,7 +50,7 @@
               <tr>
                 <td>{{$no++}}</td>
                 <td>{{$data[0]}}</td>
-                <td>{{$data[1]}}</td>
+                <td>{{floor($data[1])}}</td>
               </tr>
             @endforeach
             </tbody>
@@ -111,12 +111,12 @@
                 <tr>
                     <td>{{$nomor++}}</td>
                     <td>{{$data[0]}}</td>
-                    <td>{{$data[1]}}</td>
+                    <td>{{floor($data[1])}}</td>
                 </tr>
             @endforeach
                 <tr>
                     <th colspan='2' style="text-align:center">Total</th>
-                    <th>{{$total}}</th>
+                    <th>{{floor($total)}}</th>
                 </tr>
 					</tbody>
 				</table>
