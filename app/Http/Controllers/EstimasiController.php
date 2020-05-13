@@ -44,6 +44,7 @@ class EstimasiController extends Controller
                 ->sum('quantity');
             
             $keluar = $sum2 + $sum3 + $sum4;
+            $keluar = intval($keluar)/6*2;
             $datas[$idx] = [$data->material_name,$keluar];
             $idx++;
         }
@@ -77,6 +78,7 @@ class EstimasiController extends Controller
                     ->whereBetween('pengeluaran_packaging.created_at',[$newdate,$today])
                     ->sum('quantity');
             $keluar = $sum3 + $sum4;
+            $keluar = intval($keluar)/6*2;
             $datas[$idx] = [$data->packaging_name,$keluar];
             $idx++;
         }
