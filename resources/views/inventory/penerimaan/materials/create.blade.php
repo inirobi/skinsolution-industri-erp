@@ -131,7 +131,7 @@ $('#po_material_id').on('change', function(e){
           +subcatObj.material_code+'" class="form-control text-capitalize" placeholder="Material Code" type="text" disabled></td><td><input value="'
           +subcatObj.material_name+'" class="form-control  text-capitalize" placeholder="Material Name" type="text" disabled></td><td><input value="'
           +subcatObj.quantity * 1000+'" id="quantity'+idx+'" class="form-control text-capitalize" placeholder="Quantity" type="number" name="quantity[]"></td><td>'
-          +'<div class="input-group expired_date date" ><input type="text" class="form-control" id="expired_date'+idx+'" name="expired_date[]" /><span class="input-group-addon"><span class="fa fa-calendar"></span></span></td><td>'
+          +'<div class="input-group expired_date date" ><input type="date" class="form-control" placeholder="mm/dd/yyyy" id="expired_date'+idx+'" name="expired_date[]" /></td><td>'
           +'<input id="analis_num'+idx+'" class="form-control text-capitalize" placeholder="Analis Number" type="text" name="analis_num[]"></td><td>'
           +'<input id="batch_num'+idx+'" class="form-control  text-capitalize" placeholder="Batch Number" type="text" name="batch_num[]">'
           +'<input id="material_id'+idx+'" type="hidden" name="material_id[]" value="'+subcatObj.id+'"></td><td>');
