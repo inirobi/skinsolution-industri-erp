@@ -171,12 +171,26 @@ class PackagingReceiptController extends Controller
                 ->route('packaging_receipt.index')
                 ->with('error','Inputan tidak Valid!!!');
         }
-
-        PackagingReceipt::whereId($id)
+        if($request->customer2!=NULL)
+        {
+            PackagingReceipt::whereId($id)
             ->update([
                 'packaging_type' => $request->packaging_type2,
                 'receipt_code' => $request->receipt_code,
+                'customer_id' => $request->customer2,
+                'supplier_id' => 0,
             ]);
+        }
+        else
+        {
+            $c = PackagingReceipt::whereId($id)
+            ->update([
+                'packaging_type' => $request->packaging_type2,
+                'receipt_code' => $request->receipt_code,
+                'supplier_id' => $request->supplier2,
+                'customer_id' => 0,
+            ]);
+        }
 
         return redirect()
             ->route('packaging_receipt.index')

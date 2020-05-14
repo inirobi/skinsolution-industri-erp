@@ -61,7 +61,7 @@
                 <td> {{$data->packaging_type}} </td>
                 <td class="text-center">
                   <a class="btn btn-info" href="{{route('packaging_receipt.show',$data->id)}}" title="Detail" class="btn btn-small text-primary"><i class="fa fa-eye"></i></a>
-                  <a href="#" onclick="editConfirm( '{{$data->id}}', '{{$data->tanggal_recep}}', '{{$data->packaging_type}}', '{{$data->receipt_code}}')" class="btn btn-warning" title="Edit"><i class="fa fa-edit"></i></a>
+                  <a href="#" onclick="editConfirm( {{$data}})" class="btn btn-warning" title="Edit"><i class="fa fa-edit"></i></a>
                   <a href="{{ route('packaging_receipt.destroy', $data->id) }}" class="btn btn-danger" onclick="event.preventDefault();destroy('{{ route('packaging_receipt.destroy', $data->id) }}')" title="Hapus"><i class="fa fa-trash"></i></a>
                 </td>
             </tr>
@@ -164,7 +164,7 @@
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="modalDetailLabel">Add New Sample Income</h5>
+        <h5 class="modal-title" id="modalDetailLabel">Edit New Sample Income</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -208,8 +208,8 @@
           <div id="option-cs2">
             <div class="form-group">
               <label class="col-form-label">Choose Customer</label>
-              <select class="form-control" name="customer">
-                <option>-- Please choose customer --</option>
+              <select class="form-control" name="customer2">
+                <option value="">-- Please choose customer --</option>
                 @foreach($customers as $customer)
                   <option value="{{$customer->id}}">{{$customer->customer_name}}</option>
                 @endforeach
@@ -219,8 +219,8 @@
           <div id="option-ss2">
             <div class="form-group">
               <label class="col-form-label">Choose Supplier</label>
-              <select class="form-control" name="supplier">
-                <option>-- Please choose supplier --</option>
+              <select class="form-control" name="supplier2">
+                <option value="">-- Please choose supplier --</option>
                 @foreach($suppliers as $supplier)
                   <option value="{{$supplier->id}}">{{$supplier->supplier_name}}</option>
                 @endforeach
@@ -281,28 +281,32 @@ function destroy(action){
     });
   }
 
-function editConfirm(id,date,packaging_type2,receipt_code)
+function editConfirm(data)
 {
-  if(packaging_type2=='CS'){
+  if(data.packaging_type=='CS'){
+    var select_id = (data.customer_id=="0")?"":data.customer_id;
     $('#btn-supplier2').attr('class', 'btn btn-secondary');
     $('#btn-customer2').attr('class', 'btn btn-primary');
-    $('select[name=supplier]').attr('required','required');
-    $('select[name=customer]').removeAttr('required');
-    $('#option-ss2').show();
-    $('#option-cs2').hide();
-  }
-  if(packaging_type2=='SS'){
-    $('#btn-supplier2').attr('class', 'btn btn-primary');
-    $('#btn-customer2').attr('class', 'btn btn-secondary');
-    $('select[name=customer]').attr('required','required');
-    $('select[name=supplier]').removeAttr('required');
+    $('select[name=customer2]').val(select_id);
+    $('select[name=customer2]').attr('required','required');
+    $('select[name=supplier2]').removeAttr('required');
     $('#option-cs2').show();
     $('#option-ss2').hide();
   }
-    $('#dt').attr('value',date);
-    $('#receipt_code').attr('value',receipt_code);
-    $('#packaging_type2').val(packaging_type2);
-    $('#editReceipt').attr('action',"{{ url('packaging_receipt') }}/"+id)
+  if(data.packaging_type=='SS'){
+    var select_id = (data.supplier_id=="0")?"":data.supplier_id;
+    $('#btn-supplier2').attr('class', 'btn btn-primary');
+    $('#btn-customer2').attr('class', 'btn btn-secondary');
+    $('select[name=supplier2]').val(select_id);
+    $('select[name=supplier2]').attr('required','required');
+    $('select[name=customer2]').removeAttr('required');
+    $('#option-ss2').show();
+    $('#option-cs2').hide();
+  }
+    $('#dt').attr('value',data.tanggal_recep);
+    $('#receipt_code').attr('value',data.receipt_code);
+    $('input[name=packaging_type2]').val(data.packaging_type);
+    $('#editReceipt').attr('action',"{{ url('packaging_receipt') }}/"+data.id)
     $('#modalUpdate').modal();
 }
 
@@ -332,12 +336,16 @@ function editConfirm(id,date,packaging_type2,receipt_code)
         if (source == "SS") {
             $('#btn-customer2').attr('class', 'btn btn-secondary');
             $('#btn-supplier2').attr('class', 'btn btn-primary');
+            $('select[name=supplier2]').attr('required','required');
+            $('select[name=customer2]').removeAttr('required');
             $('#option-ss2').show();
             $('#option-cs2').hide();
         }
         if (source == "CS") {
             $('#btn-customer2').attr('class', 'btn btn-primary');
             $('#btn-supplier2').attr('class', 'btn btn-secondary');
+            $('select[name=customer2]').attr('required','required');
+            $('select[name=supplier2]').removeAttr('required');
             $('#option-cs2').show();
             $('#option-ss2').hide();
         }
