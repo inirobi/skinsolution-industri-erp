@@ -14,4 +14,9 @@ class PackagingReceipt extends Model
     {
         return $this->belongsTo('App\Customer', 'customer_id');
     }
+
+    public function supplier()
+    {
+        return $this->belongsTo('App\Supplier', 'supplier_id');
+    }
 }
