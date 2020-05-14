@@ -88,6 +88,7 @@ class PackagingReceiptController extends Controller
                             ->get();
         $pck = Packaging::groupBy('customer_id')
                 ->where('packaging_type','CS')
+                ->where('customer_id', $packaging->customer_id)
                 ->get();
         return view('inventory.penerimaan.packaging.view', compact('packaging', 'packaging_view','pck'));
     }
@@ -108,9 +109,9 @@ class PackagingReceiptController extends Controller
             ->with('success','Successfully PackagingReceipt Updated');
     }
 
-    public function viewAddSS($id)
+    public function viewAddSS($id, $supplier)
     {
-        $po = PoPackaging::all();
+        $po = PoPackaging::where('supplier_id', $supplier)->get();
         return view('inventory.penerimaan.packaging.detail', compact('po', 'id'));
     }
 

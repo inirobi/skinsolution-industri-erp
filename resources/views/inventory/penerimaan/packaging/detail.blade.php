@@ -114,7 +114,7 @@
             .append('<tr><td><input value="'
             +subcatObj.packaging_code+'" class="form-control text-capitalize" type="text" readonly></td><td><input value="'
             +subcatObj.packaging_name+'" class="form-control  text-capitalize" type="text" readonly></td><td><input value="'
-            +subcatObj.quantity+'" id="quantity'+idx+'" class="form-control text-capitalize" placeholder="Quantity" type="number" name="quantity[]"></td><td>'
+            +subcatObj.quantity+'" min="1" max="'+subcatObj.quantity+'" id="quantity'+idx+'" class="form-control text-capitalize" placeholder="Quantity" type="number" name="quantity[]"></td><td>'
             +'<input id="packaging_id'+idx+'" type="hidden" name="packaging_id[]" value="'+subcatObj.id+'"></td><td>');
             idx++;
           }); 

@@ -64,14 +64,12 @@
               <label class="col-form-label col-md-3 col-sm-3  label-align">Supplier Name : </label>
             @endif
             <div class="col-md-6 col-sm-6">
-              @if(isset($packaging->customer))
+              @if($packaging->packaging_type=="CS" && isset($packaging->customer))
                 <input class="form-control" value="{{$packaging->customer->customer_name}}" name="customer_code" disabled />
+              @elseif($packaging->packaging_type=="SS" && isset($packaging->supplier))
+                <input class="form-control" value="{{$packaging->supplier->supplier_name}}" name="supplier_code" disabled />
               @else
-                @if($packaging->packaging_type=="CS")
-                  <input class="form-control" value="Invalid data value" name="customer_code" disabled style="color:red" title="Perhaps the customer data is not exist for this receipt"/>
-                @else
-                  <input class="form-control" value="Invalid data value" name="customer_code" disabled style="color:red" title="Perhaps the supplier data is not exist for this receipt"/>
-                @endif
+                <input class="form-control" value="Invalid data value" name="vendor" disabled style="color:red" title="Perhaps the vendor (customer/supplier) data is not exist for this receipt"/>
               @endif
             </div>
           </div>
@@ -91,7 +89,7 @@
             <a data-toggle="modal" href="#modalAdd" class="btn btn-success"><i class="fa fa-plus"></i> Add New Packaging </a>
         @endif
         @if($packaging->packaging_type == "SS")  
-            <a href="{{route('packaging_receipt.showSS',$packaging->id)}}" class="btn btn-success"><i class="fa fa-plus"></i> Add New Packaging </a>
+            <a href="{{route('packaging_receipt.showSS',[$packaging->id, $packaging->supplier_id])}}" class="btn btn-success"><i class="fa fa-plus"></i> Add New Packaging </a>
         @endif
       
         <ul class="nav navbar-right panel_toolbox">
@@ -149,10 +147,14 @@
                 <input type="hidden" name="packaging_receipt_id" value='{{$packaging->id}}'>
                 <div class="form-group">
                     <label class="control-label col-md-2">Packaging</label>
-                    <select class="form-control" name="packaging_id">
-                        @foreach($pck as $d)
-                            <option value="{{$d->id}}" >{{$d->packaging_name}}</option>
-                        @endforeach
+                    <select class="form-control" name="packaging_id" required>  
+                        @if($pck->count()!=0)
+                          @foreach($pck as $d)
+                              <option value="{{$d->id}}" >{{$d->packaging_name}}</option>
+                          @endforeach
+                        @else
+                            <option value="" >Packaging data is empty</option>
+                        @endif
                     </select>
                 </div>
 
