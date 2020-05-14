@@ -98,8 +98,9 @@
             <label class="col-form-label col-md-3 col-sm-3  label-align">Periode Awal : </label>
             <div class="col-md-6 col-sm-6">
               <div class="controls">
+                <input type="hidden" name='awal' value="{{$aw}}">
                 <div class="col-md-12 xdisplay_inputx form-group has-feedback">
-                  <input value="{{$aw}}" type="text" class="form-control has-feedback-left" readonly id="single_cal4" placeholder="Date" aria-describedby="date" name='awal'>
+                  <input value="{{$aw}}" type="text" class="form-control has-feedback-left" disabled id="single_cal4" placeholder="Date" aria-describedby="date">
                   <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
                 </div>
               </div>
@@ -110,8 +111,9 @@
             <label class="col-form-label col-md-3 col-sm-3  label-align">Periode Akhir : </label>
             <div class="col-md-6 col-sm-6">
               <div class="controls">
+              <input type="hidden" name='akh' value="{{$akh}}">
                 <div class="col-md-12 xdisplay_inputx form-group has-feedback">
-                  <input value="{{$akh}}" type="text" class="form-control has-feedback-left" readonly id="single_cal3" placeholder="Date" aria-describedby="date" name='akh'>
+                  <input value="{{$akh}}" type="text" class="form-control has-feedback-left" disabled id="single_cal3" placeholder="Date" aria-describedby="date">
                   <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
                 </div>
               </div>

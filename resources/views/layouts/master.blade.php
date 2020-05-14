@@ -55,17 +55,17 @@
             <!-- menu profile quick info -->
             <div class="profile clearfix">
               <div class="profile_pic">
-                <img src="{{ asset('assets/build/images/Logo.png')}}" alt="..." class="img-circle profile_img">
+                <img src="{{ asset('assets/src/img/logo.png')}}" alt="..." class="img-circle profile_img">
               </div>
               <div class="profile_info">
-                <span>Skin</span>
-                <h2>Solution</h2>
+                <h2>Skinsolution Industri</h2>
+                <span>ERP</span>
               </div>
             </div>
             <!-- /menu profile quick info -->
 
             <br />
-
+            @if(Auth::user()->role == 0)
             <!-- sidebar menu -->
             <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
               <div class="menu_section">
@@ -120,7 +120,7 @@
                             <li><a href="{{ route('trial_revisi.index') }}">Revisi</a></li>
                           </ul>
                       </li>
-                      <li><a href="{{ route('produksi.index') }}">Produk</a></li>
+                      <li><a href="{{ route('produksi.index') }}">Product</a></li>
                       <li><a>Kegiatan<span class="fa fa-chevron-down"></span></a>
                           <ul class="nav child_menu">
                             <li class="sub_menu"><a href="{{ route('activity_product.index') }}">Produksi</a></li>
@@ -205,23 +205,51 @@
               </div>
             </div>
             <!-- /sidebar menu -->
-
-            <!-- /menu footer buttons -->
-            <div class="sidebar-footer hidden-small">
-              <a data-toggle="tooltip" data-placement="top" title="Settings">
-                <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
-              </a>
-              <a data-toggle="tooltip" data-placement="top" title="FullScreen">
-                <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
-              </a>
-              <a data-toggle="tooltip" data-placement="top" title="Lock">
-                <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
-              </a>
-              <a data-toggle="tooltip" data-placement="top" title="Logout" href="login.html">
-                <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
-              </a>
+            @elseif(Auth::user()->role == 8)
+            <!-- sidebar menu -->
+            <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+              <div class="menu_section">
+                <ul class="nav side-menu">
+                  <li><a href="{{ url('home') }}"><i class="fa fa-home"></i> Home</a></li>
+                </ul>
+              </div>
+              <div class="menu_section">
+                <h3>CUSTOMER</h3>
+                <ul class="nav side-menu">
+                  <li><a href="{{ route('produksi.index') }}"><i class="fa fa-diamond"></i> Product</a></li>
+                  <li><a href="{{ route('packagings.index') }}"><i class="fa fa-cubes"></i> Packaging</a></li>
+                  <li><a><i class="fa fa-cube"></i> Stock <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="{{ route('produksi.stoct') }}">Product</a></li>
+                      <li><a href="{{url('/packagings_stocks')}}">packaging</a></li>
+                    </ul>
+                  </li>
+                  <li><a><i class="fa fa-th-large"></i> Kegiatan <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li class="sub_menu"><a href="{{ route('activity_product.index') }}">Produksi</a></li>
+                      <li><a href="{{ route('activity_packaging.index') }}">Packaging</a></li>
+                      <li><a href="{{ route('labelling.index') }}">Labelling</a></li>
+                    </ul>
+                  </li>
+                  <li><a><i class="fa fa-shopping-cart"></i> Purchase Order <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="{{route('po_product_pemesanan.index')}}">Produksi</a></li>
+                      <li><a href="{{route('po_customer.index')}}">Trial</a></li>
+                    </ul>
+                  </li>
+                  <li><a><i class="fa fa-truck"></i> Pengiriman <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="{{route('delivery_order.index')}}">Delivery Order</a></li>
+                      <li><a href="{{route('history.index')}}">History</a></li>
+                      <li><a href="{{route('left_overs.index')}}">Leftovers</a></li>
+                    </ul>
+                  </li>
+                  <li><a href="{{route('invoice.index')}}""><i class="fa fa-file-text"></i> Invoice</a></li>
+                </ul>
+              </div>
             </div>
-            <!-- /menu footer buttons -->
+            <!-- /sidebar menu -->
+            @endif
           </div>
         </div>
         <!-- top navigation -->
@@ -234,86 +262,19 @@
                 <ul class=" navbar-right">
                   <li class="nav-item dropdown open" style="padding-left: 15px;">
                     <a href="javascript:;" class="user-profile dropdown-toggle" aria-haspopup="true" id="navbarDropdown" data-toggle="dropdown" aria-expanded="false">
-                      <img src="{{ asset('images/img.jpg')}}" alt="">John Doe
+                      <img src="{{ asset('assets/src/img/logo.png')}}" alt="">
+                      @if(Auth::user()->role == 0)
+                        PT. Skinsolution Industri
+                      @else
+                        {{Auth::user()->name}}
+                      @endif
                     </a>
                     <div class="dropdown-menu dropdown-usermenu pull-right" aria-labelledby="navbarDropdown">
-                      <a class="dropdown-item"  href="javascript:;"> Profile</a>
-                        <a class="dropdown-item"  href="javascript:;">
-                          <span class="badge bg-red pull-right">50%</span>
-                          <span>Settings</span>
-                        </a>
-                    <a class="dropdown-item"  href="javascript:;">Help</a>
-                      <a class="dropdown-item"  href="{{ route('logout') }}"
-                         onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="fa fa-sign-out pull-right"></i> Log Out</a>
+                      <a class="dropdown-item"  href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="fa fa-sign-out pull-right"></i> Log Out</a>
                     </div>
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                         @csrf
                     </form>
-                  </li>
-  
-                  <li role="presentation" class="nav-item dropdown open">
-                    <a href="javascript:;" class="dropdown-toggle info-number" id="navbarDropdown1" data-toggle="dropdown" aria-expanded="false">
-                      <i class="fa fa-envelope-o"></i>
-                      <span class="badge bg-green">6</span>
-                    </a>
-                    <ul class="dropdown-menu list-unstyled msg_list" role="menu" aria-labelledby="navbarDropdown1">
-                      <li class="nav-item">
-                        <a class="dropdown-item">
-                          <span class="image"><img src="{{ asset('images/img.jpg')}}" alt="Profile Image" /></span>
-                          <span>
-                            <span>John Smith</span>
-                            <span class="time">3 mins ago</span>
-                          </span>
-                          <span class="message">
-                            Film festivals used to be do-or-die moments for movie makers. They were where...
-                          </span>
-                        </a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="dropdown-item">
-                          <span class="image"><img src="{{ asset('images/img.jpg')}}" alt="Profile Image" /></span>
-                          <span>
-                            <span>John Smith</span>
-                            <span class="time">3 mins ago</span>
-                          </span>
-                          <span class="message">
-                            Film festivals used to be do-or-die moments for movie makers. They were where...
-                          </span>
-                        </a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="dropdown-item">
-                          <span class="image"><img src="{{ asset('images/img.jpg')}}" alt="Profile Image" /></span>
-                          <span>
-                            <span>John Smith</span>
-                            <span class="time">3 mins ago</span>
-                          </span>
-                          <span class="message">
-                            Film festivals used to be do-or-die moments for movie makers. They were where...
-                          </span>
-                        </a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="dropdown-item">
-                          <span class="image"><img src="{{ asset('images/img.jpg')}}" alt="Profile Image" /></span>
-                          <span>
-                            <span>John Smith</span>
-                            <span class="time">3 mins ago</span>
-                          </span>
-                          <span class="message">
-                            Film festivals used to be do-or-die moments for movie makers. They were where...
-                          </span>
-                        </a>
-                      </li>
-                      <li class="nav-item">
-                        <div class="text-center">
-                          <a class="dropdown-item">
-                            <strong>See All Alerts</strong>
-                            <i class="fa fa-angle-right"></i>
-                          </a>
-                        </div>
-                      </li>
-                    </ul>
                   </li>
                 </ul>
               </nav>
