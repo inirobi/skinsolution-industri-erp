@@ -147,10 +147,10 @@
             <label for="kode" class="col-form-label">Packaging</label>
             <select class="form-control" name="packaging_id">
                 @foreach($packaging as $d)
-                    @if($d->category=="sticker" || $d->category=="Stiker" || $d->category=="Sticker" || substr($d->category, 0, 3)=="box" || substr($d->category, 0, 3)=="Box")
+                    @if(strtolower($d->category)=="sticker" || strtolower($d->category)=="Stiker" || strtolower(substr($d->category, 0, 3))=="box")
                     <option value="{{$d->id}}" >{{$d->category}} - {{$d->packaging_name}}</option>
                     @endif
-                    @if($d->category!="sticker" && $d->category!="Sticker" && $d->category!="Stiker" && substr($d->category, 0, 3)!="box" && substr($d->category, 0, 3)!="Box")
+                    @if(strtolower($d->category)!="sticker" && strtolower($d->category)!="Stiker" && strtolower(substr($d->category, 0, 3))!="box")
                     <option value="{{$d->id}}" >{{$d->category}}</option>
                     @endif
                 @endforeach
