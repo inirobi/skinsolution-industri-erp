@@ -74,7 +74,7 @@ Route::get('/packaging_receipt/view/add/ajax-state/{id}',function($id)
         // $po_packaging_id = Input::get("po_packaging_id");
         $data=DB::table('po_packaging_details')
                 ->select('packagings.id','packagings.packaging_code','packagings.packaging_name',
-                    'po_packaging_details.quantity')    
+                    'po_packaging_details.quantity','po_packaging_details.accepted_quantity')    
                 ->join('packagings','po_packaging_details.packaging_id','=','packagings.id')
                 ->where('po_packaging_details.po_packaging_id',$id)->get();
         return $data;

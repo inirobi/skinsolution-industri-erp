@@ -8,6 +8,7 @@ use App\PackagingReceiptDetail;
 use App\Packaging;
 use App\PackagingStock;
 use App\PoPackaging;
+use App\PoPackagingDetail;
 use App\Customer;
 use App\Supplier;
 
@@ -111,7 +112,11 @@ class PackagingReceiptController extends Controller
 
     public function viewAddSS($id, $supplier)
     {
-        $po = PoPackaging::where('supplier_id', $supplier)->get();
+        $po = PoPackaging::where([
+            ['supplier_id', '=', $supplier],
+            ['status', '<>', "Close"],
+        ])->get();
+
         return view('inventory.penerimaan.packaging.detail', compact('po', 'id'));
     }
 
@@ -122,30 +127,71 @@ class PackagingReceiptController extends Controller
                 ->route('packaging_receipt.showSS',$request->packaging_receipt_id)
                 ->with('error', "Invalid input!");
         }
+        $count_detail_po = PoPackagingDetail::where([
+            ['po_packaging_id', '=', $request->po_packaging_id]
+        ])->count();
+        if($count_detail_po < 1){
+            return redirect()
+                ->route('packaging_receipt.showSS',$request->packaging_receipt_id)
+                ->with('error', "Po Packaging Detail doesn't have data !");
+        }
+        $count_accepted_done = 0;
         $panjang = count(collect($request->packaging_id));
-        for ($i=0; $i <$panjang ; $i++) { 
-            $prd = new PackagingReceiptDetail;
-            $prd->packaging_receipt_id = $request->packaging_receipt_id;
-            $prd->quantity = $request->quantity[$i];
-            $prd->packaging_id = $request->packaging_id[$i];
-            $stock = PackagingStock::where('packaging_id', $request->packaging_id[$i])->first();        
-            if (!empty($stock)) {
-                PackagingStock::where('packaging_id', $request->packaging_id[$i])
-                ->update([
-                    'quantity' => $stock->quantity + $request->quantity[$i],
-                ]);
-            }else{
-                return redirect()
-                    ->route('packaging_receipt.showSS',$request->packaging_receipt_id)
-                    ->with('error', "failed add! Check stock packaging");
+        for ($i=0; $i <$panjang ; $i++)
+        { 
+            if(intval($request->quantity[$i]) > 0)
+            {
+                $prd = new PackagingReceiptDetail;
+                $prd->packaging_receipt_id = $request->packaging_receipt_id;
+                $prd->quantity = $request->quantity[$i];
+                $prd->packaging_id = $request->packaging_id[$i];
+                $stock = PackagingStock::where('packaging_id', $request->packaging_id[$i])->first();        
+                if (!empty($stock))
+                {
+                    PackagingStock::where('packaging_id', $request->packaging_id[$i])
+                    ->update([
+                        'quantity' => $stock->quantity + $request->quantity[$i],
+                    ]);
+                    $ppd_ = PoPackagingDetail::where([
+                        ['po_packaging_id', '=', $request->po_packaging_id],
+                        ['packaging_id', '=', $request->packaging_id[$i]]
+                    ])->first();
+                    PoPackagingDetail::where([
+                        ['po_packaging_id', '=', $request->po_packaging_id],
+                        ['packaging_id', '=', $request->packaging_id[$i]]
+                    ])->update([
+                        'accepted_quantity' => intval($ppd_->accepted_quantity) + intval($request->quantity[$i]),
+                    ]);
+                    $ppd = PoPackagingDetail::where([
+                        ['po_packaging_id', '=', $request->po_packaging_id],
+                        ['packaging_id', '=', $request->packaging_id[$i]]
+                    ])->first();
+                    $quantity = intval($ppd->quantity);
+                    $accepted = intval($ppd->accepted_quantity);
+                    if($quantity-$accepted < 1)
+                    {
+                        $count_accepted_done += 1;
+                    }
+                }
+                else
+                {
+                    return redirect()
+                        ->route('packaging_receipt.showSS',$request->packaging_receipt_id)
+                        ->with('error', "failed add! Check stock packaging");
+                }
+                $prd->save();
             }
-            $prd->save();
+        }
+        if($count_detail_po == $count_accepted_done){
+            PoPackaging::where('id', $request->po_packaging_id)
+            ->update([
+                'status' => "Close",
+            ]);
         }
         return redirect()
             ->route('packaging_receipt.show',$request->packaging_receipt_id)
             ->with('success', "Success Added!");
     }
-
 
     /**
      * Show the form for editing the specified resource.

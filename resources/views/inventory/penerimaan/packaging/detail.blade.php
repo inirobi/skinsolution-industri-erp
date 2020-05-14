@@ -110,11 +110,18 @@
           $.get('{{ url('') }}/packaging_receipt/view/add/ajax-state/' + po_packaging_id, function(data) {
             $('#packaging_detail').empty();
             $.each(data, function(index, subcatObj){
+            var qty = parseInt(subcatObj.quantity);
+            var acc = isNaN(parseInt(subcatObj.accepted_quantity))?0:parseInt(subcatObj.accepted_quantity);
+            var avb = qty-acc;
+            console.log(qty);
+            console.log(acc);
+            console.log(avb);
+            console.log(subcatObj);
             $('#packaging_detail')
             .append('<tr><td><input value="'
             +subcatObj.packaging_code+'" class="form-control text-capitalize" type="text" readonly></td><td><input value="'
             +subcatObj.packaging_name+'" class="form-control  text-capitalize" type="text" readonly></td><td><input value="'
-            +subcatObj.quantity+'" min="1" max="'+subcatObj.quantity+'" id="quantity'+idx+'" class="form-control text-capitalize" placeholder="Quantity" type="number" name="quantity[]"></td><td>'
+            +avb+'" min="0" max="'+avb+'" id="quantity'+idx+'" title="'+avb+' package that doesnt accepted yet" class="form-control text-capitalize" placeholder="Quantity" type="number" name="quantity[]"></td><td>'
             +'<input id="packaging_id'+idx+'" type="hidden" name="packaging_id[]" value="'+subcatObj.id+'"></td><td>');
             idx++;
           }); 
