@@ -298,6 +298,7 @@ class PackagingsController extends Controller
         return Packagings::select(DB::raw('@row:=@row+1 as rowNumber, packagings.id as idData'),'packagings.*','customers.*','suppliers.*')
                         ->leftJoin('customers','packagings.customer_id','=','customers.id')
                         ->leftJoin('suppliers','packagings.supplier_id','=','suppliers.id')
+                        ->orderBy('packagings.updated_at', 'desc')
                         ->get();
     }
 
@@ -312,6 +313,7 @@ class PackagingsController extends Controller
         return Packagings::select(DB::raw('@row:=@row+1 as rowNumber, packagings.id as idData'),'packagings.*','customers.*')
                         ->leftJoin('customers','packagings.customer_id','=','customers.id')
                         ->where('packagings.packaging_type','CS')
+                        ->orderBy('packagings.updated_at', 'desc')
                         ->get();
     }
 
@@ -326,6 +328,7 @@ class PackagingsController extends Controller
         return Packagings::select(DB::raw('@row:=@row+1 as rowNumber, packagings.id as idData'),'packagings.*','suppliers.*')
                         ->leftJoin('suppliers','packagings.supplier_id','=','suppliers.id')
                         ->where('packagings.packaging_type','SS')
+                        ->orderBy('packagings.updated_at', 'desc')
                         ->get();
         // return '{"data":'.Packagings::select(DB::raw('@row:=@row+1 as rowNumber'),'packagings.*','suppliers.*')
         //     ->leftJoin('suppliers','packagings.supplier_id','=','suppliers.id')

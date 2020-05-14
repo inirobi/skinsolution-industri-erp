@@ -106,7 +106,7 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" onclick="javascript:history.back()">Back</button>
+                    <a href="{{route('packagings.index')}}" class="btn btn-danger">Back</a>
                 </div>
             </div>
         </div>
