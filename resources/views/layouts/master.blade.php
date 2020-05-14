@@ -270,6 +270,7 @@
                       @endif
                     </a>
                     <div class="dropdown-menu dropdown-usermenu pull-right" aria-labelledby="navbarDropdown">
+                      <a data-toggle="modal" href="#changePss" class="dropdown-item"><i class="fa fa-cogs pull-right"></i> Change Password</a>
                       <a class="dropdown-item"  href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="fa fa-sign-out pull-right"></i> Log Out</a>
                     </div>
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
@@ -281,7 +282,40 @@
             </div>
           </div>
         <!-- /top navigation -->
+        <!-- modal add -->
+        <div class="modal fade bd-example-modal-lg" id="changePss" tabindex="-1" role="dialog" aria-labelledby="changePssLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="changePssLabel">Change Password</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <form action="{{route('admin.change', Auth::user()->id)}}" role="form" method="post">
+                  @method('PUT')
+                  {{csrf_field()}}
 
+                  <div class="form-group">
+                    <label class="control-label col-md-2">Password</label>
+                    <input name='password' type='password' class='form-control' required>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="control-label col-md-2">Retype Password</label>
+                    <input name='re_password' type='password' class='form-control' required>
+                  </div>
+
+                  <div class="modal-footer">
+                    <button type='submit' class="btn btn-primary"><i class="fa fa-floppy-o"></i> Update</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
         <!-- page content -->
         <div class="right_col" role="main">
           <div class="">

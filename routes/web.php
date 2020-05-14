@@ -24,6 +24,7 @@ Route::get('/', function () {
 Route::get('/home', 'HomeController@index');
 Route::get('/error', 'HomeController@error');
 Route::resource('user_management', 'AdminController');
+Route::put('/admin/{id}', 'AdminController@Change')->name('admin.change');
 
 //===============inventory===================
 

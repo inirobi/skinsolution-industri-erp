@@ -31,6 +31,22 @@ class AdminController extends Controller
         //
     }
 
+    public function Change(Request $request,$id)
+    {
+        if($request->password==$request->re_password){
+            Admin::whereId($id)
+            ->update([
+                'password' => bcrypt($request->password),
+            ]);
+
+        }else{
+            return redirect('home')->with('error','Password no match');
+
+        }
+
+        return redirect('home')->with('success','Successfully Updated');
+    }
+
     /**
      * Store a newly created resource in storage.
      *
