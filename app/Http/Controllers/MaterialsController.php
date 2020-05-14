@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Materials;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Collection;
+
+use App\Materials;
 use App\MaterialSupplier;
 use App\Suppliers;
 use App\MaterialKontradiksi;
@@ -12,6 +14,7 @@ use App\PoMaterial;
 use App\PoMaterialDetail;
 use App\Material;
 use App\Product;
+use App\Stocks;
 
 use PDF; 
 
@@ -79,7 +82,13 @@ class MaterialsController extends Controller
                 'stock_minimum' => $req['stock_minimum'],
                 'category' => $req['category'],
                 'price' => $req['price'],
-              ]);
+            ]);
+            $id = DB::getPdo()->lastInsertId();
+            Stocks::create([
+                'id' => null,
+                'material_id' => $id,
+                'quantity' => 0,
+            ]);
           return redirect()
               ->route('materials.index')
               ->with('success', 'Data bahan baku berhasil disimpan.');
@@ -179,17 +188,17 @@ class MaterialsController extends Controller
     
         //MASUK
         
-          $purchase =DB::table('purchases as a')
-          ->join('purchase_details as b','a.id','=','b.purchase_id')
-          ->where('b.material_id',$id)
-          ->orderby('b.created_at','asc')
-          ->get();
-           
-          $sum=DB::table('purchases as a')
-          ->join('purchase_details as b','a.id','=','b.purchase_id')
-          ->where('b.material_id',$id)
-          ->orderby('b.created_at')
-          ->sum('quantity');
+        $purchase =DB::table('purchases as a')
+        ->join('purchase_details as b','a.id','=','b.purchase_id')
+        ->where('b.material_id',$id)
+        ->orderby('b.created_at','asc')
+        ->get();
+        
+        $sum=DB::table('purchases as a')
+        ->join('purchase_details as b','a.id','=','b.purchase_id')
+        ->where('b.material_id',$id)
+        ->orderby('b.created_at')
+        ->sum('quantity');
     
         //KELUAR
         
@@ -216,9 +225,6 @@ class MaterialsController extends Controller
         ->groupBy('pengeluaran_material.id')
         ->get();
         
-        
-        
-        
         $sum2 = DB::table('formulas')
         ->join('formula_details','formula_details.formula_id','=','formulas.id')
         ->where('formula_details.material_id',$id)
@@ -233,10 +239,58 @@ class MaterialsController extends Controller
         ->where('material_id',$id)
         ->sum('quantity');
         
+        $formula = DB::table('formulas')
+            ->join('formula_details','formula_details.formula_id','=','formulas.id')
+            ->where('formula_details.material_id',$id)
+            ->get();
+
+        $pro_act = DB::table('product_activities')
+            ->join('product_activity_details','product_activities.id','=','product_activity_details.product_activity_id')
+            ->where('product_activity_details.material_id',$id)
+            ->get();
+        $pro_mat = DB::table('pengeluaran_material')
+            ->where('material_id',$id)
+            ->get();
+
+        $cetak_keluar=[];
+
+        foreach ($formula as $data) {
+            $field['tanggal'] = $this->convertToCorrectDateValue(substr($data->created_at,0,10));
+            $field['keterangan'] = $data->formula_num;
+            $field['quantity'] = $data->quantity;
+            $cetak_keluar[] = (object)$field;
+        }
+        foreach ($pro_act as $data) {
+            $field['tanggal'] = $this->convertToCorrectDateValue(substr($data->date_start,0,10));
+            $field['keterangan'] = $data->activity_code;
+            $field['quantity'] = $data->weighing;
+            $cetak_keluar[] = (object)$field;
+        }
+        foreach ($pro_mat as $data) {
+            $field['tanggal'] = $this->convertToCorrectDateValue(substr($data->date,0,10));
+            $field['keterangan'] = $data->code;
+            $field['quantity'] = $data->quantity;
+            $cetak_keluar[] = (object)$field;
+        }
+        $collect = Collection::make($cetak_keluar);
+        $datas = $collect->sortBy('tanggal');
         $sisa = $sum - ($sum2 + $sum3 + $sum4);
         $masuk = $sum;
         $keluar = $sum2 + $sum3 + $sum4;
-        return view('inventory.bahan_baku.print',compact('masuk','keluar','purchase','formula','pro_act','pro_mat','sisa','material'));
+        return view('inventory.bahan_baku.print',compact('masuk','keluar','purchase','formula','pro_act','pro_mat','datas','sisa','material'));
+    }
+
+    public function convertToCorrectDateValue($date="05/02/2020")
+    {
+        $temp = explode("/", $date);
+        if(strlen($temp[0]) > 2)
+        {
+            return $date;
+        }
+        else
+        {
+            return $temp[2]."-".$temp[0]."-".$temp[1];
+        }
     }
 
     /**

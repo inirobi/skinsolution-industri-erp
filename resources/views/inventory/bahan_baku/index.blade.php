@@ -64,8 +64,8 @@
                 <td>Rp {{number_format($data -> price,2)}}</td>
                 <td class="text-center"><a href="{{ route('material.kontradiksi.show', $data) }}"><i class="fa fa-pencil"></i> List</a></td>
                 <td class="text-center">
-                  <a class="btn btn-primary" href="{{ route('material.print', $data->id) }}" target="_blank" title="Print" class="btn btn-small text-primary">
-                    <i class="fa fa-print"></i>
+                  <a class="btn btn-primary" href="{{ route('material.print', $data->id) }}" target="_blank" title="Lihat Kartu Stok {{ $data -> material_name }}" class="btn btn-small text-primary">
+                    <i class="fa fa-file-text-o"></i>
                   </a>
                   <a href="{{ route('materials.edit', $data) }}" class="btn btn-warning" title="Edit"><i class="fa fa-edit"></i></a>
                   <a href="{{ route('materials.destroy', $data) }}" class="btn btn-danger" onclick="event.preventDefault();destroy('{{ route('materials.destroy', $data) }}')" title="Hapus"><i class="fa fa-trash"></i></a>
