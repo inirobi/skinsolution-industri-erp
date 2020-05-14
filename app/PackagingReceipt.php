@@ -9,4 +9,8 @@ class PackagingReceipt extends Model
     protected $table = 'packaging_receipts';
     protected $guarded  = ['id'];
 
+    public function customer()
+    {
+        return $this->belongsTo('App\Customer', 'customer_id');
+    }
 }

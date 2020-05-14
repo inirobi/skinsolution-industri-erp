@@ -15,4 +15,9 @@ class Customer extends Model
       'customer_phone',
     ];
 
+    public function packagingReceipt()
+    {
+        return $this->hasMany('App\PackagingReceipt');
+    }
+
 }

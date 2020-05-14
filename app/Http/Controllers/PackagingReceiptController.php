@@ -87,10 +87,9 @@ class PackagingReceiptController extends Controller
                             ->orderBy('updated_at','desc')
                             ->get();
         $pck = Packaging::groupBy('customer_id')
-                ->where('packaging_type','CS')
-                ->get();
-        // echo '<pre>';
-        // var_dump($pck);die;
+            ->where('packaging_type','CS')
+            ->where('customer_id', $packaging->customer_id)
+            ->get();
         return view('inventory.penerimaan.packaging.view', compact('packaging', 'packaging_view','pck'));
     }
 
