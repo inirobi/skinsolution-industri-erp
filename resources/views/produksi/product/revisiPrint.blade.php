@@ -12,7 +12,7 @@
 		<div style='float:right;text-align:right'>
 			<img src="{{asset('assets/src/img/logo-skin-care.png')}}" />
 			<br><br>
-			<h2>CV SKIN SOLUTION BEAUTY CARE INDONESIA <br>
+			<h2>PT. SKINSOLUTION INDUSTRI BEAUTY CARE INDONESIA <br>
 				<small>
 					Jalan Waruga Jaya No. 47, Ciwaruga <br>
 					Parongpong, 40559 <br>
@@ -78,7 +78,7 @@
 		<div style='float:right;text-align:right'>
 			<img src="{{asset('assets/src/img/logo-skin-care.png')}}" />
 			<br><br>
-			<h2>CV SKIN SOLUTION BEAUTY CARE INDONESIA <br>
+			<h2>PT. SKINSOLUTION INDUSTRI BEAUTY CARE INDONESIA <br>
 				<small>
 					Jalan Waruga Jaya No. 47, Ciwaruga <br>
 					Parongpong, 40559 <br>

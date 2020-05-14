@@ -82,7 +82,7 @@
 		<div style='float:right;text-align:right'>
 			<img src="{{asset('assets/src/img/logo-skin-care.png')}}" />
 			<br><br>
-			<h2 style="font-size:14pt">CV SKIN SOLUTION BEAUTY CARE INDONESIA <br>
+			<h2 style="font-size:14pt">PT. SKINSOLUTION INDUSTRI BEAUTY CARE INDONESIA <br>
 				<small>
 					Jalan Waruga Jaya No. 47, Ciwaruga <br>
 					Parongpong, 40559 <br>

@@ -142,7 +142,7 @@
                       </li>
                     </ul>
                   </li>
-                  <li><a href="#"><i class="fa fa-users"></i> User Management</a></li>
+                  <li><a href="{{ route('user_management.index')}}"><i class="fa fa-users"></i> User Management</a></li>
                 </ul>
               </div>
               <div class="menu_section">
@@ -183,8 +183,8 @@
                       <li><a href="{{route('petty.index')}}">Cash Flow</a></li>
                     </ul>
                   </li>
-                  <li><a href="#"><i class="fa fa-user"></i> Customer </a></li>
-                  <li><a href="#"><i class="fa fa-credit-card"></i> Penggajian</span></a></li>
+                  <li><a href="http://customer.skinsolutionindustri.co.id/"><i class="fa fa-user"></i> Customer </a></li>
+                  <li><a href="http://hrd.skinsolutionindustri.co.id/"><i class="fa fa-credit-card"></i> HRD</span></a></li>
                 </ul>
               </div>
               <div class="menu_section">

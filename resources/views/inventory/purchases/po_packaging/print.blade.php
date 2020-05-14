@@ -174,7 +174,7 @@
 			<h1>Purchase Order Packaging</h1>
 			<address contenteditable>
 				<p>
-					CV SKIN SOLUTION BEAUTY CARE INDONESIA<br>
+					PT. SKINSOLUTION INDUSTRI BEAUTY CARE INDONESIA<br>
 					Jalan Ciwaruga No. 47, Bandung Barat<br>
 					<!--Parongpong, 40559<br>
 					West Java, Indonesia<br>-->
@@ -293,7 +293,7 @@
 		</article>
 		<footer>
 			<address contenteditable>
-				CV SKIN SOLUTION:<br>
+				PT. SKINSOLUTION INDUSTRI:<br>
 				<br/><br/>
 				&nbsp;&nbsp; &nbsp;&nbsp;   &nbsp;&nbsp;
 				<br><br>

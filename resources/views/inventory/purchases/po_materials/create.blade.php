@@ -241,6 +241,7 @@
 
 let cekCurrency = $('#cekCurrency').val();
 let cekppn = $('#cekppn').val();
+$("#kurs").hide();
 if (cekppn == "0") {
   $('#btn-yes').attr('class', 'btn btn-secondary');
   $('#btn-no').attr('class', 'btn btn-primary');
@@ -253,12 +254,12 @@ if (cekppn == "1") {
 if (cekCurrency == "USD") {
   $('#btn-idr').attr('class', 'btn btn-secondary');
   $('#btn-usd').attr('class', 'btn btn-primary');
+  $("#kurs").show();
 }
 if (cekCurrency == "IDR") {
   $('#btn-idr').attr('class', 'btn btn-primary');
   $('#btn-usd').attr('class', 'btn btn-secondary');
 }
-  $("#kurs").hide();
   $('input[type=radio][name=currency]').change(function() {
       var source = this.value;
       
