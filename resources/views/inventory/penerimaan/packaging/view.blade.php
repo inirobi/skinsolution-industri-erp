@@ -57,6 +57,24 @@
               <input class="form-control" value="{{$packaging->packaging_type}}" name="customer_code" disabled />
             </div>
           </div>
+          <div class="field item form-group">
+            @if($packaging->packaging_type=="CS")
+              <label class="col-form-label col-md-3 col-sm-3  label-align">Customer Name : </label>
+            @else
+              <label class="col-form-label col-md-3 col-sm-3  label-align">Supplier Name : </label>
+            @endif
+            <div class="col-md-6 col-sm-6">
+              @if(isset($packaging->customer))
+                <input class="form-control" value="{{$packaging->customer->customer_name}}" name="customer_code" disabled />
+              @else
+                @if($packaging->packaging_type=="CS")
+                  <input class="form-control" value="Invalid data value" name="customer_code" disabled style="color:red" title="Perhaps the customer data is not exist for this receipt"/>
+                @else
+                  <input class="form-control" value="Invalid data value" name="customer_code" disabled style="color:red" title="Perhaps the supplier data is not exist for this receipt"/>
+                @endif
+              @endif
+            </div>
+          </div>
         </form>
       </div>
       </div>
