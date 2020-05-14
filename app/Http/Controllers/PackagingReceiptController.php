@@ -84,8 +84,6 @@ class PackagingReceiptController extends Controller
         $pck = Packaging::groupBy('customer_id')
                 ->where('packaging_type','CS')
                 ->get();
-        // echo '<pre>';
-        // var_dump($pck);die;
         return view('inventory.penerimaan.packaging.view', compact('packaging', 'packaging_view','pck'));
     }
 
