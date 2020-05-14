@@ -11,7 +11,7 @@ class Purchase extends Model
         'purchase_num',
         'delivery_orders_num',
         'po_material_id',
-    ];
+    ];      
 
     public function po_material()
     {

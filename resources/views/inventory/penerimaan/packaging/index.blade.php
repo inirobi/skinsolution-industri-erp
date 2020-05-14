@@ -82,7 +82,7 @@
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="modalDetailLabel">Add New Sample Income</h5>
+        <h5 class="modal-title" id="modalDetailLabel">Add New Packaging Receipt</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -121,6 +121,28 @@
                   </label>
                 </div>
               </div>
+          </div>
+          <div id="option-cs">
+            <div class="form-group">
+              <label class="col-form-label">Choose Customer</label>
+              <select class="form-control" name="customer">
+                <option value="">-- Please choose customer --</option>
+                @foreach($customers as $customer)
+                  <option value="{{$customer->id}}">{{$customer->customer_name}}</option>
+                @endforeach
+              </select>
+            </div>
+          </div>
+          <div id="option-ss">
+            <div class="form-group">
+              <label class="col-form-label">Choose Supplier</label>
+              <select class="form-control" name="supplier">
+                <option value="">-- Please choose supplier --</option>
+                @foreach($suppliers as $supplier)
+                  <option value="{{$supplier->id}}">{{$supplier->supplier_name}}</option>
+                @endforeach
+              </select>
+            </div>
           </div>
           <div class="form-group">
             <br>
@@ -183,6 +205,28 @@
                 </div>
               </div>
           </div>
+          <div id="option-cs2">
+            <div class="form-group">
+              <label class="col-form-label">Choose Customer</label>
+              <select class="form-control" name="customer">
+                <option>-- Please choose customer --</option>
+                @foreach($customers as $customer)
+                  <option value="{{$customer->id}}">{{$customer->customer_name}}</option>
+                @endforeach
+              </select>
+            </div>
+          </div>
+          <div id="option-ss2">
+            <div class="form-group">
+              <label class="col-form-label">Choose Supplier</label>
+              <select class="form-control" name="supplier">
+                <option>-- Please choose supplier --</option>
+                @foreach($suppliers as $supplier)
+                  <option value="{{$supplier->id}}">{{$supplier->supplier_name}}</option>
+                @endforeach
+              </select>
+            </div>
+          </div>
           <div class="form-group">
             <br>
             <label for="kategori" class="col-form-label">Receipt Code:</label>
@@ -216,7 +260,11 @@
  
 @push('scripts')
 <script>
-
+$('select[name=customer]').attr('required','required');
+$('#option-cs').show();
+$('#option-ss').hide();
+$('#option-cs2').show();
+$('#option-ss2').hide();
 function destroy(action){
     swal({
         title: 'Apakah anda yakin?',
@@ -238,10 +286,18 @@ function editConfirm(id,date,packaging_type2,receipt_code)
   if(packaging_type2=='CS'){
     $('#btn-supplier2').attr('class', 'btn btn-secondary');
     $('#btn-customer2').attr('class', 'btn btn-primary');
+    $('select[name=supplier]').attr('required','required');
+    $('select[name=customer]').removeAttr('required');
+    $('#option-ss2').show();
+    $('#option-cs2').hide();
   }
   if(packaging_type2=='SS'){
     $('#btn-supplier2').attr('class', 'btn btn-primary');
     $('#btn-customer2').attr('class', 'btn btn-secondary');
+    $('select[name=customer]').attr('required','required');
+    $('select[name=supplier]').removeAttr('required');
+    $('#option-cs2').show();
+    $('#option-ss2').hide();
   }
     $('#dt').attr('value',date);
     $('#receipt_code').attr('value',receipt_code);
@@ -257,10 +313,18 @@ function editConfirm(id,date,packaging_type2,receipt_code)
         if (source == "SS") {
             $('#btn-customer').attr('class', 'btn btn-secondary');
             $('#btn-supplier').attr('class', 'btn btn-primary');
-        }
-        if (source == "CS") {
+            $('select[name=supplier]').attr('required','required');
+            $('select[name=customer]').removeAttr('required');
+            $('#option-ss').show();
+            $('#option-cs').hide();
+          }
+          if (source == "CS") {
             $('#btn-customer').attr('class', 'btn btn-primary');
             $('#btn-supplier').attr('class', 'btn btn-secondary');
+            $('select[name=customer]').attr('required','required');
+            $('select[name=supplier]').removeAttr('required');
+            $('#option-cs').show();
+            $('#option-ss').hide();
         }
     });
     $('input[type=radio][name=packaging_type2]').change(function () {
@@ -268,10 +332,14 @@ function editConfirm(id,date,packaging_type2,receipt_code)
         if (source == "SS") {
             $('#btn-customer2').attr('class', 'btn btn-secondary');
             $('#btn-supplier2').attr('class', 'btn btn-primary');
+            $('#option-ss2').show();
+            $('#option-cs2').hide();
         }
         if (source == "CS") {
             $('#btn-customer2').attr('class', 'btn btn-primary');
             $('#btn-supplier2').attr('class', 'btn btn-secondary');
+            $('#option-cs2').show();
+            $('#option-ss2').hide();
         }
     });
 </script>
