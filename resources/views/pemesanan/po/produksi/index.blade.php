@@ -55,8 +55,10 @@
                 <td> {{$data->date}}</td>
                 <td class="text-center">
                   <a href="{{route('po_product_pemesanan.show',$data->id) }}" class="btn btn-info" title="View"><i class="fa fa-eye"></i></a>
+                  @if(Auth::user()->role!=8)
                   <a href="#" class="btn btn-warning" onclick="editConfirm( '{{$data->id}}', '{{$data->po_num}}', '{{$data->customer_id}}', '{{$data->date}}')" title="Edit"><i class="fa fa-edit"></i></a>
                   <a href="{{route('po_product_pemesanan.destroy',$data->id) }}" class="btn btn-danger" onclick="event.preventDefault();destroy('{{ route('po_product_pemesanan.destroy',$data->id) }}');" title="Hapus"><i class="fa fa-trash"></i></a>
+                  @endif
                 </td>
               </tr>
               @endforeach
@@ -99,11 +101,15 @@
           
           <div class="form-group">
             <label class="control-label col-md-2">Customer</label>
-            <select class="form-control" name="customer_id" id="customer_id">
-                @foreach($customer as $d)
-                    <option value="{{$d->id}}" >{{$d->customer_name}}</option>
-                @endforeach
-            </select>
+            @if(Auth::user()->role==8)
+                <input name='customer_id' type='text' class='form-control' value="{{Auth::user()->email}}" required readonly>
+            @else
+              <select class="form-control" name="customer_id" id="customer_id">
+                  @foreach($customer as $d)
+                      <option value="{{$d->id}}">{{$d->customer_name}}</option>
+                  @endforeach
+              </select>
+            @endif
           </div>
 
           <div class="form-group">
@@ -164,11 +170,16 @@
           
           <div class="form-group">
             <label class="control-label col-md-2">Customer</label>
+            @if(Auth::user()->role==8)
+                <input name='customer_id' type='hidden' class='form-control' value="{{Auth::user()->email}}" required readonly>
+                <input name='' type='text' class='form-control' value="{{Auth::user()->name}}" required readonly>
+            @else
             <select class="form-control" name="customer_id">
                 @foreach($customer as $d)
                     <option value="{{$d->id}}" >{{$d->customer_name}}</option>
                 @endforeach
             </select>
+            @endif
           </div>
 
           <div class="form-group">

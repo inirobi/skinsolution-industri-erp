@@ -23,7 +23,7 @@
 </div>
 
 <div class="clearfix"></div>
-
+@if(Auth::user()->role!=8)
 <div class="row">
     <div class="col-md-12 col-sm-12 ">
         <div class="x_panel">
@@ -77,7 +77,43 @@
     </div>
 </div>
 <!-- /page content -->
+@else
+<div class="row">
+    <div class="col-md-12 col-sm-12 ">
+        <div class="x_panel">
+            <div class="x_title">
+            <div class="col-md-6">
+            </div>
+            <div class="pull-right">
+            </div>
+            <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="card-box table-responsive">
 
+                            <table id="tabeldata" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Kode</th>
+                                        <th>Kategori</th>
+                                        <th>Nama</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /page content -->
+@endif
 <!-- hapus -->
 <form id="destroy-form" method="POST">
     @method('DELETE')
@@ -103,6 +139,8 @@
 </script>
 
 @push('beforeScripts')
+
+@if(Auth::user()->role!=8)
 <script>
     $('#kategori').change(function () {
         switch (this.value) {
@@ -243,6 +281,111 @@
 
     });
 </script>
+@else
+<script>
+    $('#kategori').change(function () {
+        switch (this.value) {
+            case 'CS':
+                $.ajax({
+                    type: "GET",
+                    dataType: "json",
+                    url: '{{url("packagings/customers/ajax")}}',
+                    success: function (response) {
+                        $('#tabeldata').DataTable().ajax.url(
+                        '{{url("packagings/customers/ajax")}}');
+                        $('#tabeldata').DataTable().button().add(0, {
+                            action: function (e, dt, button, config) {
+                                dt.ajax.reload();
+                            },
+                            text: 'Reload table'
+                        });
+                        $('#tabeldata').DataTable().ajax.reload();
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
+                break;
+            case 'SS':
+                $.ajax({
+                    type: "GET",
+                    dataType: "json",
+                    url: '{{url("packagings/suppliers/ajax")}}',
+                    success: function (response) {
+                        $('#tabeldata').DataTable().ajax.url(
+                        '{{url("packagings/suppliers/ajax")}}');
+                        $('#tabeldata').DataTable().button().add(0, {
+                            action: function (e, dt, button, config) {
+                                dt.ajax.reload();
+                            },
+                            text: 'Reload table'
+                        });
+                        $('#tabeldata').DataTable().ajax.reload();
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
+                break;
+
+            default:
+                $.ajax({
+                    type: "GET",
+                    dataType: "json",
+                    url: '{{url("packagings/all/ajax")}}',
+                    success: function (response) {
+                        $('#tabeldata').DataTable().ajax.url('{{url("packagings/all/ajax")}}');
+                        $('#tabeldata').DataTable().button().add(0, {
+                            action: function (e, dt, button, config) {
+                                dt.ajax.reload();
+                            },
+                            text: 'Reload table'
+                        });
+                        $('#tabeldata').DataTable().ajax.reload();
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
+                break;
+        }
+    });
+    $(document).ready(function () {
+        $.ajax({
+            type: "GET",
+            dataType: "json",
+            url: '{{url("packagings/customers/ajax", Auth::user()->email)}}',
+            success: function (response) {
+                $('#tabeldata').DataTable({
+                    ajax: {
+                        url: '{{url("packagings/customers/ajax", Auth::user()->email)}}',
+                        dataSrc: ''
+                    },
+                    "dataType": "json",
+                    "columns": [
+                        {
+                            "data": "rowNumber"
+                        },
+                        {
+                            "data": "packaging_code"
+                        },
+                        {
+                            "data": "category"
+                        },
+                        {
+                            "data": "packaging_name"
+                        },
+                    ]
+                });
+            },
+            error: function (error) {
+                alert(error);
+            }
+        });
+
+    });
+</script>
+@endif
 @endpush
 
 @endsection

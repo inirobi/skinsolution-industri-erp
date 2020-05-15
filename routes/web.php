@@ -51,6 +51,7 @@ Route::get('/packagings/customer/ajax', 'PackagingsController@customerState');
 Route::get('/packagings/supplier/ajax', 'PackagingsController@supplierState');
 Route::get('/packagings/all/ajax', 'PackagingsController@getAllPackagingsData');
 Route::get('/packagings/customers/ajax', 'PackagingsController@getCustomersPackagingsData');
+Route::get('/packagings/customers/ajax/{id}', 'PackagingsController@getCustomersPackagingsDataFilter');
 Route::get('/packagings/suppliers/ajax', 'PackagingsController@getSuppliersPackagingsData');
 //EOF Route Packagings
 

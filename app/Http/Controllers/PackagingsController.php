@@ -8,6 +8,7 @@ use App\Suppliers;
 use App\Packaging;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class PackagingsController extends Controller
 {
@@ -29,6 +30,7 @@ class PackagingsController extends Controller
     {
         $packagings = Packagings::orderBy('id', 'desc')->get();
         $pck = DB::table('packagings')->get();
+
         return view('inventory.packagings.index', ['datas'=> $packagings, 'no'=>1,'pck'=> $pck]);
     }
     /**
@@ -316,6 +318,21 @@ class PackagingsController extends Controller
                         ->orderBy('packagings.updated_at', 'desc')
                         ->get();
     }
+    /**
+     * State Ajax of Customers Data Packaging
+     * 
+     * @return JSON
+     */
+    public function getCustomersPackagingsDataFilter($id)
+    {
+        DB::statement(DB::raw('set @row:=0'));
+        return Packagings::select(DB::raw('@row:=@row+1 as rowNumber, packagings.id as idData'),'packagings.*','customers.*')
+                        ->leftJoin('customers','packagings.customer_id','=','customers.id')
+                        ->where('packagings.packaging_type','CS')
+                        ->orderBy('packagings.updated_at', 'desc')
+                        ->where('customers.id', $id)
+                        ->get();
+    }
 
     /**
      * State Ajax of Customers Data Packaging
@@ -343,6 +360,15 @@ class PackagingsController extends Controller
             ->select('packaging_stocks.*', 'packagings.*')
             ->orderBy('packagings.updated_at', 'desc')
             ->get();
+        if(Auth::user()->role==8){
+            $stocks = DB::table('packaging_stocks')
+                ->join('packagings', 'packaging_stocks.packaging_id', '=', 'packagings.id')
+                ->join('customers', 'customers.id', '=', 'packagings.customer_id')
+                ->select('packaging_stocks.*', 'packagings.*')
+                ->orderBy('packagings.updated_at', 'desc')
+                ->where('customers.id', Auth::user()->email)
+                ->get();
+        }
         return view('inventory.packagings.stocks',['stocks'=> $stocks, 'no'=>1]);
     }
 

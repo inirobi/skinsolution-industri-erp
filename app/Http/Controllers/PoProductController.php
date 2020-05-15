@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use App\Customer;
 use App\PoProduct;
 use App\PoProductDetail;
@@ -20,7 +21,15 @@ class PoProductController extends Controller
     {
         $no = 1;
         $customer = Customer::all();
-        $popro=DB::table('po_products')->select('po_products.*','customers.customer_name')->join('customers','customers.id','=','po_products.customer_id')->orderBy('po_products.id', 'desc')->get();
+        $popro=DB::table('po_products')->select('po_products.*','customers.customer_name')
+        ->join('customers','customers.id','=','po_products.customer_id')
+        ->orderBy('po_products.id', 'desc')->get();
+        if(Auth::user()->role==8){
+            $popro=DB::table('po_products')->select('po_products.*','customers.customer_name')
+            ->join('customers','customers.id','=','po_products.customer_id')
+            ->where('customers.id', Auth::user()->email)
+            ->orderBy('po_products.id', 'desc')->get();
+        }
         return view('pemesanan.po.produksi.index', compact('popro','customer','no'));
     }
 
