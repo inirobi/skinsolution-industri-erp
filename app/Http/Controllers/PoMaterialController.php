@@ -26,7 +26,7 @@ class PoMaterialController extends Controller
         ->select('po_materials.*','suppliers.supplier_name')
         ->join('suppliers','suppliers.id','=','po_materials.supplier_id')
         ->orderBy('po_materials.updated_at', 'desc')->get();
-        return view('inventory.purchases.po_mater   ials.index', ['purchase' =>$purchase, 'no'=>1]);
+        return view('inventory.purchases.po_materials.index', ['purchase' =>$purchase, 'no'=>1]);
     }
 
     /**
