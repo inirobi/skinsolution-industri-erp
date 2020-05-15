@@ -35,6 +35,7 @@
     <div class="col-md-12 col-sm-12 ">
       <div class="x_panel">
         <div class="x_title">
+        @if(Auth::user()->role!=8)
           <a data-toggle="modal" href="#modalAdd" class="btn btn-success" ><i class="fa fa-plus"></i> Add New Invoice </a>
           <ul class="nav navbar-right panel_toolbox">
             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -42,6 +43,7 @@
             <li><a class="close-link"><i class="fa fa-close"></i></a>
             </li>
           </ul>
+        @endif
           <div class="clearfix"></div>
         </div>
         <div class="x_content">

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use App\Invoice;
 use App\InvoiceDetail;
 use App\Customer;
@@ -28,24 +29,52 @@ class InvoiceController extends Controller
      */
     public function index()
     {
-        $inv = DB::table('invoices')
-            ->select('invoices.id as xx','customers.customer_name','po_products.po_num','invoices.*')
-            ->join('customers','invoices.customer_id','customers.id')
-            ->join('po_products','invoices.po_product_id','po_products.id')
-            ->join('po_product_details','po_products.id','po_product_details.po_product_id')
-            ->where('jenis_po','=','produksi')
-            ->groupBy('invoices.id')
-            ->orderBy('invoices.updated_at','desc')
-            ->get();
-        $inv2 = DB::table('invoices')
-            ->select('invoices.id as xx','customers.customer_name','po_customers.po_num','invoices.*')
-            ->join('customers','invoices.customer_id','customers.id')
-            ->join('po_customers','invoices.po_product_id','po_customers.id')
-            ->join('po_customer_details','po_customers.id','po_customer_details.po_customer_id')
-            ->where('jenis_po','=','trial')
-            ->groupBy('invoices.id')
-            ->orderBy('invoices.updated_at','desc')
-            ->get();
+        if(Auth::user()->role!=8)
+        {
+
+            $inv = DB::table('invoices')
+                ->select('invoices.id as xx','customers.customer_name','po_products.po_num','invoices.*')
+                ->join('customers','invoices.customer_id','customers.id')
+                ->join('po_products','invoices.po_product_id','po_products.id')
+                ->join('po_product_details','po_products.id','po_product_details.po_product_id')
+                ->where('jenis_po','=','produksi')
+                ->groupBy('invoices.id')
+                ->orderBy('invoices.updated_at','desc')
+                ->get();
+            $inv2 = DB::table('invoices')
+                ->select('invoices.id as xx','customers.customer_name','po_customers.po_num','invoices.*')
+                ->join('customers','invoices.customer_id','customers.id')
+                ->join('po_customers','invoices.po_product_id','po_customers.id')
+                ->join('po_customer_details','po_customers.id','po_customer_details.po_customer_id')
+                ->where('jenis_po','=','trial')
+                ->groupBy('invoices.id')
+                ->orderBy('invoices.updated_at','desc')
+                ->get();
+        }
+        else
+        {
+            $inv = DB::table('invoices')
+                ->select('invoices.id as xx','customers.customer_name','po_products.po_num','invoices.*')
+                ->join('customers','invoices.customer_id','customers.id')
+                ->join('po_products','invoices.po_product_id','po_products.id')
+                ->join('po_product_details','po_products.id','po_product_details.po_product_id')
+                ->where('jenis_po','=','produksi')
+                ->groupBy('invoices.id')
+                ->orderBy('invoices.updated_at','desc')
+                ->where('customers.id', Auth::user()->email)
+                ->get();
+            $inv2 = DB::table('invoices')
+                ->select('invoices.id as xx','customers.customer_name','po_customers.po_num','invoices.*')
+                ->join('customers','invoices.customer_id','customers.id')
+                ->join('po_customers','invoices.po_product_id','po_customers.id')
+                ->join('po_customer_details','po_customers.id','po_customer_details.po_customer_id')
+                ->where('jenis_po','=','trial')
+                ->where('customers.id', Auth::user()->email)
+                ->groupBy('invoices.id')
+                ->orderBy('invoices.updated_at','desc')
+                ->get();
+        }
+        
             
         $customer = Customer::all();
         $po = PoProduct::All();
