@@ -11,6 +11,7 @@ use App\ProductActivityDetail;
 use App\Stock;
 use App\PoProductDetail;
 use Illuminate\Support\Facades\Response; 
+use Illuminate\Support\Facades\Auth; 
 
 class ProductActivityController extends Controller
 {
@@ -23,11 +24,20 @@ class ProductActivityController extends Controller
     {
         $no = 1;
         $po = PoProduct::all();
-        $productactivity = DB::table('product_activities')
-        ->select('product_activities.*','po_products.po_num')
-        ->join('po_products','po_products.id','product_activities.po_product_id')
-        ->orderBy('product_activities.updated_at', 'desc')
-        ->get();
+        if(Auth::user()->role == 0){
+            $productactivity = DB::table('product_activities')
+                ->select('product_activities.*','po_products.po_num')
+                ->join('po_products','po_products.id','product_activities.po_product_id')
+                ->orderBy('product_activities.updated_at', 'desc')
+                ->get();
+        }elseif(Auth::user()->role == 8){
+            $productactivity = DB::table('product_activities')
+                ->select('product_activities.*','po_products.po_num')
+                ->join('po_products','po_products.id','product_activities.po_product_id')
+                ->orderBy('product_activities.updated_at', 'desc')
+                ->where('po_products.customer_id', Auth::user()->email)
+                ->get();
+        }
         return view('produksi.kegiatan.product.index', compact('no','productactivity','po'));
     }
 

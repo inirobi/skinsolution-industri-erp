@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\TrialData;
 use App\PoCustomer;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 class TrialDataController extends Controller
 {
     /**
@@ -15,8 +16,18 @@ class TrialDataController extends Controller
      */
     public function index()
     {
-        $trial = TrialData::orderBy('id', 'desc')->get();
         $pocustomer = PoCustomer::all();
+        if(Auth::user()->role == 0){
+            $trial = TrialData::orderBy('updated_at', 'desc')->get();
+        }elseif(Auth::user()->role == 8){
+            $trial = DB::table('trial_datas')
+                        ->select('trial_datas.*','po_customers.po_num','po_customers.customer_id','po_customer_details.product_name')
+                        ->join('po_customers','trial_datas.po_customer_id','po_customers.id')
+                        ->join('po_customer_details','trial_datas.po_customer_detail_id','po_customer_details.id')
+                        ->orderBy('trial_datas.updated_at', 'desc')
+                        ->where('po_customers.customer_id', Auth::user()->email)
+                        ->get();
+        }
         $no = 1;
         return view('produksi.trial.data.index', compact('trial','no','pocustomer'));
     }

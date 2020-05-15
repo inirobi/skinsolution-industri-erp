@@ -36,7 +36,9 @@
     <div class="col-md-12 col-sm-12 ">
       <div class="x_panel">
         <div class="x_title">
+        @if(Auth::user()->role == 0)
           <a href="{{route('produksi.create')}}" class="btn btn-success" ><i class="fa fa-plus"></i> Add New Product </a>
+        @endif
           <div class="clearfix"></div>
         </div>
         <div class="x_content">
@@ -49,11 +51,13 @@
                 <th>No</th>
                 <th>Product Code</th>
                 <th>Product Name</th>
-                <th>Customer</th>
-                <th>Formula</th>
-                <th>Revision</th>
-                <th>HPP</th>
-                <th>Action</th>
+                @if(Auth::user()->role == 0)
+                  <th>Customer</th>
+                  <th>Formula</th>
+                  <th>Revision</th>
+                  <th>HPP</th>
+                  <th>Action</th>
+                @endif
               </tr>
             </thead>
             <tbody>
@@ -65,15 +69,17 @@
                 <td>{{ $no++ }}</td>
                 <td> {{$data->product_code}}</td>
                 <td> {{$data->product_name}}</td>
-                <td> {{$data->customer_name}}</td>
-                <td><a target="_blank" href="{{route('produksi.print.formula',$data->formula_id)}}">{{$data->formula_num}}</a></td>
-                <td><a target="_blank" href="{{route('produksi.print.revisi',$data->trial_revision_data_id)}}">{{$data->revision_num}}</a></td>
-                <td class="text-center"><a target="_blank" href="{{route('formula.hpp',$data->formula_id)}}"><i class="fa fa-pencil"></i> List</a></td>
-                <td class="text-center">
+                @if(Auth::user()->role == 0)
+                  <td> {{$data->customer_name}}</td>
+                  <td><a target="_blank" href="{{route('produksi.print.formula',$data->formula_id)}}">{{$data->formula_num}}</a></td>
+                  <td><a target="_blank" href="{{route('produksi.print.revisi',$data->trial_revision_data_id)}}">{{$data->revision_num}}</a></td>
+                  <td class="text-center"><a target="_blank" href="{{route('formula.hpp',$data->formula_id)}}"><i class="fa fa-pencil"></i> List</a></td>
+                  <td class="text-center">
                   <a href="{{route('produksi.edit',$data->xx)}}" class="btn btn-warning" title="Edit"><i class="fa fa-edit"></i></a>
                   <a href="{{route('produksi.show',$data->xx)}}" class="btn btn-info" title="Detail"><i class="fa fa-eye"></i></a>
                   <a href="{{route('produksi.destroy',$data->xx)}}" class="btn btn-danger" onclick="event.preventDefault();destroy('{{route('produksi.destroy',$data->xx)}}');" title="Hapus"><i class="fa fa-trash"></i></a>
                   <a href="{{route('produksi.print',$data->xx)}}" target="_blank" class="btn btn-primary" title="Print"><i class="fa fa-print"></i></a>
+                @endif
                 </td>
               </tr>
               @endforeach

@@ -29,7 +29,9 @@
     <div class="col-md-12 col-sm-12 ">
       <div class="x_panel">
         <div class="x_title">
-        <a data-toggle="modal" href="#modalAdd" class="btn btn-success" ><i class="fa fa-plus"></i> Add New Product Activity </a>
+        @if(Auth::user()->role == 0)
+          <a data-toggle="modal" href="#modalAdd" class="btn btn-success" ><i class="fa fa-plus"></i> Add New Product Activity </a>
+        @endif  
           <ul class="nav navbar-right panel_toolbox">
             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
             </li>
@@ -48,6 +50,7 @@
                 <th>No</th>
                 <th>Activity Code</th>
                 <th>Date Start</th>
+                <th>Date Start</th>
                 <th>PO Product Number</th>
                 <th>Status</th>
                 <th>Keterangan</th>
@@ -60,15 +63,18 @@
                 <td>{{ $no++ }}</td>
                 <td> {{$data->activity_code}} </td>
                 <td> {{$data->date_start}}</td>
+                <td> {{$data->date_end}}</td>
                 <td> {{$data->po_num}}</td><td>
                   @if($data->status=="Pending")<span class="badge badge-warning">Pending</span>@endif
                   @if($data->status=="Release")<span class="badge bg-green">Release</span>@endif
                 </td>
                 <td> {{$data->keterangan}}</td>
                 <td class="text-center">
-                  <a href="#" class="btn btn-warning" onclick="editConfirm( '{{$data->id}}', '{{$data->activity_code}}', '{{$data->date_start}}', '{{$data->keterangan}}', '{{$data->po_product_id}}')" title="Edit"><i class="fa fa-edit"></i></a>
                   <a href="{{route('activity_product.show',$data->id)}}" class="btn btn-info" title="View"><i class="fa fa-eye"></i></a>
-                  <a href="{{route('activity_product.destroy',$data->id)}}" class="btn btn-danger" onclick="event.preventDefault();destroy('{{route('activity_product.destroy',$data->id)}}');" title="Hapus"><i class="fa fa-trash"></i></a>
+                  @if(Auth::user()->role == 0)
+                    <a href="#" class="btn btn-warning" onclick="editConfirm( '{{$data->id}}', '{{$data->activity_code}}', '{{$data->date_start}}', '{{$data->keterangan}}', '{{$data->po_product_id}}')" title="Edit"><i class="fa fa-edit"></i></a>
+                    <a href="{{route('activity_product.destroy',$data->id)}}" class="btn btn-danger" onclick="event.preventDefault();destroy('{{route('activity_product.destroy',$data->id)}}');" title="Hapus"><i class="fa fa-trash"></i></a>
+                  @endif
                 </td>
               </tr>
               @endforeach

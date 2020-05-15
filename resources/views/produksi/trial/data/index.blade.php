@@ -1,5 +1,7 @@
 @extends('layouts.master')
-
+@section('site-title')
+  Trial Data
+@endsection
 @push('styles')
     <!-- bootstrap-daterangepicker -->
     <link href="{{ asset('assets/vendors/bootstrap-daterangepicker/daterangepicker.css')}}" rel="stylesheet">
@@ -10,7 +12,7 @@
 @section('content')
 <!-- page content -->
 <div class="page-title">
-  <div class="title_left">
+  <div class="title_left"> 
     <h3>Trial Data List</h3>
   </div>
 
@@ -34,7 +36,9 @@
     <div class="col-md-12 col-sm-12 ">
       <div class="x_panel">
         <div class="x_title">
+        @if(Auth::user()->role == 0)
           <a data-toggle="modal" href="#modalAdd" class="btn btn-success" ><i class="fa fa-plus"></i>Add New Trial Data </a>
+        @endif  
           <ul class="nav navbar-right panel_toolbox">
             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
             </li>
@@ -47,7 +51,7 @@
             <div class="row">
                 <div class="col-sm-12">
                   <div class="card-box table-responsive">
-          <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
+          <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
             <thead>
               <tr>
                 <th>No</th>
@@ -57,7 +61,9 @@
                 <th>Willingness</th>
                 <th>Type</th>
                 <th>Keterangan</th>
+                @if(Auth::user()->role == 0)
                 <th>Action</th>
+                @endif
               </tr>
             </thead>
             <tbody>
@@ -65,18 +71,25 @@
               <tr>
                 <td>{{ $no++ }}</td>
                 <td> {{$data->trial_num}} </td>
-                <td> {{$data->po_customer->po_num}}</td>
-                <td> {{$data->po_customer_detail->product_name}}</td>
+                @if(Auth::user()->role == 0)
+                  <td> {{$data->po_customer->po_num}}</td>
+                  <td> {{$data->po_customer_detail->product_name}}</td>
+                @elseif(Auth::user()->role == 8)
+                  <td> {{$data->po_num}}</td>
+                  <td> {{$data->product_name}}</td>
+                @endif
                 <td> {{$data->willingness}} </td>
                 <td> 
                     @if($data->type==0)<span class="badge badge-info">Dekoratif</span>@endif
                     @if($data->type==1)<span class="badge bg-green">Skin Care</span>@endif
                 </td>
                 <td> {{$data->keterangan}} </td>
+                @if(Auth::user()->role == 0)
                 <td class="text-center">
                   <a onclick="editConfirm({{$data}})" class="btn btn-warning" title="Edit"><i class="fa fa-edit"></i></a>
                   <a href="{{route('trial.destroy',$data->id)}}" class="btn btn-danger" onclick="event.preventDefault();destroy('{{route('trial.destroy',$data->id)}}');" title="Hapus"><i class="fa fa-trash"></i></a>
                 </td>
+                @endif
               </tr>
               @endforeach
             </tbody>

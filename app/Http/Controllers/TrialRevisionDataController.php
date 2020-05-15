@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\TrialRevisionData;
 use App\TrialData;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class TrialRevisionDataController extends Controller
 {
@@ -17,7 +18,17 @@ class TrialRevisionDataController extends Controller
     public function index()
     {
         $trialdata = TrialData::all();
-        $trial = TrialRevisionData::orderBy('id', 'desc')->get();
+        if(Auth::user()->role == 0){
+            $trial = TrialRevisionData::orderBy('updated_at', 'desc')->get();
+        }elseif(Auth::user()->role == 8){
+            $trial = DB::table('trial_revision_datas')
+                    ->select('trial_revision_datas.*')
+                    ->join('trial_datas','trial_revision_datas.trial_data_id','trial_datas.id')
+                    ->join('po_customers','trial_datas.po_customer_id','po_customers.id')
+                    ->orderBy('trial_revision_datas.updated_at', 'desc')
+                    ->where('po_customers.customer_id', Auth::user()->email)
+                    ->get();
+        }
         $no = 1;
         return view('produksi.trial.revisi.index', compact('trial','no','trialdata'));
     }
@@ -101,15 +112,23 @@ class TrialRevisionDataController extends Controller
     public function update(Request $request, $id)
     {
         try{ 
-            TrialRevisionData::whereId($id)
-            ->update([
-                'revision_num' => $request->revision_num,
-                'trial_data_id' => $request->trial_data_id,
-                'created_from' => $request->created_from,
-                'created_to' => $request->created_to,
-                'prosedur' => $request->prosedur,
-                'keterangan' => $request->keterangan,
-            ]);
+            if(Auth::user()->role == 0){
+                TrialRevisionData::whereId($id)
+                    ->update([
+                        'revision_num' => $request->revision_num,
+                        'trial_data_id' => $request->trial_data_id,
+                        'created_from' => $request->created_from,
+                        'created_to' => $request->created_to,
+                        'prosedur' => $request->prosedur,
+                        'keterangan' => $request->keterangan,
+                    ]);
+            }elseif(Auth::user()->role == 8){
+                TrialRevisionData::whereId($id)
+                    ->update([
+                        'feedback' => $request->feedback,
+                    ]);
+            }
+            
             return redirect()
                 ->route('trial_revisi.index')
                 ->with('success','Successfully Trial Revision Updated');

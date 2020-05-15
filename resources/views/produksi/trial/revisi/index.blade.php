@@ -1,5 +1,7 @@
 @extends('layouts.master')
-
+@section('site-title')
+  Trial Revision Data
+@endsection
 @push('styles')
     <!-- bootstrap-daterangepicker -->
     <link href="{{ asset('assets/vendors/bootstrap-daterangepicker/daterangepicker.css')}}" rel="stylesheet">
@@ -15,12 +17,14 @@
   </div>
 
   <div class="title_right">
-    <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
-      <div class="input-group">
-        <input type="text" class="form-control" placeholder="Search for...">
-        <span class="input-group-btn">
-          <button class="btn btn-secondary" type="button">Go!</button>
-        </span>
+    <div class="col-md-12 col-sm-5 col-xs-12 form-group pull-right top_search">
+      <div style='float:right'>
+        <div class="input-group">
+          <ul class="breadcrumb">
+            <li><a href="{{url('/home')}}">Home</a></li>
+            <li><a>Trial Revision Data List</a></li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
@@ -32,7 +36,9 @@
     <div class="col-md-12 col-sm-12 ">
       <div class="x_panel">
         <div class="x_title">
+        @if(Auth::user()->role == 0)
           <a data-toggle="modal" href="#modalAdd" class="btn btn-success" ><i class="fa fa-plus"></i>Add New Trial Revision Data </a>
+        @endif  
           <ul class="nav navbar-right panel_toolbox">
             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
             </li>
@@ -45,7 +51,7 @@
             <div class="row">
                 <div class="col-sm-12">
                   <div class="card-box table-responsive">
-          <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
+          <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
             <thead>
               <tr>
                 <th>No</th>
@@ -69,8 +75,12 @@
                 <td> {{$data->keterangan}} </td>
                 <td> {{$data->feedback}}</td>
                 <td class="text-center">
+                @if(Auth::user()->role == 0)
                   <a onclick="editConfirm({{$data}})" class="btn btn-warning" title="Edit"><i class="fa fa-edit"></i></a>
                   <a href="{{route('trial_revisi.destroy',$data->id)}}" class="btn btn-danger" onclick="event.preventDefault();destroy('{{route('trial_revisi.destroy',$data->id)}}');" title="Hapus"><i class="fa fa-trash"></i></a>
+                @elseif(Auth::user()->role == 8)
+                  <a onclick="editFeed('{{$data->feedback}}','{{$data->id}}')" class="btn btn-warning" title="Edit"><i class="fa fa-edit"></i></a>
+                @endif 
                 </td>
               </tr>
               @endforeach
@@ -84,6 +94,35 @@
   </div>
 </div>
 <!-- /page content -->
+<!-- modal add feedback-->
+<div class="modal fade bd-example-modal-lg" id="feedback" tabindex="-1" role="dialog" aria-labelledby="feedbackLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="feedbackLabel">Add New Trial Revision</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id='feedbck' role="form" method="post">
+          @method('put')
+          {{csrf_field()}}
+
+          <div class="form-group">
+            <label class="control-label">Feedback</label>
+            <textarea name='feedback' id='feed' class='form-control' required></textarea>
+          </div>
+
+            <div class="modal-footer">
+              <button type='submit' class="btn btn-primary"><i class="fa fa-floppy-o"></i> Save</button>
+              <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- modal add -->
 <div class="modal fade bd-example-modal-lg" id="modalAdd" tabindex="-1" role="dialog" aria-labelledby="modalAddLabel" aria-hidden="true">
@@ -264,6 +303,15 @@ function editConfirm(data)
 
     $('#updateRevisi').attr('action',"{{ url('trial_revisi') }}/"+data.id)
     $('#modalEdit').modal();
+}
+
+function editFeed(feed,id)
+{
+  console.log(feed);
+    $('#feed').html(feed);
+
+    $('#feedbck').attr('action',"{{ url('trial_revisi') }}/"+id)
+    $('#feedback').modal();
 }
 
 function destroy(action){

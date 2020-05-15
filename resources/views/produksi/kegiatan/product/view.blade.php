@@ -74,7 +74,9 @@
   <div class="col-md-12 col-sm-12 ">
     <div class="x_panel">
       <div class="x_title">
+        @if(Auth::user()->role == 0)
           <a href="{{route('activity_product.view.add',$productactivity->id)}}" class="btn btn-success"><i class="fa fa-plus"></i> Add New Product </a>
+        @endif
         <ul class="nav navbar-right panel_toolbox">
           <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
           <li><a class="close-link"><i class="fa fa-close"></i></a></li>
@@ -91,7 +93,9 @@
                     <th>No</th>
                     <th>Product</th>
                     <th>Result</th>
-                    <th>Action</th>
+                    @if(Auth::user()->role == 0)
+                      <th>Action</th>
+                    @endif
                   </tr>
                 </thead>
                 <tbody>
@@ -107,7 +111,9 @@
                         <td>{{$no++}}</td>
                         <td> {{$data->product->product_name}} </td>
                         <td> {{$data->result_real}}</td>
-                        <td><a href="{{route('product_activity.viewsub',[$data->product_activity_id,$data->product_id])}}" class='btn btn-warning' ><i class="fa fa-eye"></i></a></td>
+                        @if(Auth::user()->role == 0)
+                          <td><a href="{{route('product_activity.viewsub',[$data->product_activity_id,$data->product_id])}}" class='btn btn-warning' ><i class="fa fa-eye"></i></a></td>
+                        @endif
                     </tr>
                     @endif
                   @endforeach

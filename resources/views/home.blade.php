@@ -12,6 +12,7 @@
         </div>
         <div class="clearfix"></div>
       </div>
+      @if(Auth::user()->role == 0)
       <div class="x_content">
         <div class="col-md-9 col-sm-9 ">
           <div class="demo-container" style="height:280px">
@@ -79,6 +80,7 @@
           </ul>
         </div>
       </div>
+      @endif
     </div>
   </div>
 </div>

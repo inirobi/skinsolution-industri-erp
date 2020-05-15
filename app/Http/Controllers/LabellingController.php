@@ -10,6 +10,7 @@ use App\PackagingActivity;
 use App\Labelling; 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class LabellingController extends Controller
 {
@@ -21,7 +22,19 @@ class LabellingController extends Controller
     public function index()
     {
         $no = 1;
-        $labellings = DB::table('labellings')->select('labellings.*','packaging_activities.activity_code')->join('packaging_activities','packaging_activities.id','labellings.packaging_activity_id')->orderby('packaging_activities.id','ASC')->get();
+        if(Auth::user()->role == 0){
+            $labellings = DB::table('labellings')
+                ->select('labellings.*','packaging_activities.activity_code')
+                ->join('packaging_activities','packaging_activities.id','labellings.packaging_activity_id')
+                ->orderby('packaging_activities.id','ASC')
+                ->get();
+        }elseif(Auth::user()->role == 8){
+            $labellings = DB::table('labellings')
+                ->select('labellings.*','packaging_activities.activity_code')
+                ->join('packaging_activities','packaging_activities.id','labellings.packaging_activity_id')
+                ->orderby('packaging_activities.id','ASC')
+                ->get();
+        }
         return view('produksi.kegiatan.labelling.index', compact('labellings','no'));
     }
 

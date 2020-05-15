@@ -14,6 +14,7 @@ use App\Material;
 use App\SampleMaterial;
 use App\FormulaDetail;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
@@ -24,14 +25,27 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $product = DB::table('products')
-            ->select('products.*','customers.*','formulas.*','trial_revision_datas.*')
-            ->join('customers','products.customer_id','customers.id')
-            ->join('formulas','products.formula_id','formulas.id')
-            ->join('trial_revision_datas','products.trial_revision_data_id','trial_revision_datas.id')
-            ->selectRaw('products.id as xx')
-            ->orderBy('products.updated_at', 'desc')
-            ->get();
+        if(Auth::user()->role == 0){
+
+            $product = DB::table('products')
+                ->select('products.*','customers.*','formulas.*','trial_revision_datas.*')
+                ->join('customers','products.customer_id','customers.id')
+                ->join('formulas','products.formula_id','formulas.id')
+                ->join('trial_revision_datas','products.trial_revision_data_id','trial_revision_datas.id')
+                ->selectRaw('products.id as xx')
+                ->orderBy('products.updated_at', 'desc')
+                ->get();
+        }elseif(Auth::user()->role == 8){
+            $product = DB::table('products')
+                ->select('products.*','customers.*','formulas.*','trial_revision_datas.*')
+                ->join('customers','products.customer_id','customers.id')
+                ->join('formulas','products.formula_id','formulas.id')
+                ->join('trial_revision_datas','products.trial_revision_data_id','trial_revision_datas.id')
+                ->selectRaw('products.id as xx')
+                ->orderBy('products.updated_at', 'desc')
+                ->where('products.customer_id', Auth::user()->email)
+                ->get();
+        }
         $no = 1;
         return view('produksi.product.index', compact('product','no'));
     }
@@ -280,8 +294,17 @@ class ProductController extends Controller
 
     public function indexStock()
     {
-        $stocks = ProductStock::all();
-        $no = 1;
+        if(Auth::user()->role == 0){
+            $stocks = ProductStock::all();
+        }elseif(Auth::user()->role == 8){
+            $stocks = DB::table('product_stocks')
+                ->select('products.customer_id','products.product_name','product_stocks.*')
+                ->join('products','product_stocks.product_id','products.id')
+                ->orderBy('product_stocks.updated_at', 'desc')
+                ->where('products.customer_id', Auth::user()->email)
+                ->get();
+        }
+            $no = 1;
         return view('produksi.product.stock', compact('stocks', 'no'));
     }
 

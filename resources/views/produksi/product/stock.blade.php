@@ -30,7 +30,9 @@
       <div class="x_panel">
         <div class="x_title">
           <h2>Stocks</h2>
-          <button class="pull-right btn btn-primary" onclick="javascript:window.print()"><i class="fa fa-print"></i> Print</button>
+          @if(Auth::user()->role == 0)
+            <button class="pull-right btn btn-primary" onclick="javascript:window.print()"><i class="fa fa-print"></i> Print</button>
+          @endif
           <div class="clearfix"></div>
         </div>
         <div class="x_content">
@@ -54,13 +56,17 @@
               @foreach($stocks as $data)
               <tr>
                 <td>{{ $no++ }}</td>
-                <td> {{$data->product->product_name}}</td>
-                <td> {{$data->production_quantity}}</td>
-                <td> {{$data->packaging_quantity}}</td>
-                <td> {{$data->labelling_quantity}}</td>
-                <td> {{$data->date_end_production}}</td>
-                <td> {{$data->date_end_packaging}}</td>
-                <td> {{$data->date_end_labelling}}</td>
+                @if(Auth::user()->role == 0)
+                  <td> {{$data->product->product_name}}</td>
+                @elseif(Auth::user()->role == 8)
+                  <td> {{$data->product_name}}</td>
+                @endif
+                  <td> {{$data->production_quantity}}</td>
+                  <td> {{$data->packaging_quantity}}</td>
+                  <td> {{$data->labelling_quantity}}</td>
+                  <td> {{$data->date_end_production}}</td>
+                  <td> {{$data->date_end_packaging}}</td>
+                  <td> {{$data->date_end_labelling}}</td>
               </tr>
               @endforeach
             </tbody>
@@ -75,7 +81,7 @@
         <!-- /page content -->
 
 @endsection
-
+@if(Auth::user()->role == 0)
 @push('print')
 <div class="page-title">
   <div class="title_left">
@@ -130,6 +136,7 @@
 	</div>
 </div>
 @endpush
+@endif
 @push('styles')
 <style>
 #printable { display: none; }

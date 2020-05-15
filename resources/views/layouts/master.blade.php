@@ -231,6 +231,12 @@
                       <li><a href="{{ route('labelling.index') }}">Labelling</a></li>
                     </ul>
                   </li>
+                  <li><a><i class="fa fa-recycle"></i>Trial<span class="fa fa-chevron-down"></span></a>
+                      <ul class="nav child_menu">
+                        <li class="sub_menu"><a href="{{ route('trial.index') }}">Data</a></li>
+                        <li><a href="{{ route('trial_revisi.index') }}">Revisi</a></li>
+                      </ul>
+                  </li>
                   <li><a><i class="fa fa-shopping-cart"></i> Purchase Order <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li><a href="{{route('po_product_pemesanan.index')}}">Produksi</a></li>
