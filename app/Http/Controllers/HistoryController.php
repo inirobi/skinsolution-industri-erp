@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use App\DeliveryOrder;
 use App\DeliveryOrderDetail;
 use App\Customer;
@@ -21,7 +22,13 @@ class HistoryController extends Controller
     public function index()
     {
         $no = 1;
-        $po = PoProduct::All();
+        if(Auth::user()->role == 0){
+            $po = PoProduct::orderBy('updated_at', 'desc')->get();
+        }elseif(Auth::user()->role == 8){
+            $po = PoProduct::orderBy('updated_at', 'desc')
+                    ->where('customer_id', Auth::user()->email)
+                    ->get();
+        }
         return view('pemesanan.history.index', compact('no','po'));
     }
 

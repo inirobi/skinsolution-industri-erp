@@ -58,7 +58,9 @@
     <div class="col-md-12 col-sm-12 ">
       <div class="x_panel">
         <div class="x_title">
+        @if(Auth::user()->role == 0)
           <a data-toggle="modal" href="#modalAdd" class="btn btn-success"><i class="fa fa-plus"></i> Add New Product </a>
+        @endif  
           <ul class="nav navbar-right panel_toolbox">
             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
             </li>
