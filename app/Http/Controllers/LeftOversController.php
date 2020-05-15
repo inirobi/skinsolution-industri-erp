@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Facades\Auth;
+use App\PoProduct;
 class LeftOversController extends Controller
 {
     /**
@@ -14,9 +15,16 @@ class LeftOversController extends Controller
      */
     public function index()
     {
-        $po = DB::table('customers')        
-        ->join('po_products','customers.id','po_products.customer_id')   
-        ->get();
+        if(Auth::user()->role == 0){
+            $po = DB::table('customers')        
+                ->join('po_products','customers.id','po_products.customer_id')   
+                ->get();
+        }elseif(Auth::user()->role == 8){
+            $po = DB::table('customers')        
+                ->join('po_products','customers.id','po_products.customer_id')   
+                ->where('customers.id',Auth::user()->email)   
+                ->get();
+        }
         return view('pemesanan.left_overs.index', compact('po'));
     }
 
@@ -49,7 +57,16 @@ class LeftOversController extends Controller
      */
     public function show($id)
     {
-        //
+        $invs = DB::table('leftover')->select('leftover.*','products.product_name')->join('products','products.id','=','leftover.pro_id')->where('po_id',$id)->count();
+        if($invs == 0){
+            $inv =DB::table('po_product_details')->select('po_product_details.*','products.product_name')->join('products','products.id','=','po_product_details.product_id')->where('po_product_details.po_product_id',$id)->get();
+        }
+        else{ 
+            $inv =DB::table('leftover')->select('leftover.*','products.product_name')->join('products','products.id','=','leftover.pro_id')->where('po_id',$id)->get();
+        }
+        $no = 1;
+        $po =PoProduct::find($id);
+        return view('pemesanan.left_overs.view', compact('inv','po','invs','no'));
     }
 
     /**

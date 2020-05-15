@@ -11,6 +11,7 @@ use App\PoProduct;
 use App\PoProductDetail;
 use App\ProductStock;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 class DeliveryOrderController extends Controller
 {
     /**
@@ -18,9 +19,15 @@ class DeliveryOrderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index() 
     {
-        $inv = DeliveryOrder::orderBy('id', 'desc')->get();
+        if(Auth::user()->role == 0){
+            $inv = DeliveryOrder::orderBy('updated_at', 'desc')->get();
+        }elseif(Auth::user()->role == 8){
+            $inv = DeliveryOrder::orderBy('updated_at', 'desc')
+                ->where('customer_id', Auth::user()->email)
+                ->get();
+        }
         return view('pemesanan.delivery_order.index', compact('inv'));
     }
 

@@ -44,6 +44,7 @@
                     <th>PO Number</th>
                     <th>Customer Name</th>
                     <th>Date</th>
+                    <th>Action</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -54,6 +55,7 @@
                     <td> {{$data->po_num}} </td>
                     <td> {{$data->customer_name}}</td>
                     <td> {{$data->date}}</td>
+                    <td class='text-center'><a href="{{route('left_overs.show',$data->id)}}" class="btn btn-info" title="Detail"><i class="fa fa-eye"></i></a></td>
                   </tr>
                   @endforeach
                 </tbody>

@@ -32,7 +32,9 @@ class LabellingController extends Controller
             $labellings = DB::table('labellings')
                 ->select('labellings.*','packaging_activities.activity_code')
                 ->join('packaging_activities','packaging_activities.id','labellings.packaging_activity_id')
+                ->join('products','packaging_activities.product_id','products.id')
                 ->orderby('packaging_activities.id','ASC')
+                ->where('products.customer_id',Auth::user()->email)
                 ->get();
         }
         return view('produksi.kegiatan.labelling.index', compact('labellings','no'));
