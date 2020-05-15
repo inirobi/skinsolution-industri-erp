@@ -91,25 +91,11 @@
 				</tr>
 			</thead>
 			<tbody>
-				@foreach($pro_act as $data1)
+				@foreach($datas as $data)
 				<tr id="row1">
-					<td>{{substr($data1->date_start,0,10)}}</td>
-					<td>{{$data1->activity_code}}</td>
-					<td>{{$data1->weighing}}</td>
-				</tr>
-				@endforeach
-				@foreach($pro_mat as $data2)
-				<tr id="row1">
-					<td>{{substr($data2->date,0,10)}}</td>
-					<td>{{$data2->code}}</td>
-					<td>{{$data2->quantity}}</td>
-				</tr>
-				@endforeach
-				@foreach($formula as $data3)
-				<tr id="row1">
-					<td>{{substr($data3->created_at,0,10)}}</td>
-					<td>{{$data3->formula_num}}</td>
-					<td>{{$data3->weighing}}</td>
+					<td>{{$data->tanggal}}</td>
+					<td>{{$data->keterangan}}</td>
+					<td>{{$data->quantity}}</td>
 				</tr>
 				@endforeach
 				<tr>

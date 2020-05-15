@@ -51,9 +51,9 @@ class MaterialOutController extends Controller
                 $request->keterangan = '';
             }
             $stock= DB::table('stocks')
-            ->select(DB::raw('sum(quantity) as qty'))
-            ->where('stocks.material_id',$request->material_id)
-            ->get();
+                ->select(DB::raw('sum(quantity) as qty'))
+                ->where('stocks.material_id',$request->material_id)
+                ->get();
             $stock_sum = floor($stock[0]->qty);
             if($stock_sum < $request->quantity){
                 return redirect()->back()->with('error','Material Quantity Kurang');

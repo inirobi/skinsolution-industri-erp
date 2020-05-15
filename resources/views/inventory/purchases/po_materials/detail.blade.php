@@ -163,7 +163,7 @@
 
           <div class="form-group">
             <label class="control-label col-md-2">Price</label>
-            <input type="number" class="form-control" placeholder="Quantity" required name="price">
+            <input type="number" class="form-control" placeholder="Price" required name="price">
           </div>
 
           <button type='submit' class="btn btn-primary">Submit</button>

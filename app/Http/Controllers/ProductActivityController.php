@@ -72,7 +72,6 @@ class ProductActivityController extends Controller
                 ->route('activity_product.index')
                 ->with('error','Inputan Tidak Valid!!');
         }
-        
         ProductActivity::create($request->all());
         return redirect()
             ->route('activity_product.index')

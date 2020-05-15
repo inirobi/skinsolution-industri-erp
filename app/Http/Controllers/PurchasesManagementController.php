@@ -60,12 +60,26 @@ class PurchasesManagementController extends Controller
             'po_material_id' => $request->po_material_id,
         ]);
         $data=DB::table('po_material_details')
-                ->select('materials.id','materials.material_code','materials.material_name',
-                    'po_material_details.quantity')
-                ->join('materials','po_material_details.material_id','=','materials.id')
-                ->where('po_material_details.po_material_id',$request->po_material_id)->get();
-
-
+            ->select('materials.id','materials.material_code','materials.material_name',
+            'po_material_details.quantity')
+            ->join('materials','po_material_details.material_id','=','materials.id')
+            ->where('po_material_details.po_material_id',$request->po_material_id)->get();
+        
+        $panjang = count(collect($request->material_id));
+        for ($i=0; $i < $panjang; $i++) { 
+            PurchaseDetail::create([
+                'id' => null,
+                'purchase_id' => $purchase->id,
+                'material_id' => $request->material_id[$i],
+                'quantity' => $request->quantity[$i],
+                'expired_date' => $request->expired_date[$i],
+                'batch_num' => $request->batch_num[$i],
+                'analis_num' => $request->analis_num[$i]
+            ]);
+            $stock = Stock::where('material_id', $request->material_id[$i])->first();
+            $stock->quantity = intval($stock->quantity) + intval($request->quantity[$i]);
+            $stock->save();
+        }
         return redirect()
             ->route('purchases_material.index')
             ->with('success','Successfully Purchase Added');

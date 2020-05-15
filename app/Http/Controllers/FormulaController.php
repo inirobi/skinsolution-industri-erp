@@ -59,7 +59,7 @@ class FormulaController extends Controller
         try {
             $cek = DB::table('formulas')
                 ->where('formula_num',$request->formula_num)
-                ->count();
+                ->count(); 
             
             if($cek > 0){
                 return redirect()
