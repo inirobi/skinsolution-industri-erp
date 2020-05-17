@@ -26,14 +26,14 @@ class LabellingController extends Controller
             $labellings = DB::table('labellings')
                 ->select('labellings.*','packaging_activities.activity_code')
                 ->join('packaging_activities','packaging_activities.id','labellings.packaging_activity_id')
-                ->orderby('packaging_activities.id','ASC')
+                ->orderby('labellings.updated_at','desc')
                 ->get();
         }elseif(Auth::user()->role == 8){
             $labellings = DB::table('labellings')
                 ->select('labellings.*','packaging_activities.activity_code')
                 ->join('packaging_activities','packaging_activities.id','labellings.packaging_activity_id')
                 ->join('products','packaging_activities.product_id','products.id')
-                ->orderby('packaging_activities.id','ASC')
+                ->orderby('labellings.updated_at','desc')
                 ->where('products.customer_id',Auth::user()->email)
                 ->get();
         }
@@ -155,16 +155,16 @@ class LabellingController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $sup = Labelling::where('id', $request->id)
+        $sup = Labelling::where('id', $id)
             ->update([
                 'labelling_code' => $request->labelling_code,
                 'date' => $request->date    ,
                 'packaging_activity_id' => $request->packaging_activity_id,
                 'packaging_result' => $request->packaging_result,
                 'result' => $request->result,
+                'jenis' => $request->jenis,
                 'used_quantity' => $request->used_quantity,
         ]);
-
             return redirect()->route('labelling.index')->with('success','Successfully Updated');
     }
 

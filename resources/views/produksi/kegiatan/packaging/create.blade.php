@@ -1,21 +1,24 @@
 @extends('layouts.master')
 @section('site-title')
-  Packaging Activity
+  Filling
 @endsection
 @section('content')
 <!-- page content -->
 <div class="page-title">
   <div class="title_left">
-    <h3>Add New Packaging Activity Order</h3>
+    <h3>Add New Filling</h3>
   </div>
 
   <div class="title_right">
-    <div class="col-md-5 col-sm-5 form-group pull-right top_search">
-      <div class="input-group">
-        <input type="text" class="form-control" placeholder="Search for...">
-        <span class="input-group-btn">
-          <button class="btn btn-default" type="button">Go!</button>
-        </span>
+    <div class="col-md-12 col-sm-5 col-xs-12 form-group pull-right top_search">
+      <div style='float:right'>
+        <div class="input-group">
+          <ul class="breadcrumb">
+            <li><a href="{{url('/home')}}">Home</a></li>
+            <li><a href="{{route('activity_packaging.index')}}">Filling</a></li>
+            <li><a>Add Filling</a></li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
@@ -31,7 +34,7 @@
           <p>Wajib disi <code>*</code>
           </p>
           <span class="section">
-            {{ __('Form Packaging Activity Order') }}
+            {{ __('Form Filling') }}
           </span>
           <div class="field item form-group">
             <label class="col-form-label col-md-3 col-sm-3  label-align">Activity Code<code>*</code></label>

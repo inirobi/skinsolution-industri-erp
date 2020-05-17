@@ -82,7 +82,12 @@
                       <li><a href="{{ route('packagings.index') }}">Packaging</a></li>
                       <li><a href="{{ route('suppliers.index') }}">Supplier</a></li>
                       <li><a href="{{ route('principals.index') }}">Principal</a></li>
-                      <li><a href="{{ route('samples.index') }}">Sample Materials</a></li>
+                      <li><a>Sample<span class="fa fa-chevron-down"></span></a>
+                          <ul class="nav child_menu">
+                            <li class="sub_menu"><a href="{{ route('samples.index') }}">Materials</a></li>
+                            <li><a href="{{ route('samples_packaging.index') }}">Packaging</a></li>
+                          </ul>
+                      </li>
                       <li><a>Purchase Order<span class="fa fa-chevron-down"></span></a>
                           <ul class="nav child_menu">
                             <li class="sub_menu"><a href="{{ route('po_material.index') }}">Materials</a></li>
@@ -93,14 +98,16 @@
                           <ul class="nav child_menu">
                             <li class="sub_menu"><a href="{{route('purchases_material.index')}}">Materials</a></li>
                             <li><a href="{{ route('packaging_receipt.index') }}">Packaging</a></li>
-                            <li><a href="{{ route('income_samples.index') }}">Sample</a></li>
+                            <li><a href="{{ route('income_samples.index') }}">Sample Material</a></li>
+                            <li><a href="{{ route('income_packaging_samples.index2') }}">Sample Packaging</a></li>
                           </ul>
                       </li>
                       <li><a>Stok<span class="fa fa-chevron-down"></span></a>
                           <ul class="nav child_menu">
                             <li class="sub_menu"><a href="{{url('/materials_stocks')}}">Materials</a></li>
                             <li><a href="{{url('/packagings_stocks')}}">Packaging</a></li>
-                            <li><a href="{{url('/samples_stocks')}}">Sample</a></li>
+                            <li><a href="{{url('/samples_stocks')}}">Sample Material</a></li>
+                            <li><a href="{{url('/samples_packaging_stocks')}}">Sample packaging</a></li>
                           </ul>
                       </li>
                       <li><a>Estimasi Pemesanan<span class="fa fa-chevron-down"></span></a>
@@ -121,20 +128,27 @@
                           </ul>
                       </li>
                       <li><a href="{{ route('produksi.index') }}">Product</a></li>
+                      <li><a href="{{ route('rnd.index') }}">Distribusi Stock</a></li>
                       <li><a>Kegiatan<span class="fa fa-chevron-down"></span></a>
                           <ul class="nav child_menu">
                             <li class="sub_menu"><a href="{{ route('activity_product.index') }}">Produksi</a></li>
-                            <li><a href="{{ route('activity_packaging.index') }}">Packaging</a></li>
-                            <li><a href="{{ route('labelling.index') }}">Labelling</a></li>
+                            <li><a href="{{ route('activity_packaging.index') }}">Filling</a></li>
+                            <li><a href="{{ route('labelling.index') }}">Kemas Tersier dan Sekunder</a></li>
                           </ul>
                       </li>
-                      <li><a href="{{ route('produksi.stoct') }}">Stok Produk</a></li>
+                      <li><a>Stock<span class="fa fa-chevron-down"></span></a>
+                          <ul class="nav child_menu">
+                            <li class="sub_menu"><a href="{{ route('produksi.stoct') }}">Product</a></li>
+                            <li><a href="#">Material RnD</a></li>
+                          </ul>
+                      </li>
                       <li><a href="{{ route('retur.index') }}">Retur</a></li>
                       <li><a>Pengeluaran Bahan<span class="fa fa-chevron-down"></span></a>
                           <ul class="nav child_menu">
                             <li class="sub_menu"><a href="{{ route('pengeluaran_material.index') }}">Material</a></li>
                             <li><a href="{{ route('pengeluaran_ruahan.index') }}">Ruahan</a></li>
                             <li><a href="{{ route('pengeluaran_packaging.index') }}">Packaging</a></li>
+                            <li><a href="{{ route('pengeluaran_sample_pck.index') }}">Sample Packaging</a></li>
                             <li><a href="{{ route('pengeluaran_labelling.index') }}">Labelling</a></li>
                             <li><a href="{{ route('pengeluaran_packaging2.index2') }}">Hasil Packaging</a></li>
                             <li><a href="{{ route('pengeluaran_labelling2.index2') }}">Hasil Labelling</a></li>
@@ -181,6 +195,7 @@
                       </li>
                       <li><a href="{{route('bayar.notif_po')}}">Notifikasi Pembayaran PO</a></li>
                       <li><a href="{{route('petty.index')}}">Cash Flow</a></li>
+                      <li><a href="{{route('petty_cash.index2')}}">Petty Cash</a></li>
                     </ul>
                   </li>
                   <li><a href="http://customer.skinsolutionindustri.co.id/"><i class="fa fa-user"></i> Customer </a></li>
@@ -227,7 +242,7 @@
                   <li><a><i class="fa fa-th-large"></i> Kegiatan <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li class="sub_menu"><a href="{{ route('activity_product.index') }}">Produksi</a></li>
-                      <li><a href="{{ route('activity_packaging.index') }}">Packaging</a></li>
+                      <li><a href="{{ route('activity_packaging.index') }}">Filling</a></li>
                       <li><a href="{{ route('labelling.index') }}">Labelling</a></li>
                     </ul>
                   </li>

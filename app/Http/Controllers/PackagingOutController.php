@@ -194,7 +194,7 @@ class PackagingOutController extends Controller
   
         } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){
         return redirect()
-            ->route('pengeluaran_ruahan.index')
+            ->route('pengeluaran_packaging.index')
             ->with('error', 'Data is not found.');
         }
     }

@@ -1,12 +1,12 @@
 @extends('layouts.master')
 @section('site-title')
-  Sample Stock
+	Stock RnD
 @endsection
 @section('content')
 <!-- page content -->
 <div class="page-title">
   <div class="title_left">
-    <h3>Stock Sample Lists</h3>
+    <h3>Stock RnD Lists</h3>
   </div>
 
   <div class="title_right">
@@ -15,7 +15,7 @@
       <div class="input-group">
         <ul class="breadcrumb">
           <li><a href="{{url('/home')}}">Home</a></li>
-          <li>Stock Samples</li>
+          <li>Stock RnDs</li>
         </ul>
       </div>
     </div>
@@ -29,7 +29,7 @@
     <div class="col-md-12 col-sm-12 ">
       <div class="x_panel">
         <div class="x_title">
-          <h2>Stock Samples</h2>
+          <h2>Stock RnDs</h2>
           <button class="pull-right btn btn-primary" onclick="javascript:window.print()"><i class="fa fa-print"></i> Print</button>
           <div class="clearfix"></div>
         </div>
@@ -43,8 +43,8 @@
                 <th>No</th>
                 <th>Material Code</th>
                 <th>Material Name</th>
-                <th>Supplier Name</th>
                 <th>Quantity</th>
+                <th>Date</th>
               </tr>
             </thead>
             <tbody>
@@ -53,8 +53,11 @@
                 <td>{{ $no++ }}</td>
                 <td>{{ $data -> material_code }}</td>
                 <td>{{ $data -> material_name }}</td>
-                <td>{{ $data -> supplier_name }}</td>
-                <td>{{ $data -> quantity }}</td>
+                <td>
+                  @if($data->quantity <= $data->stock_minimum)<span class="badge badge-danger">{{number_format($data->quantity,0,',','.')}}</span>@endif
+                  @if($data->quantity > $data->stock_minimum)<span class="badge bg-green">{{number_format($data->quantity,0,',','.')}}</span>@endif
+                </td>
+                <td> {{$data->created_at}}</td>
               </tr>
               @endforeach
             </tbody>
@@ -67,13 +70,11 @@
   </div>
 </div>
         <!-- /page content -->
-
 @endsection
-
 @push('print')
 <div class="page-title">
   <div class="title_left">
-    <h3>Sample Stock</h3>
+    <h3>Materials Stock</h3>
   </div>
   <div class="title_right">
     <div class="col-md-12 col-sm-5 col-xs-12 form-group pull-right top_search">
@@ -102,23 +103,21 @@
 					<thead>
 						<tr>
 							<th>NO</th>
-							<th>MATERIAL CODE</th>
-							<th>MATERIAL NAME</th>
-							<th>SUPPLIER NAME</th>
+							<th>KODE MATERIAL</th>
+							<th>NAMA MATERIAL</th>
 							<th>QUANTITY</th>
 						</tr>
 					</thead>
 					<tbody>
             @php $nomor=1; @endphp
             @foreach($stocks as $data)
-              <tr>
-                <td>{{ $nomor++ }}</td>
-                <td>{{ $data -> material_code }}</td>
-                <td>{{ $data -> material_name }}</td>
-                <td>{{ $data -> supplier_name }}</td>
-                <td>{{ $data -> quantity }}</td>
-              </tr>
-              @endforeach
+            <tr id="row1">
+              <td align='center'>{{$nomor++}}</td>
+              <td>{{$data->material_code}}</td>
+              <td>{{$data->material_name}}</td>		
+              <td>{{$data->quantity}}</td>
+            </tr>
+            @endforeach
 					</tbody>
 				</table>
 			</div>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Petty;
+use App\PettyCash;
 use Carbon\Carbon;
 
 class PettyCashController extends Controller
@@ -19,6 +20,13 @@ class PettyCashController extends Controller
         $petty =Petty::orderBy('id', 'desc')->get();
         $no = 1;
         return view('accounting.cash_flow.index', compact('petty','no'));
+    }
+
+    public function index2()
+    {
+        $petty =PettyCash::orderBy('id', 'desc')->get();
+        $no = 1;
+        return view('accounting.petty_cash.index', compact('petty','no'));
     }
 
     /**
@@ -41,15 +49,12 @@ class PettyCashController extends Controller
     {
         try{
             $saldo=0;
-            $sald =Petty::orderBy('id','DESC')->limit(1)->get();
-            foreach($sald as $data){
-                $data->saldo;
-            }
-
+            $sald =Petty::orderBy('id','DESC')->limit(1)->first();
+            $saldo=($sald==null)?0:intval($sald->saldo);
             if($request->status=='1'){
-                $saldo= $data->saldo+$request->money;
+                $saldo= $saldo+$request->money;
             }else{
-                $saldo= $data->saldo-$request->money;
+                $saldo= $saldo-$request->money;
             }
             //$data->saldo;
                 $petty= new Petty;
@@ -61,10 +66,36 @@ class PettyCashController extends Controller
                 $petty->save();
             return redirect()
                 ->route('petty.index')
-                ->with('success','Successfully PurchaseOrder Added');
+                ->with('success','Successfully Cash Flow Added');
         } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){
             return redirect()
                 ->route('petty.index')
+                ->with('error', 'Data is not found.');
+        }
+    }
+    public function store2(Request $request)
+    {
+        try{
+            $sald =PettyCash::orderBy('id','DESC')->limit(1)->first();
+            $saldo=($sald==null)?0:intval($sald->saldo);
+            if($request->status=='1'){
+                $saldo= $saldo+$request->money;
+            }else{
+                $saldo= $saldo-$request->money;
+            }
+                $petty= new PettyCash;
+                $petty->date = $request->date;
+                $petty->money = $request->money;
+                $petty->status = $request->status;
+                $petty->saldo = $saldo;
+                $petty->keterangan = $request->keterangan;
+                $petty->save();
+            return redirect()
+                ->route('petty_cash.index2')
+                ->with('success','Successfully Patty Cash Added');
+        } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){
+            return redirect()
+                ->route('petty_cash.index2')
                 ->with('error', 'Data is not found.');
         }
     }

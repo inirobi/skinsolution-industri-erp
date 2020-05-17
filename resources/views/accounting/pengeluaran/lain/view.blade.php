@@ -13,7 +13,7 @@
 @section('content')
 <div class="page-title">
   <div class="title_left">
-    <h3>Purchase Order Material List</h3>
+    <h3>Purchase Order Other View</h3>
   </div>
 
   <div class="title_right">
@@ -34,7 +34,7 @@
   <div class="col-md-12 col-sm-12">
     <div class="x_panel">
       <div class="x_title">
-        <h2>Purchase Order Material Detail</h2>
+        <h2>Purchase Order Other View</h2>
         <div class="clearfix"></div>
       </div>
       <div class="x_content">

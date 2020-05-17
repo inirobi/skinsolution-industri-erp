@@ -1,12 +1,12 @@
 @extends('layouts.master')
 @section('site-title')
-  Sample Income Material
+  Sample Income
 @endsection
 @section('content')
 <!-- page content -->
 <div class="page-title">
   <div class="title_left">
-    <h3>Sample Income Material List</h3>
+    <h3>Sample Income Packaging List</h3>
   </div>
 
   <div class="title_right">
@@ -15,7 +15,7 @@
         <div class="input-group">
           <ul class="breadcrumb">
             <li><a href="{{url('/home')}}">Home</a></li>
-            <li><a>Sample Income Material </a></li>
+            <li><a>Sample Income Packaging</a></li>
           </ul>
         </div>
       </div>
@@ -29,7 +29,7 @@
     <div class="col-md-12 col-sm-12 ">
       <div class="x_panel">
         <div class="x_title">
-          <a data-toggle="modal" href="#modalAdd" class="btn btn-success"><i class="fa fa-plus"></i> Add New Sample Income Material</a>
+          <a data-toggle="modal" href="#modalAdd" class="btn btn-success"><i class="fa fa-plus"></i> Add New Sample Income Packaging </a>
           <ul class="nav navbar-right panel_toolbox">
             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
             </li>
@@ -47,7 +47,7 @@
               <tr>
                 <th>No</th>
                 <th>Sample Income Number</th>
-                <th>Sample Material</th>
+                <th>Sample Packaging</th>
                 <th>Date</th>
                 <th>Quantity</th>
                 <th>Price Per Kg</th>
@@ -58,7 +58,7 @@
               <tr>
                 <td> {{$no++}} </td>
                 <td> {{$data->purchase_num}} </td>
-                <td> {{$data->sample_material->material_name}} </td>
+                <td> {{$data->sample_packaging->packaging_name}} </td>
                 <td> {{$data->date}}</td>
                 <td> {{$data->quantity}}</td>
                 <td> {{number_format($data->price)}}</td>
@@ -80,23 +80,23 @@
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="modalDetailLabel">Add New Sample Income Material</h5>
+        <h5 class="modal-title" id="modalDetailLabel">Add New Sample Income Packaging</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <form method="post" role="form" action="{{route('income_samples.store')}}">
+        <form method="post" role="form" action="{{route('income_packaging_samples.store2')}}">
         {{csrf_field()}}
           <div class="form-group">
             <label for="kode" class="col-form-label">Income Number:</label>
             <input type="text" class="form-control" name='purchase_num'>
           </div>
           <div class="form-group">
-            <label for="cas_num" class="col-form-label">Sample Material:</label>
-            <select class="form-control" name="sample_material_id">
+            <label for="cas_num" class="col-form-label">Sample Packaging:</label>
+            <select class="form-control" name="sample_packaging_id">
                 @foreach($sampleMaterial as $a)
-                    <option value="{{$a->id}}" >{{$a->material_name}}</option>
+                    <option value="{{$a->id}}" >{{$a->packaging_name}}</option>
                 @endforeach
             </select>
           </div>

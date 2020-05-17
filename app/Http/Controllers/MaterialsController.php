@@ -82,6 +82,7 @@ class MaterialsController extends Controller
                 'stock_minimum' => $req['stock_minimum'],
                 'category' => $req['category'],
                 'price' => $req['price'],
+                'halal' => $req['halal'],
             ]);
             $id = DB::getPdo()->lastInsertId();
             Stocks::create([
@@ -169,6 +170,7 @@ class MaterialsController extends Controller
           $materials->stock_minimum = $req['stock_minimum'];
           $materials->category = $req['category'];
           $materials->price = $req['price'];
+          $materials->halal = $req['halal'];
           $materials->save();
 
           return redirect()

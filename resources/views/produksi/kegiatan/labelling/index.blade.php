@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('site-title')
-  Labelling
+  Kemas Tersier dan Sekunder
 @endsection
 @push('styles')
     <!-- bootstrap-daterangepicker -->
@@ -13,7 +13,7 @@
 <!-- page content -->
 <div class="page-title">
   <div class="title_left">
-    <h3>Labelling Lists</h3>
+    <h3>Kemas Tersier dan Sekunder Lists</h3>
   </div>
 
   <div class="title_right">
@@ -22,7 +22,7 @@
         <div class="input-group">
           <ul class="breadcrumb">
             <li><a href="{{url('/home')}}">Home</a></li>
-            <li><a>Labelling Activity</a></li>
+            <li><a>Kemas Tersier dan Sekunder</a></li>
           </ul>
         </div>
       </div>
@@ -37,7 +37,7 @@
       <div class="x_panel">
         <div class="x_title">
         @if(Auth::user()->role == 0)
-          <a href="{{route('labelling.create')}}" class="btn btn-success" ><i class="fa fa-plus"></i> Add New Labelling </a>
+          <a href="{{route('labelling.create')}}" class="btn btn-success" ><i class="fa fa-plus"></i> Add New Kemas Tersier dan Sekunder </a>
         @endif  
           <ul class="nav navbar-right panel_toolbox">
             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -60,7 +60,8 @@
                 <th>Packaging Activity Code</th>
                 <th>Packaging Result</th>
                 <th>Labelling Result</th>
-                <th>Result</th>
+                <th>Jenis</th>
+                <th>Status</th>
                 @if(Auth::user()->role == 0)
                   <th>Action</th>
                 @endif
@@ -75,6 +76,10 @@
                 <td>{{$data->activity_code}}</td>
                 <td>{{$data->packaging_result}}</td>
                 <td>{{$data->result}}</td>
+                <td>
+                  @if($data->jenis=="Sekunder")<span class="badge badge-info">Sekunder</span>@endif
+                  @if($data->jenis=="Tersier")<span class="badge bg-green">Tersier</span>@endif
+                </td>
                 <td>
                   @if($data->status=="Pending")<span class="badge badge-warning">Pending</span>@endif
                   @if($data->status=="Release")<span class="badge bg-green">Release</span>@endif

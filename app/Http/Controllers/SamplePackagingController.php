@@ -3,21 +3,17 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Samples;
-use App\Suppliers;
 use Illuminate\Support\Facades\DB;
+use App\SamplePackagings;
+use App\Suppliers;
 
-class SamplesController extends Controller
+class SamplePackagingController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
         $this->middleware('auth');
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -25,8 +21,8 @@ class SamplesController extends Controller
      */
     public function index()
     {
-        $tamp = Samples::orderBy('updated_at', 'desc')->get();
-        return view('inventory.samples.material.index',['samples'=> $tamp, 'no'=>1]);
+        $tamp = SamplePackagings::orderBy('updated_at', 'desc')->get();
+        return view('inventory.samples.packaging.index',['samples'=> $tamp, 'no'=>1]);
     }
 
     /**
@@ -37,7 +33,7 @@ class SamplesController extends Controller
     public function create()
     {
         $suppliers = Suppliers::All();
-        return view('inventory.samples.material.create',['suppliers'=> $suppliers]);
+        return view('inventory.samples.packaging.create',['suppliers'=> $suppliers]);
     }
 
     /**
@@ -49,9 +45,9 @@ class SamplesController extends Controller
     public function store(Request $request)
     {
         $this->validate($request,[
-            'material_code' => 'required',
+            'packaging_code' => 'required',
             'cas_num' => 'required',
-            'material_name' => 'required',
+            'packaging_name' => 'required',
             'inci_name' => 'required',
             'supplier_id' => 'required',
             'category' => 'required',
@@ -60,23 +56,23 @@ class SamplesController extends Controller
 
         try {
             $req = $request->all();
-            Samples::create([
+            SamplePackagings::create([
                 'id' => null,
-                'material_code' => $req['material_code'],
+                'packaging_code' => $req['packaging_code'],
                 'cas_num' => $req['cas_num'],
-                'material_name' => $req['material_name'],
+                'packaging_name' => $req['packaging_name'],
                 'inci_name' => $req['inci_name'],
                 'supplier_id' => $req['supplier_id'],
                 'category' => $req['category'],
                 'price' => $req['price'],
               ]);
           return redirect()
-              ->route('samples.index')
-              ->with('success', 'Data sample berhasil disimpan.');
+              ->route('samples_packaging.index')
+              ->with('success', 'Data sample packaging berhasil disimpan.');
 
         }catch(Exception $e){
           return redirect()
-              ->route('samples.create')
+              ->route('samples_packaging.create')
               ->with('error', $e->toString());
         }
     }
@@ -102,14 +98,14 @@ class SamplesController extends Controller
     {
         try {
             $suppliers = Suppliers::All();
-            $samples = Samples::findOrFail($id);
-            return view('inventory.samples.material.create', ['samples' => $samples, 'suppliers' => $suppliers]);
+            $samples = SamplePackagings::findOrFail($id);
+            return view('inventory.samples.packaging.create', ['samples' => $samples, 'suppliers' => $suppliers]);
   
-          } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){
-            return redirect()
-                ->route('samples.index')
-                ->with('error', 'Data tidak ditemukan.');
-          }
+        } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){
+        return redirect()
+            ->route('samples_packaging.index')
+            ->with('error', 'Data tidak ditemukan.');
+        }
     }
 
     /**
@@ -122,9 +118,9 @@ class SamplesController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request,[
-            'material_code' => 'required',
+            'packaging_code' => 'required',
             'cas_num' => 'required',
-            'material_name' => 'required',
+            'packaging_name' => 'required',
             'inci_name' => 'required',
             'supplier_id' => 'required',
             'category' => 'required',
@@ -133,10 +129,10 @@ class SamplesController extends Controller
 
         try {
           $req = $request->all();
-          $samples = Samples::findOrFail($id);
-          $samples->material_code = $req['material_code'];
+          $samples = SamplePackagings::findOrFail($id);
+          $samples->packaging_code = $req['packaging_code'];
           $samples->cas_num = $req['cas_num'];
-          $samples->material_name = $req['material_name'];
+          $samples->packaging_name = $req['packaging_name'];
           $samples->inci_name = $req['inci_name'];
           $samples->supplier_id = $req['supplier_id'];
           $samples->category = $req['category'];
@@ -144,12 +140,12 @@ class SamplesController extends Controller
           $samples->save();
 
           return redirect()
-              ->route('samples.index')
+              ->route('samples_packaging.index')
               ->with('success', 'Data sample berhasil diupdate.');
 
         } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){
           return redirect()
-              ->route('samples.index')
+              ->route('samples_packaging.index')
               ->with('error', 'Data tidak ditemukan.');
         }
     }
@@ -163,27 +159,26 @@ class SamplesController extends Controller
     public function destroy($id)
     {
         try {
-            $samples = Samples::findOrFail($id)->delete();
-  
+            $samples = SamplePackagings::findOrFail($id)->delete();
             return redirect()
-                ->route('samples.index')
-                ->with('success', 'Data samples berhasil dihapus.');
+                ->route('samples_packaging.index')
+                ->with('success', 'Data samples packaging berhasil dihapus.');
   
-          } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){
+        } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){
             return redirect()
-                ->route('samples.index')
+                ->route('samples_packaging.index')
                 ->with('error', 'Data tidak ditemukan.');
-          }
+        }
     }
 
     public function dataStock()
     {
-        $stocks = DB::table('sample_stocks')
-            ->join('sample_materials', 'sample_stocks.sample_material_id', '=', 'sample_materials.id')
-            ->join('suppliers', 'sample_materials.supplier_id', '=', 'suppliers.id')
-            ->select('sample_stocks.*', 'sample_materials.material_code', 'sample_materials.material_name', 'suppliers.supplier_name')
-            ->orderBy('sample_stocks.updated_at', 'desc')
+        $stocks = DB::table('sample_packaging_stocks')
+            ->join('sample_packagings', 'sample_packaging_stocks.sample_packaging_id', '=', 'sample_packagings.id')
+            ->join('suppliers', 'sample_packagings.supplier_id', '=', 'suppliers.id')
+            ->select('sample_packaging_stocks.*', 'sample_packagings.packaging_code', 'sample_packagings.packaging_name', 'suppliers.supplier_name')
+            ->orderBy('sample_packaging_stocks.updated_at', 'desc')
             ->get();
-        return view('inventory.samples.material.stocks',['stocks'=> $stocks, 'no'=>1]);
+        return view('inventory.samples.packaging.stocks',['stocks'=> $stocks, 'no'=>1]);
     }
 }

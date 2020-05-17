@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\DB;
 use App\SamplePurchase;
 use App\SampleMaterial;
 use App\SampleStock;
+use App\SamplePackagingStock;
+use App\SamplePackagingPurchase;
+use App\SamplePackagings;
 class SamplePurchaseController extends Controller
 {
     /**
@@ -20,6 +23,14 @@ class SamplePurchaseController extends Controller
         $sampleMaterial = SampleMaterial::orderBy('id', 'desc')->get();
         $no = 1;
         return view('inventory.penerimaan.sample.index', compact('purchase', 'no','sampleMaterial'));
+    }
+
+    public function index2()
+    {
+        $purchase = SamplePackagingPurchase::orderBy('id', 'desc')->get();
+        $sampleMaterial = SamplePackagings::orderBy('id', 'desc')->get();
+        $no = 1;
+        return view('inventory.penerimaan.sample_packaging.index', compact('purchase', 'no','sampleMaterial'));
     }
 
     /**
@@ -49,10 +60,8 @@ class SamplePurchaseController extends Controller
                 ->route('income_samples.index')
                ->with('error','Code Already Exists!!');
         }
-        $date = explode('/',$request->date);
-        $date = $date[2]."-".$date[0]."-".$date[1];
         $purchase = SamplePurchase::create([
-            'date' => $date,
+            'date' => $request->date,
             'purchase_num' => $request->purchase_num,
             'sample_material_id' => $request->sample_material_id,
             'quantity' => $request->quantity,
@@ -87,6 +96,55 @@ class SamplePurchaseController extends Controller
         return redirect()
             ->route('income_samples.index')
             ->with('success','Successfully Sample Income Added');
+    }
+
+    public function store2(Request $request)
+    {
+        $cek = DB::table('sample_packaging_purchases')
+        ->where('purchase_num',$request->purchase_num)
+        ->count();
+        
+        if($cek > 0){
+            return redirect()
+                ->route('income_packaging_samples.index')
+               ->with('error','Code Already Exists!!');
+        }
+        $purchase = SamplePackagingPurchase::create([
+            'date' => $request->date,
+            'purchase_num' => $request->purchase_num,
+            'sample_packaging_id' => $request->sample_packaging_id,
+            'quantity' => $request->quantity,
+            'price' => $request->price,
+        ]);
+
+        $stock = SamplePackagingStock::where('sample_packaging_id', $request->input('sample_packaging_id'))->first();        
+            if (!empty($stock)) {
+                SamplePackagingStock::where('sample_packaging_id', $request->input('sample_packaging_id'))
+                ->update([
+                    'sample_packaging_id' => $request->input('sample_packaging_id'),
+                    'quantity' => $stock->quantity + $request->input('quantity'),
+                ]);
+
+            }else{
+                $sup = SamplePackagingStock::create([
+                    'sample_packaging_id' => $request->sample_packaging_id,
+                    'quantity' => $request->quantity,
+                ]);                        
+            }
+            
+        $material = SamplePackagings::findOrFail($request->sample_packaging_id);
+        $price = $request->price / 1000;
+        if($material->price < $price){
+            SamplePackagings::whereId($request->sample_packaging_id)
+            ->update([
+                'price' => $price,
+            ]);        
+
+        }
+                
+        return redirect()
+            ->route('income_packaging_samples.index2')
+            ->with('success','Successfully Sample Packaging Income Added');
     }
 
     /**

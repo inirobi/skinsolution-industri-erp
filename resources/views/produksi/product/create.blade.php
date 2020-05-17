@@ -90,7 +90,7 @@
           </div>
          
           <div class="field item form-group">
-            <label class="col-form-label col-md-3 col-sm-3  label-align">Revision Numbe<code>*</code></label>
+            <label class="col-form-label col-md-3 col-sm-3  label-align">Revision Number<code>*</code></label>
             <div class="col-md-6 col-sm-6">
             <select class="form-control" name="trial_revision_data_id">
                 @foreach($revision as $d)

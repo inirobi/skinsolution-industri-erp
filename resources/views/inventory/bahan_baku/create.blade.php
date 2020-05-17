@@ -83,6 +83,40 @@
                 </span>
             @enderror
           </div>
+          @if(isset($materials))
+            <input type="hidden" id="get_halal" value="{{ $materials->halal }}">
+          @endif
+          <div class="item form-group">
+            <label class="col-form-label col-md-3 col-sm-3 label-align">Halal <code>*</code></label>
+            <div class="col-md-6 col-sm-6 ">
+                <div id="halal" class="btn-group" data-toggle="buttons">
+                    <label class="btn btn-primary" data-toggle-class="btn-primary"
+                        data-toggle-passive-class="btn-default" id="btn-no">
+                        <input type="radio" value="0" id="halal" name="halal"
+                        @if(isset($materials)) 
+                          @if($materials->halal == 0)
+                            checked="checked"
+                          @endif
+                        @else
+                          checked="checked"
+                        @endif
+                        class="join-btn">
+                        &nbsp; No
+                    </label>
+                    <label class="btn btn-secondary" data-toggle-class="btn-primary"
+                        data-toggle-passive-class="btn-default" id="btn-yes">
+                        <input type="radio" value="1" id="halal" name="halal"
+                        @if(isset($materials)) 
+                          @if($materials->halal == 1)
+                            checked="checked"
+                          @endif
+                        @endif
+                          class="join-btn">
+                        &nbsp; Yes
+                    </label>
+                </div>
+            </div>
+          </div>
           <div class="field item form-group">
             <label class="col-form-label col-md-3 col-sm-3  label-align">Inci Name<code>*</code></label>
             <div class="col-md-6 col-sm-6">
@@ -145,6 +179,31 @@
   </div>
 </div>
 <!-- /page content -->
-
-@include('layouts.validasi_footer')
 @endsection
+@push('scripts')
+<script>
+
+  let get_halal = $('#get_halal').val();
+  if (get_halal == "1") {
+      $('#btn-no').attr('class', 'btn btn-secondary');
+      $('#btn-yes').attr('class', 'btn btn-primary');
+  }
+  if (get_halal == "0") {
+      $('#btn-no').attr('class', 'btn btn-primary');
+      $('#btn-yes').attr('class', 'btn btn-secondary');
+  }
+  $('input[type=radio][name=halal]').change(function () {
+      var source = this.value;
+
+      if (source == "1") {
+          $('#btn-no').attr('class', 'btn btn-secondary');
+          $('#btn-yes').attr('class', 'btn btn-primary');
+      }
+      if (source == "0") {
+          $('#btn-no').attr('class', 'btn btn-primary');
+          $('#btn-yes').attr('class', 'btn btn-secondary');
+      }
+  });
+
+</script>
+@endpush

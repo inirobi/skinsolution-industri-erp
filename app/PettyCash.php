@@ -4,10 +4,8 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Petty extends Model
+class PettyCash extends Model
 {
-    protected $table = 'cash_flow';
+    protected $table = 'petty_cash';
     protected $guarded  = ['id'];
-
-  
 }

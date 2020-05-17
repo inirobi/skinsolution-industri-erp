@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('site-title')
-  Cash Flow
+  Patty Cash
 @endsection
 @push('styles')
     <!-- bootstrap-daterangepicker -->
@@ -13,7 +13,7 @@
 <!-- page content -->
 <div class="page-title">
   <div class="title_left">
-    <h3>Cash Flow Lists</h3>
+    <h3>Petty Cash Lists</h3>
   </div>
 
   <div class="title_right">
@@ -22,7 +22,7 @@
         <div class="input-group">
           <ul class="breadcrumb">
             <li><a href="{{url('/home')}}">Home</a></li>
-            <li><a>Cash Flows</a></li>
+            <li><a>Petty Cashs</a></li>
           </ul>
         </div>
       </div>
@@ -35,8 +35,8 @@
     <div class="col-md-12 col-sm-12 ">
       <div class="x_panel">
         <div class="x_title">
-        <h2>Cash Flows</h2>
-          <a data-toggle="modal" href="#modalAdd" class="btn btn-success pull-right" ><i class="fa fa-plus"></i> Add New Cash Flow </a>
+        <h2>Petty Cashs</h2>
+          <a data-toggle="modal" href="#modalAdd" class="btn btn-success pull-right" ><i class="fa fa-plus"></i> Add New Patty Cash </a>
           <div class="clearfix"></div>
         </div>
         <div class="x_content">
@@ -86,7 +86,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <form action="{{ route('petty.store') }}" role="form" method="post">
+        <form action="{{ route('petty_cash.store2') }}" role="form" method="post">
           {{csrf_field()}}
           <div class="form-group">
             <fieldset>

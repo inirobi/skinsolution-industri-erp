@@ -42,6 +42,7 @@
                 <th>No</th>
                 <th>Code Material</th>
                 <th>Name Material</th>
+                <th>Halal</th>
                 <th>Cas Number</th>
                 <th>Inci Name</th>
                 <th>Stock Minimum</th>
@@ -57,6 +58,10 @@
                 <td>{{ $no++ }}</td>
                 <td>{{ $data -> material_code }}</td>
                 <td>{{ $data -> material_name }}</td>
+                <td>
+                  @if($data->halal == 0)<span class="badge badge-danger">No</span>@endif
+                  @if($data->halal == 1)<span class="badge bg-green">Yes</span>@endif
+                </td>
                 <td>{{ $data -> cas_num }}</td>
                 <td>{{ $data -> inci_name }}</td>
                 <td>{{ $data -> stock_minimum }}</td>

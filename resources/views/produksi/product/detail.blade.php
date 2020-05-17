@@ -32,7 +32,7 @@
         @foreach($product as $data)
           <p>Wajib disi <code>*</code>
           </p>
-          <span class="section"> Update Product </span>
+          <span class="section"> Detail Product </span>
           <div class="field item form-group">
             <label class="col-form-label col-md-3 col-sm-3  label-align">Product Code<code>*</code></label>
             <div class="col-md-6 col-sm-6">

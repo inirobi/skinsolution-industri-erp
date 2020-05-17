@@ -1,12 +1,12 @@
 @extends('layouts.master')
 @section('site-title')
-  Labelling
+  Kemas Tersier dan Sekunder
 @endsection
 @section('content')
 <!-- page content -->
 <div class="page-title">
   <div class="title_left">
-    <h3>Edit Labelling</h3>
+    <h3>Edit Kemas Tersier dan Sekunder</h3>
   </div>
 
   <div class="title_right">
@@ -15,8 +15,8 @@
         <div class="input-group">
           <ul class="breadcrumb">
             <li><a href="{{url('/home')}}">Home</a></li>
-            <li><a href="{{route('labelling.index')}}">Labelling</a></li>
-            <li><a>Edit Labelling</a></li>
+            <li><a href="{{route('labelling.index')}}">Kemas Tersier dan Sekunder</a></li>
+            <li><a>Edit Kemas Tersier dan Sekunder</a></li>
           </ul>
         </div>
       </div>
@@ -35,7 +35,7 @@
           <p>Wajib disi <code>*</code>
           </p>
           <span class="section">
-                {{ __('Edit Labelling') }}
+                {{ __('Edit Kemas Tersier dan Sekunder') }}
           </span>
           <div class="field item form-group">
             <label class="col-form-label col-md-3 col-sm-3  label-align">Labelling Code<code>*</code></label>
@@ -66,6 +66,26 @@
                   </div>
               </div>
               </fieldset>
+          </div>
+          <input type="hidden" id='get_jenis' value="{{ $labelling->jenis}}">
+          <div class="item form-group">
+            <label class="col-form-label col-md-3 col-sm-3 label-align">Jenis <code>*</code></label>
+            <div class="col-md-6 col-sm-6 ">
+                <div id="jenis" class="btn-group" data-toggle="buttons">
+                    <label class="btn btn-primary" data-toggle-class="btn-primary"
+                        data-toggle-passive-class="btn-default" id="btn-sekunder">
+                        <input type="radio" value="Sekunder" id="jenis" name="jenis"
+                            @if($labelling->jenis == "Sekunder") checked="checked" @endif class="join-btn">
+                        &nbsp; Sekunder
+                    </label>
+                    <label class="btn btn-secondary" data-toggle-class="btn-primary"
+                        data-toggle-passive-class="btn-default" id="btn-tersier">
+                        <input type="radio" value="Tersier" id="jenis" name="jenis"
+                        @if($labelling->jenis == "Tersier") checked="checked" @endif class="join-btn">
+                        &nbsp; Tersier
+                    </label>
+                </div>
+            </div>
           </div>
           <div class="field item form-group">
               <label class="col-form-label col-md-3 col-sm-3  label-align">Packaging Activity <code>*</code></label>
@@ -145,6 +165,15 @@
 
 @push('scripts')
 <script>
+    let get_jenis = $('#get_jenis').val();
+    if (get_jenis == "Tersier") {
+      $('#btn-sekunder').attr('class', 'btn btn-secondary');
+      $('#btn-tersier').attr('class', 'btn btn-primary');
+    }
+    if (get_jenis == "Sekunder") {
+      $('#btn-sekunder').attr('class', 'btn btn-primary');
+      $('#btn-tersier').attr('class', 'btn btn-secondary');
+    }
     $('#packaging_activity_id').on('change', function(e){
         var packaging_activity_id = e.target.value;
         $.get('{{ url('') }}/labelling/add/ajax-state/' + packaging_activity_id, function(data) {
@@ -153,6 +182,17 @@
             $('#packaging_stock').attr('value',data[0].packaging_quantity);
         });
     });
+    $('input[type=radio][name=jenis]').change(function () {
+      var source = this.value;
+      if (source == "Tersier") {
+        $('#btn-sekunder').attr('class', 'btn btn-secondary');
+        $('#btn-tersier').attr('class', 'btn btn-primary');
+      }
+      if (source == "Sekunder") {
+        $('#btn-sekunder').attr('class', 'btn btn-primary');
+        $('#btn-tersier').attr('class', 'btn btn-secondary');
+      }
+    });
 </script>  
     <!-- bootstrap-daterangepicker -->
 <script src="{{ asset('assets/vendors/moment/min/moment.min.js')}}"></script>

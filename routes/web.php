@@ -65,6 +65,11 @@ Route::resource('/samples', 'SamplesController');
 Route::get('/samples_stocks', 'SamplesController@dataStock');
 Route::resource('/income_samples', 'SamplePurchaseController');
 
+//packaging
+Route::resource('/samples_packaging', 'SamplePackagingController');
+Route::get('/samples_packaging_stocks', 'SamplePackagingController@dataStock');
+Route::get('/income_packaging_samples', 'SamplePurchaseController@index2')->name('income_packaging_samples.index2');
+Route::post('/income_packaging_samples', 'SamplePurchaseController@store2')->name('income_packaging_samples.store2');
 //penerimaan packaging
 Route::resource('/packaging_receipt', 'PackagingReceiptController');
 Route::post('/packaging_receipt/storeCS', 'PackagingReceiptController@storeCS')->name('packaging_receipt.storeCS');
@@ -184,6 +189,8 @@ Route::post('/invoice/detail/store2', 'InvoiceController@detailStore2')->name('i
 //notifikasi pembayaran invoice
 Route::get('/bayar/notif', 'PettyCashController@bayar')->name('bayar.notif_po');
 Route::resource('/petty', 'PettyCashController');
+Route::get('/petty_cash', 'PettyCashController@index2')->name('petty_cash.index2');
+Route::post('/petty_cash', 'PettyCashController@store2')->name('petty_cash.store2');
 
 //==========================Produksi============================
 //labelling
@@ -230,6 +237,8 @@ Route::post('/pengeluaran_packaging2', 'PackagingOutController@store2')->name('p
 Route::get('/pengeluaran_packaging2/{id}/edit2', 'PackagingOutController@edit2')->name('pengeluaran_packaging2.edit2');
 Route::put('/pengeluaran_packaging2/{id}', 'PackagingOutController@update2')->name('pengeluaran_packaging2.update2');
 
+Route::resource('/rnd', 'RnDController');
+Route::resource('/pengeluaran_sample_pck', 'SamplePackagingOutController');
 
 Route::resource('/pengeluaran_labelling', 'LabellingOutController');
 Route::get('/pengeluaran_labelling2', 'LabellingOutController@index2')->name('pengeluaran_labelling2.index2');

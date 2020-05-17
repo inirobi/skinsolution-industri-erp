@@ -1,12 +1,12 @@
 @extends('layouts.master')
 @section('site-title')
-  Sample
+  Sample Material
 @endsection
 @section('content')
 <!-- page content -->
 <div class="page-title">
   <div class="title_left">
-    <h3>Sample Lists</h3>
+    <h3>Sample Material Lists</h3>
   </div>
 
   <div class="title_right">
@@ -15,7 +15,7 @@
         <div class="input-group">
           <ul class="breadcrumb">
             <li><a href="{{url('/home')}}">Home</a></li>
-            <li><a>Samples</a></li>
+            <li><a>Samples Material</a></li>
           </ul>
         </div>
       </div>
@@ -29,7 +29,7 @@
     <div class="col-md-12 col-sm-12 ">
       <div class="x_panel">
         <div class="x_title">
-          <a href="{{ route('samples.create') }}" class="btn btn-success"><i class="fa fa-plus"></i> Add New Sample </a>
+          <a href="{{ route('samples.create') }}" class="btn btn-success"><i class="fa fa-plus"></i> Add New Sample Material</a>
           <div class="clearfix"></div>
         </div>
         <div class="x_content">
@@ -60,7 +60,7 @@
                 <td>{{ $data -> inci_name }}</td>
                 <td>{{ $data -> supplier_id }}</td>
                 <td>{{ $data -> category }}</td>
-                <td>${{ $data -> price }}</td>
+                <td>{{ $data -> price }}</td>
                 <td class="text-center">
                   <a href="{{ route('samples.edit', $data) }}" class="btn btn-warning" title="Edit"><i class="fa fa-edit"></i></a>
 

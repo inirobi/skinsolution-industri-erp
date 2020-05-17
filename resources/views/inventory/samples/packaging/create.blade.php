@@ -1,12 +1,12 @@
 @extends('layouts.master')
 @section('site-title')
-  Sample
+  Sample Packagings
 @endsection
 @section('content')
 <!-- page content -->
 <div class="page-title">
   <div class="title_left">
-    <h3>Samples</h3>
+    <h3>Sample Packagingss</h3>
   </div>
 
   <div class="title_right">
@@ -15,11 +15,11 @@
         <div class="input-group">
           <ul class="breadcrumb">
             <li><a href="{{url('/home')}}">Home</a></li>
-            <li><a href="{{route('samples.index')}}">Samples</a></li>
+            <li><a href="{{route('samples_packaging.index')}}">Sample Packagingss</a></li>
             @if(isset($samples))
-              <li><a>Update Sample</a></li>
+              <li><a>Update Sample Packagings</a></li>
             @else
-                <li><a>Add Sample</a></li>
+                <li><a>Add Sample Packagings</a></li>
             @endif
           </ul>
         </div>
@@ -34,10 +34,10 @@
     <div class="x_panel">
       <div class="x_content">
         @if(isset($samples))
-          <form action="{{ route('samples.update', $samples) }}" novalidate method="POST" enctype="multipart/form-data">
+          <form action="{{ route('samples_packaging.update', $samples) }}" novalidate method="POST" enctype="multipart/form-data">
           @method('PUT')
         @else
-            <form action="{{ route('samples.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('samples_packaging.store') }}" method="POST" enctype="multipart/form-data">
         @endif
 
         @csrf
@@ -45,23 +45,23 @@
           </p>
           <span class="section">
             @if(isset($samples))
-                {{ __('Update sample') }}
+                {{ __('Update sample Packagings') }}
                 @php
                   $ss = $samples->supplier_id;
                 @endphp
             @else
-                {{ __('Form sample') }}
+                {{ __('Form sample Packagings') }}
                 @php
                   $ss = '';
                 @endphp
             @endif
           </span>
           <div class="field item form-group">
-            <label class="col-form-label col-md-3 col-sm-3  label-align">Material Kode<code>*</code></label>
+            <label class="col-form-label col-md-3 col-sm-3  label-align">Packagings Kode<code>*</code></label>
             <div class="col-md-6 col-sm-6">
-              <input class="form-control @error('material_code') is-invalid @enderror" value="{{ old('material_code', $samples->material_code ?? '') }}" name="material_code" required="required" />
+              <input class="form-control @error('packaging_code') is-invalid @enderror" value="{{ old('packaging_code', $samples->packaging_code ?? '') }}" name="packaging_code" required="required" />
             </div>
-            @error('material_code')
+            @error('packaging_code')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
                 </span>
@@ -79,11 +79,11 @@
             @enderror
           </div>
           <div class="field item form-group">
-            <label class="col-form-label col-md-3 col-sm-3  label-align">Material Name<code>*</code></label>
+            <label class="col-form-label col-md-3 col-sm-3  label-align">Packagings Name<code>*</code></label>
             <div class="col-md-6 col-sm-6">
-              <input class="form-control  @error('material_name') is-invalid @enderror" value="{{ old('material_name', $samples->material_name ?? '') }}" name="material_name"required="required" type="text" />
+              <input class="form-control  @error('packaging_name') is-invalid @enderror" value="{{ old('packaging_name', $samples->packaging_name ?? '') }}" name="packaging_name"required="required" type="text" />
             </div>
-            @error('material_name')
+            @error('packaging_name')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
                 </span>
@@ -146,7 +146,7 @@
               <div class="col-md-6 offset-md-3">
           <button type='submit' class="btn btn-primary">Submit</button>
           @if(isset($samples))
-              <a href="{{ route('samples.index') }}" class="btn btn-danger">Cancel</a>
+              <a href="{{ route('samples_packaging.index') }}" class="btn btn-danger">Cancel</a>
             @else
               <button type="reset" class="btn btn-success">Reset</button>
             @endif

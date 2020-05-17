@@ -85,7 +85,9 @@ class PoCustomerController extends Controller
     {
         $purchase = PoCustomer::findOrFail($id);
         $product = Product::all();
-        $purchase_view = PoCustomerDetail::where('po_customer_id', $id)->get();
+        $purchase_view = PoCustomerDetail::where('po_customer_id', $id)
+                        ->orderBy('updated_at', 'desc')
+                        ->get();
         return view('pemesanan.po.trial.view', compact('purchase', 'purchase_view', 'product'));
     }
 
