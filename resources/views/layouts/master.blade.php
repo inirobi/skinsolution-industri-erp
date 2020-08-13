@@ -212,7 +212,7 @@
                       <li><a href="{{route('laba.index')}}">Laporan Laba</a></li>
                       <li><a href="e_commerce.html">Laporan Hutang</a></li>
                       <li><a href="e_commerce.html">Laporan Piutang</a></li>
-                      <li><a href="e_commerce.html">Laporan Bonus</a></li>
+                      <li><a href="{{route('laporanBonus.index')}}">Laporan Bonus</a></li>
                       <li><a href="e_commerce.html">Laporan Asuransi</a></li>
                     </ul>
                   </li>

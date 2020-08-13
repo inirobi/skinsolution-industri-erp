@@ -390,3 +390,5 @@ Route::post('/laporanStorePemasukkan', 'LaporanController@storePemasukkan')->nam
 
 Route::get('/laba', 'PettyCashController@laba')->name('laba.index');
 Route::post('/laba', 'PettyCashController@laba')->name('laba.store');
+
+Route::resource('/laporanBonus', 'LaporanBonusController');
